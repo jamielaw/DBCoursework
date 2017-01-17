@@ -172,15 +172,15 @@ $creatingTables = [
 
 
 foreach ($creatingTables as $sqlquery){
+  echo nl2br("\n"); //Line break in HTML conversion
   echo "Executing SQL statement: ";
-  echo $sqlquery;
-  echo PHP_EOL;
+  echo $sqlquery; //Dispay statement being executed
+  echo nl2br("\n");
   if ($conn->query($sqlquery) === TRUE) {
       echo "SQL statement performed correctly";
   } else {
-      echo "Error executing statement" . $conn->error;
+      echo "Error executing statement: " . $conn->error;
   }
-  echo PHP_EOL;
 }
 
 

@@ -9,7 +9,7 @@ $conn = new mysqli($servername, $username, $password);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }else{
-  echo "working";
+  echo "Connection established";
 }
 
 // Drop database if necessary
@@ -126,7 +126,7 @@ $createPhotoCollectionsTable = "CREATE TABLE IF NOT EXISTS myDB.photoCollection(
 )";
 
 
-Create table for user circle relationships
+// Create table for user circle relationships
 $createUserCircleRelationshipsTable = "CREATE TABLE IF NOT EXISTS myDB.userCircleRelationships(
   email VARCHAR(255) NOT NULL,
   circleFriendsId INT NOT NULL,
@@ -172,12 +172,15 @@ $creatingTables = [
 
 
 foreach ($creatingTables as $sqlquery){
+  echo "Executing SQL statement: ";
   echo $sqlquery;
+  echo PHP_EOL;
   if ($conn->query($sqlquery) === TRUE) {
-      echo "Database created successfully";
+      echo "SQL statement performed correctly";
   } else {
-      echo "Error creating database: " . $conn->error;
+      echo "Error executing statement" . $conn->error;
   }
+  echo PHP_EOL;
 }
 
 

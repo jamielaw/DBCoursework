@@ -20,7 +20,8 @@ $createDatabase = "CREATE DATABASE IF NOT EXISTS MyDB";
 
 //Create roles table
 $createRolesTable = "CREATE TABLE IF NOT EXISTS MyDB.roles(
-  roleID INT NOT NULL, roleTitle VARCHAR(255),
+  roleID INT NOT NULL AUTO_INCREMENT, 
+  roleTitle VARCHAR(50),
   PRIMARY KEY(roleID)
 )";
 

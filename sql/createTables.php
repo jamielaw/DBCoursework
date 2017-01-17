@@ -111,9 +111,9 @@ $createPostsTable = "CREATE TABLE IF NOT EXISTS myDB.posts(
 $createAccessRightsTable = "CREATE TABLE IF NOT EXISTS myDB.accessRights(
   accessRightId INT NOT NULL,
   PRIMARY KEY(accessRightsId)
-  --FOREIGN KEY(photoCollectionsId),
-  -- FOREIGN KEY(email),
-  -- FOREIGN KEY(circleFriendsId),
+  FOREIGN KEY(photoCollectionId) REFERENCES myDB.photoCollection(photoCollectionId),
+  FOREIGN KEY(email) REFERENCES myDB.users(email),
+  FOREIGN KEY(circleFriendsId) REFERENCES myDB.circleOfFriends(circleFriendsId)
 )";
 
 // Create table for Photo Collections
@@ -122,17 +122,16 @@ $createPhotoCollectionsTable = "CREATE TABLE IF NOT EXISTS myDB.photoCollection(
   dateCreated DATETIME NOT NULL,
   description VARCHAR(255) NOT NULL,
   createdBy VARCHAR(255) NOT NULL,
-  PRIMARY KEY(photoCollectionsId)
+  PRIMARY KEY(photoCollectionId)
 )";
 
 
-// Create table for user circle relatiorships
-// COME BACK AND FIX THIS
-// $sql = "CREATE TABLE IF NOT EXISTS myDB.userCircleRelationships(
-//   email VARCHAR(255) NOT NULL,
-//   cricleFriendsId
-//   PRIMARY KEY(photoCollectionsId)
-// )";
+Create table for user circle relationships
+$createUserCircleRelationshipsTable = "CREATE TABLE IF NOT EXISTS myDB.userCircleRelationships(
+  email VARCHAR(255) NOT NULL,
+  circleFriendsId INT NOT NULL,
+  PRIMARY KEY(email, circleFriendsID)
+)";
 
 
 // Create table for Circle of friends

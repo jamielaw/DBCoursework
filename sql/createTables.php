@@ -9,15 +9,45 @@ $conn = new mysqli($servername, $username, $password);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
-
-
-
 // This file contains table initalisers for
 // annotations , photos, access rights, comments,
 // Create users database
 $sql = "CREATE DATABASE IF NOT EXISTS MyDB";
 // $sql = "CREATE TABLE IF NOT EXISTS myDB.users(email VARCHAR(50) NOT NULL, password VARCHAR(50) NOT NULL, firstName VARCHAR(50) NOT NULL, lastName VARCHAR(50) NOT NULL, profileImage VARCHAR(50) NOT NULL, profileDescription VARCHAR(50) NOT NULL, PRIMARY KEY(email)
 // 	)";
+
+// Create database
+$sql = "CREATE DATABASE IF NOT EXISTS MyDB";
+
+//Create roles table
+$sql = "CREATE TABLE IF NOT EXISTS MyDB.roles(
+  roleID INT NOT NULL, roleTitle VARCHAR(255),
+  PRIMARY KEY(roleID)
+	)";
+
+//Create users table
+$sql = "CREATE TABLE IF NOT EXISTS MyDB.users(
+  email VARCHAR(255) NOT NULL,
+  roleID INT NOT NULL,
+  password VARCHAR(255) NOT NULL,
+  firstName VARCHAR(255) NOT NULL,
+  lastName VARCHAR(255) NOT NULL,
+  profileImage VARCHAR(255) NOT NULL,
+  profileDescription VARCHAR(255) NOT NULL,
+  PRIMARY KEY(email)
+  -- FOREIGN KEY (roleID) REFERENCES MyDB.roles(roleID)
+	)";
+
+//Create rights table
+$sql = "CREATE TABLE IF NOT EXISTS MyDB.rights(
+  rightID INT NOT NULL,
+  roleID INT NOT NULL,
+  rightTitle VARCHAR(255) NOT NULL,
+  rightDescription VARCHAR(255) NOT NULL,
+  PRIMARY KEY(rightID)
+  -- FOREIGN KEY(roleID) REFERENCES MyDB.roles(roleID)
+	)";
+
 
 // Create table for annotations
 $sql = "CREATE TABLE IF NOT EXISTS myDB.annotations(
@@ -88,24 +118,30 @@ $sql = "CREATE TABLE IF NOT EXISTS myDB.circleOfFriends(
 // Create table for messages
 $sql = "CREATE TABLE IF NOT EXISTS myDB.messages(
   messagesId INT NOT NULL,
-  messageText VARCHAR NOT NULL,
+  messageText VARCHAR(255) NOT NULL,
   dateCreated DATETIME NOT NULL,
   PRIMARY KEY(messagesId)
   -- FOREIGN KEY
 )";
 
 
-// Create table for
-$sql = "CREATE TABLE IF NOT EXISTS myDB.messages(
-  messagesId INT NOT NULL,
-  messageText VARCHAR NOT NULL,
-  dateCreated DATETIME NOT NULL,
-  PRIMARY KEY(messagesId)
-  -- FOREIGN KEY
+// Create table for privacy settings
+$sql = "CREATE TABLE IF NOT EXISTS myDB.privacySettings(
+  privacySettingsId INT NOT NULL,
+  privacySettingsTitle VARCHAR(255) NOT NULL,
+  privacySettingsDescription VARCHAR NOT NULL,
+  status BOOLEAN NOT NULL
+  -- FK:
 )";
 
-$sql =
-
+// Create table friendships
+$sql = "CREATE TABLE IF NOT EXISTS myDB.friendships(
+  friendshipid INT NOT NULL,
+  emailFrom VARCHAR(255) NOT NULL,
+  emailTo VARCHAR(255) NOT NULL,
+  status BOOLEAN NOT NULL
+  -- FK:
+)";
 
 
 if ($conn->query($sql) === TRUE) {

@@ -8,25 +8,23 @@ $conn = new mysqli($servername, $username, $password);
 // Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
+}else{
+  echo "working";
 }
-// This file contains table initalisers for
-// annotations , photos, access rights, comments,
-// Create users database
-$sql = "CREATE DATABASE IF NOT EXISTS MyDB";
-// $sql = "CREATE TABLE IF NOT EXISTS myDB.users(email VARCHAR(50) NOT NULL, password VARCHAR(50) NOT NULL, firstName VARCHAR(50) NOT NULL, lastName VARCHAR(50) NOT NULL, profileImage VARCHAR(50) NOT NULL, profileDescription VARCHAR(50) NOT NULL, PRIMARY KEY(email)
-// 	)";
 
-// Create database
-$sql = "CREATE DATABASE IF NOT EXISTS MyDB";
+// Create users database
+$createDatabase = "CREATE DATABASE IF NOT EXISTS MyDB";
 
 //Create roles table
-$sql = "CREATE TABLE IF NOT EXISTS MyDB.roles(
+$createRolesTable = "CREATE TABLE IF NOT EXISTS MyDB.roles(
   roleID INT NOT NULL, roleTitle VARCHAR(255),
   PRIMARY KEY(roleID)
-	)";
+)";
+
+
 
 //Create users table
-$sql = "CREATE TABLE IF NOT EXISTS MyDB.users(
+$createUsersTable = "CREATE TABLE IF NOT EXISTS MyDB.users(
   email VARCHAR(255) NOT NULL,
   roleID INT NOT NULL,
   password VARCHAR(255) NOT NULL,
@@ -36,21 +34,22 @@ $sql = "CREATE TABLE IF NOT EXISTS MyDB.users(
   profileDescription VARCHAR(255) NOT NULL,
   PRIMARY KEY(email)
   -- FOREIGN KEY (roleID) REFERENCES MyDB.roles(roleID)
-	)";
+)";
+
 
 //Create rights table
-$sql = "CREATE TABLE IF NOT EXISTS MyDB.rights(
+$createRightsTable = "CREATE TABLE IF NOT EXISTS MyDB.rights(
   rightID INT NOT NULL,
   roleID INT NOT NULL,
   rightTitle VARCHAR(255) NOT NULL,
   rightDescription VARCHAR(255) NOT NULL,
   PRIMARY KEY(rightID)
   -- FOREIGN KEY(roleID) REFERENCES MyDB.roles(roleID)
-	)";
+)";
 
 
 // Create table for annotations
-$sql = "CREATE TABLE IF NOT EXISTS myDB.annotations(
+$createAnnotationsTable = "CREATE TABLE IF NOT EXISTS myDB.annotations(
   anotationsId INT NOT NULL,
   coordinateX INT NOT NULL,
   cordinateY INT NOT NULL,
@@ -62,7 +61,7 @@ $sql = "CREATE TABLE IF NOT EXISTS myDB.annotations(
 
 
 // Create table for Photos
-$sql = "CREATE TABLE IF NOT EXISTS myDB.photos(
+$createPhotosTable = "CREATE TABLE IF NOT EXISTS myDB.photos(
   photosId INT NOT NULL,
   dateAdded DATETIME NOT NULL,
   imageReference VARCHAR(255) NOT NULL,
@@ -70,8 +69,8 @@ $sql = "CREATE TABLE IF NOT EXISTS myDB.photos(
   -- FOREIGN KEY(photoCollectionsId)
 )";
 
-// Create table for Comments
-$sql = "CREATE TABLE IF NOT EXISTS myDB.comments(
+// Create table for comments
+$createTableForComments = "CREATE TABLE IF NOT EXISTS myDB.comments(
   postId INT NOT NULL,
   postTitle INT NOT NULL,
   postText TEXT NOT NULL,
@@ -80,7 +79,7 @@ $sql = "CREATE TABLE IF NOT EXISTS myDB.comments(
 )";
 
 // Create table for Access Rights
-$sql = "CREATE TABLE IF NOT EXISTS myDB.accessRights(
+$createAccessRightsTable = "CREATE TABLE IF NOT EXISTS myDB.accessRights(
   accessRightId INT NOT NULL,
   PRIMARY KEY(accessRightsId)
   --FOREIGN KEY(photoCollectionsId),
@@ -89,7 +88,7 @@ $sql = "CREATE TABLE IF NOT EXISTS myDB.accessRights(
 )";
 
 // Create table for Photo Collections
-$sql = "CREATE TABLE IF NOT EXISTS myDB.photoCollectionId(
+$createPhotoCollectionsTable = "CREATE TABLE IF NOT EXISTS myDB.photoCollectionId(
   photoCollectionId INT NOT NULL,
   dateCreated DATETIME NOT NULL,
   description VARCHAR(255) NOT NULL,
@@ -108,7 +107,7 @@ $sql = "CREATE TABLE IF NOT EXISTS myDB.photoCollectionId(
 
 
 // Create table for Cricle of friends
-$sql = "CREATE TABLE IF NOT EXISTS myDB.circleOfFriends(
+$createCircleOfFriendsTable = "CREATE TABLE IF NOT EXISTS myDB.circleOfFriends(
   circleFriendsId INT NOT NULL,
   circleOfFriendsName VARCHAR(255) DATETIME,
   dateCreated DATETIME NOT NULL,
@@ -116,7 +115,7 @@ $sql = "CREATE TABLE IF NOT EXISTS myDB.circleOfFriends(
 )";
 
 // Create table for messages
-$sql = "CREATE TABLE IF NOT EXISTS myDB.messages(
+$createMessagesTable = "CREATE TABLE IF NOT EXISTS myDB.messages(
   messagesId INT NOT NULL,
   messageText VARCHAR(255) NOT NULL,
   dateCreated DATETIME NOT NULL,
@@ -126,7 +125,7 @@ $sql = "CREATE TABLE IF NOT EXISTS myDB.messages(
 
 
 // Create table for privacy settings
-$sql = "CREATE TABLE IF NOT EXISTS myDB.privacySettings(
+$createPrivacySettingsTable = "CREATE TABLE IF NOT EXISTS myDB.privacySettings(
   privacySettingsId INT NOT NULL,
   privacySettingsTitle VARCHAR(255) NOT NULL,
   privacySettingsDescription VARCHAR NOT NULL,
@@ -135,7 +134,7 @@ $sql = "CREATE TABLE IF NOT EXISTS myDB.privacySettings(
 )";
 
 // Create table friendships
-$sql = "CREATE TABLE IF NOT EXISTS myDB.friendships(
+$createFriendshipsTable = "CREATE TABLE IF NOT EXISTS myDB.friendships(
   friendshipid INT NOT NULL,
   emailFrom VARCHAR(255) NOT NULL,
   emailTo VARCHAR(255) NOT NULL,
@@ -143,12 +142,23 @@ $sql = "CREATE TABLE IF NOT EXISTS myDB.friendships(
   -- FK:
 )";
 
+$creatingTables = [
+    $createDatabase,
+    $createRolesTable,
+    $createUsersTable,
+    $createRightsTable
+];
 
-if ($conn->query($sql) === TRUE) {
-    echo "Database created successfully";
-} else {
-    echo "Error creating database: " . $conn->error;
+
+foreach ($creatingTables as $sqlquery){
+  echo $sqlquery;
+  if ($conn->query($sqlquery) === TRUE) {
+      echo "Database created successfully";
+  } else {
+      echo "Error creating database: " . $conn->error;
+  }
 }
+
 
 $conn->close();
 ?>

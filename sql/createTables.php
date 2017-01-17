@@ -12,6 +12,9 @@ if ($conn->connect_error) {
   echo "working";
 }
 
+// Drop database if necessary
+$dropDatabase = "DROP DATABASE IF EXISTS MyDB";
+
 // Create users database
 $createDatabase = "CREATE DATABASE IF NOT EXISTS MyDB";
 
@@ -46,7 +49,7 @@ $createRightsTable = "CREATE TABLE IF NOT EXISTS MyDB.rights(
 
 // Create table friendships
 $createFriendshipsTable = "CREATE TABLE IF NOT EXISTS MyDB.friendships(
-  friendshipid INT NOT NULL,
+  friendshipID INT NOT NULL,
   emailFrom VARCHAR(255) NOT NULL,
   emailTo VARCHAR(255) NOT NULL,
   status BOOLEAN NOT NULL
@@ -76,13 +79,13 @@ $createPostsTable = "CREATE TABLE IF NOT EXISTS myDB.posts(
 
 // Create table for annotations
 $createAnnotationsTable = "CREATE TABLE IF NOT EXISTS myDB.annotations(
-  anotationsId INT NOT NULL,
+  annotationsId INT NOT NULL,
   coordinateX INT NOT NULL,
-  cordinateY INT NOT NULL,
+  coordinateY INT NOT NULL,
   annotationText VARCHAR(255) NOT NULL,
   PRIMARY KEY(annotationsId),
-  -- FOREIGN KEY(photoId),
-  -- FOREIGN KEY(annotatedBy)
+  FOREIGN KEY(photoId) REFERENCES MyDB.photos(photoId),
+  -- //FOREIGN KEY(annotatedBy)
 	)";
 
 
@@ -92,7 +95,7 @@ $createPhotosTable = "CREATE TABLE IF NOT EXISTS myDB.photos(
   dateAdded DATETIME NOT NULL,
   imageReference VARCHAR(255) NOT NULL,
   PRIMARY KEY(photosId)
-  -- FOREIGN KEY(photoCollectionsId)
+  FOREIGN KEY(photoCollectionId) REFERENCES MyDB.photoCollection(photoCollectionId)
 )";
 
 // Create table for comments
@@ -114,7 +117,7 @@ $createAccessRightsTable = "CREATE TABLE IF NOT EXISTS myDB.accessRights(
 )";
 
 // Create table for Photo Collections
-$createPhotoCollectionsTable = "CREATE TABLE IF NOT EXISTS myDB.photoCollectionId(
+$createPhotoCollectionsTable = "CREATE TABLE IF NOT EXISTS myDB.photoCollection(
   photoCollectionId INT NOT NULL,
   dateCreated DATETIME NOT NULL,
   description VARCHAR(255) NOT NULL,
@@ -132,7 +135,7 @@ $createPhotoCollectionsTable = "CREATE TABLE IF NOT EXISTS myDB.photoCollectionI
 // )";
 
 
-// Create table for Cricle of friends
+// Create table for Circle of friends
 $createCircleOfFriendsTable = "CREATE TABLE IF NOT EXISTS myDB.circleOfFriends(
   circleFriendsId INT NOT NULL,
   circleOfFriendsName VARCHAR(255) DATETIME,

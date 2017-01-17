@@ -98,13 +98,13 @@ $createPhotosTable = "CREATE TABLE IF NOT EXISTS myDB.photos(
   FOREIGN KEY(photoCollectionId) REFERENCES MyDB.photoCollection(photoCollectionId)
 )";
 
-// Create table for comments
-$createTableForComments = "CREATE TABLE IF NOT EXISTS myDB.comments(
+// Create table for posts
+$createPostsTable = "CREATE TABLE IF NOT EXISTS myDB.posts(
   postId INT NOT NULL,
   postTitle INT NOT NULL,
   postText TEXT NOT NULL,
   dateCreated DATETIME,
-  PRIMARY KEY(photosId)
+  FOREIGN KEY(blogId) REFERENCES MyDB.blogs(blogId)
 )";
 
 // Create table for Access Rights

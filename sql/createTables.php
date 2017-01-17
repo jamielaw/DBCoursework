@@ -33,7 +33,7 @@ $createUsersTable = "CREATE TABLE IF NOT EXISTS MyDB.users(
   lastName VARCHAR(255) NOT NULL,
   profileImage VARCHAR(255) NOT NULL,
   profileDescription VARCHAR(255) NOT NULL,
-  PRIMARY KEY(email)
+  PRIMARY KEY(email),
   FOREIGN KEY(roleID) REFERENCES MyDB.roles(roleID)
 )";
 
@@ -43,7 +43,7 @@ $createRightsTable = "CREATE TABLE IF NOT EXISTS MyDB.rights(
   roleID INT NOT NULL,
   rightTitle VARCHAR(255) NOT NULL,
   rightDescription VARCHAR(255) NOT NULL,
-  PRIMARY KEY(rightID)
+  PRIMARY KEY(rightID),
   FOREIGN KEY(roleID) REFERENCES MyDB.roles(roleID)
 )";
 
@@ -63,7 +63,7 @@ $createBlogsTable = "CREATE TABLE IF NOT EXISTS MyDB.blogs(
   blogDescription VARCHAR(255) NOT NULL,
   dateCreated VARCHAR(255) NOT NULL,
   email VARCHAR(255) NOT NULL,
-  PRIMARY KEY(blogId)
+  PRIMARY KEY(blogId),
   FOREIGN KEY(email) REFERENCES MyDB.users(email)
 )";
 
@@ -94,7 +94,7 @@ $createPhotosTable = "CREATE TABLE IF NOT EXISTS myDB.photos(
   photosId INT NOT NULL,
   dateAdded DATETIME NOT NULL,
   imageReference VARCHAR(255) NOT NULL,
-  PRIMARY KEY(photosId)
+  PRIMARY KEY(photosId),
   FOREIGN KEY(photoCollectionId) REFERENCES MyDB.photoCollection(photoCollectionId)
 )";
 
@@ -110,7 +110,7 @@ $createCommentsTable = "CREATE TABLE IF NOT EXISTS myDB.comments(
 // Create table for Access Rights
 $createAccessRightsTable = "CREATE TABLE IF NOT EXISTS myDB.accessRights(
   accessRightId INT NOT NULL,
-  PRIMARY KEY(accessRightsId)
+  PRIMARY KEY(accessRightsId),
   FOREIGN KEY(photoCollectionId) REFERENCES myDB.photoCollection(photoCollectionId),
   FOREIGN KEY(email) REFERENCES myDB.users(email),
   FOREIGN KEY(circleFriendsId) REFERENCES myDB.circleOfFriends(circleFriendsId)
@@ -147,7 +147,7 @@ $createMessagesTable = "CREATE TABLE IF NOT EXISTS myDB.messages(
   messageId INT NOT NULL,
   messageText VARCHAR(255) NOT NULL,
   dateCreated DATETIME NOT NULL,
-  PRIMARY KEY(messageId)
+  PRIMARY KEY(messageId),
   FOREIGN KEY(emailTo) REFERENCES MyDB.users(email),
   FOREIGN KEY(emailFrom) REFERENCES MyDB.users(emailFrom) 
 )";

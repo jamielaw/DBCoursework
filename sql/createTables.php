@@ -21,8 +21,6 @@ $createRolesTable = "CREATE TABLE IF NOT EXISTS MyDB.roles(
   PRIMARY KEY(roleID)
 )";
 
-
-
 //Create users table
 $createUsersTable = "CREATE TABLE IF NOT EXISTS MyDB.users(
   email VARCHAR(255) NOT NULL,
@@ -33,9 +31,8 @@ $createUsersTable = "CREATE TABLE IF NOT EXISTS MyDB.users(
   profileImage VARCHAR(255) NOT NULL,
   profileDescription VARCHAR(255) NOT NULL,
   PRIMARY KEY(email)
-  -- FOREIGN KEY (roleID) REFERENCES MyDB.roles(roleID)
+  FOREIGN KEY(roleID) REFERENCES MyDB.roles(roleID)
 )";
-
 
 //Create rights table
 $createRightsTable = "CREATE TABLE IF NOT EXISTS MyDB.rights(
@@ -44,9 +41,38 @@ $createRightsTable = "CREATE TABLE IF NOT EXISTS MyDB.rights(
   rightTitle VARCHAR(255) NOT NULL,
   rightDescription VARCHAR(255) NOT NULL,
   PRIMARY KEY(rightID)
-  -- FOREIGN KEY(roleID) REFERENCES MyDB.roles(roleID)
+  FOREIGN KEY(roleID) REFERENCES MyDB.roles(roleID)
 )";
 
+// Create table friendships
+$createFriendshipsTable = "CREATE TABLE IF NOT EXISTS MyDB.friendships(
+  friendshipid INT NOT NULL,
+  emailFrom VARCHAR(255) NOT NULL,
+  emailTo VARCHAR(255) NOT NULL,
+  status BOOLEAN NOT NULL
+)";
+
+
+//Create blogs table
+$createBlogsTable = "CREATE TABLE IF NOT EXISTS MyDB.blogs(
+  blogId INT NOT NULL,
+  blogTitle VARCHAR(255) NOT NULL,
+  blogDescription VARCHAR(255) NOT NULL,
+  dateCreated VARCHAR(255) NOT NULL,
+  email VARCHAR(255) NOT NULL,
+  PRIMARY KEY(blogId)
+  FOREIGN KEY(email) REFERENCES MyDB.users(email)
+)";
+
+
+//Create posts table
+$createPostsTable = "CREATE TABLE IF NOT EXISTS myDB.posts(
+  postId INT NOT NULL,
+  postTitle INT NOT NULL,
+  postText TEXT NOT NULL,
+  dateCreated DATETIME NOT NULL,
+  PRIMARY KEY(postId)
+)";
 
 // Create table for annotations
 $createAnnotationsTable = "CREATE TABLE IF NOT EXISTS myDB.annotations(
@@ -133,14 +159,7 @@ $createPrivacySettingsTable = "CREATE TABLE IF NOT EXISTS myDB.privacySettings(
   -- FK:
 )";
 
-// Create table friendships
-$createFriendshipsTable = "CREATE TABLE IF NOT EXISTS myDB.friendships(
-  friendshipid INT NOT NULL,
-  emailFrom VARCHAR(255) NOT NULL,
-  emailTo VARCHAR(255) NOT NULL,
-  status BOOLEAN NOT NULL
-  -- FK:
-)";
+
 
 $creatingTables = [
     $createDatabase,

@@ -144,11 +144,11 @@ $createCircleOfFriendsTable = "CREATE TABLE IF NOT EXISTS myDB.circleOfFriends(
 
 // Create table for messages
 $createMessagesTable = "CREATE TABLE IF NOT EXISTS myDB.messages(
-  messagesId INT NOT NULL,
+  messageId INT NOT NULL,
   messageText VARCHAR(255) NOT NULL,
   dateCreated DATETIME NOT NULL,
-  PRIMARY KEY(messagesId)
-  -- FOREIGN KEY
+  PRIMARY KEY(messageId)
+  -- FOREIGN KEY 
 )";
 
 
@@ -157,8 +157,8 @@ $createPrivacySettingsTable = "CREATE TABLE IF NOT EXISTS myDB.privacySettings(
   privacySettingsId INT NOT NULL,
   privacySettingsTitle VARCHAR(255) NOT NULL,
   privacySettingsDescription VARCHAR NOT NULL,
-  status BOOLEAN NOT NULL
-  -- FK:
+  status BOOLEAN NOT NULL,
+  FOREIGN KEY(email) REFERENCES MyDB.users(email)
 )";
 
 

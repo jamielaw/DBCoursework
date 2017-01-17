@@ -85,7 +85,7 @@ $createAnnotationsTable = "CREATE TABLE IF NOT EXISTS myDB.annotations(
   annotationText VARCHAR(255) NOT NULL,
   PRIMARY KEY(annotationsId),
   FOREIGN KEY(photoId) REFERENCES MyDB.photos(photoId),
-  -- //FOREIGN KEY(annotatedBy)
+  FOREIGN KEY(email) REFERENCES MyDB.users(email)
 	)";
 
 

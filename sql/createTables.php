@@ -98,13 +98,13 @@ $createPhotosTable = "CREATE TABLE IF NOT EXISTS myDB.photos(
   FOREIGN KEY(photoCollectionId) REFERENCES MyDB.photoCollection(photoCollectionId)
 )";
 
-// Create table for posts
-$createPostsTable = "CREATE TABLE IF NOT EXISTS myDB.posts(
-  postId INT NOT NULL,
-  postTitle INT NOT NULL,
-  postText TEXT NOT NULL,
+// Create table for comments (on photos)
+$createCommentsTable = "CREATE TABLE IF NOT EXISTS myDB.comments(
+  commentId INT NOT NULL,
+  commentText VARCHAR(255) NOT NULL,
   dateCreated DATETIME,
-  FOREIGN KEY(blogId) REFERENCES MyDB.blogs(blogId)
+  FOREIGN KEY(photoId) REFERENCES MyDB.photos(photoId),
+  FOREIGN KEY(email) REFERENCES MyDB.users(email)
 )";
 
 // Create table for Access Rights
@@ -148,7 +148,8 @@ $createMessagesTable = "CREATE TABLE IF NOT EXISTS myDB.messages(
   messageText VARCHAR(255) NOT NULL,
   dateCreated DATETIME NOT NULL,
   PRIMARY KEY(messageId)
-  -- FOREIGN KEY 
+  FOREIGN KEY(emailTo) REFERENCES MyDB.users(email),
+  FOREIGN KEY(emailFrom) REFERENCES MyDB.users(emailFrom) 
 )";
 
 

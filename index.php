@@ -1,5 +1,3 @@
-<?php include 'dbh.php' ?>
-
 <!DOCTYPE html>
 <html>
   <head>
@@ -7,13 +5,18 @@
     <title>Database Coursework</title>
   </head>
   <body>
-    <?php
 
-    $sql = "SELECT * FROM posts";
-    $result = mysqli_query($conn, $sql);
-    $row = $result->fetch_assoc();
 
-    echo $row['subject'];
-     ?>
+    <form action="signup.php" method="POST">
+      <input type="text" name="first" placeholder="First Name">
+      <br>
+      <input type="text" name="last" placeholder="Last Name">
+      <br>
+      <input type="text" name="uid" placeholder="Username">
+      <br>
+      <input type="password" name="pwd" placeholder="Password">
+      <br>
+      <button type="submit">Sign Up</button>
+    </form>
   </body>
 </html>

@@ -177,6 +177,7 @@ $createPrivacySettingsTable = "CREATE TABLE IF NOT EXISTS myDB.privacySettings(
 
 
 $creatingTables = [ //make sure you create in the right order! foreign keys must refer to a primary key in an existing table
+    //$dropDatabase, //uncomment this if there is a wrong format in any table
     $createDatabase,
     $createRolesTable,
     $createUsersTable,

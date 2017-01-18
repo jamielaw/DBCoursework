@@ -15,7 +15,7 @@
 		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		$sql = "DELETE FROM users  WHERE email = ?";
 		$q = $pdo->prepare($sql);
-		$q->execute(array($email));
+		$response = $q->execute(array($email));
 		Database::disconnect();
 		header("Location: index.php");
 		
@@ -40,7 +40,7 @@
 		    		
 	    			<form class="form-horizontal" action="delete.php" method="post">
 	    			  <input type="hidden" name="email" value="<?php echo $email;?>"/>
-					  <p class="alert alert-error">Are you sure to delete ?</p>
+					  <p class="alert alert-error">Are you sure to delete  ?</p>
 					  <div class="form-actions">
 						  <button type="submit" class="btn btn-danger">Yes</button>
 						  <a class="btn" href="index.php">No</a>

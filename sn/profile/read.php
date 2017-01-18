@@ -36,6 +36,11 @@
 		    		
 	    			<div class="form-horizontal" >
 					  <div class="control-group">
+					  <div class="controls">
+						    <label class="checkbox">
+						     	<img src="<?php echo $data['profileImage'];?>"  height="200" ></td>
+						    </label>
+					    </div>
 					    <label class="control-label">Email</label>
 					    <div class="controls">
 						    <label class="checkbox">

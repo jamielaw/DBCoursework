@@ -16,6 +16,14 @@
 					<a href="create.php" class="btn btn-success">Create</a>
 				</p>
 				
+				<ul class="nav nav-tabs" id="myTab">
+					<li><a href="#home">Profile</a></li>
+					<li class="active"><a href="#friends">Friends</a></li>
+					<li><a href="#messages">Messages</a></li>
+					<li><a href="#photoCollections">Photo Collections</a></li>
+				</ul>
+
+				<br><br>
 				<table class="table table-striped table-bordered">
 		              <thead>
 		                <tr>

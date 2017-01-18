@@ -1,10 +1,11 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>Photos</title>
-  </head>
+<?php
+$title = "Photo Collections";
+$description = "";
+include("inc/header.php");
+ ?>
   <body>
+    <!--  Navigation-->
+    <?php include 'inc/nav-trn.php'; ?>
     <!--Link to creating photo collections  -->
     <a href="createphotocollection.php">
       <button type="button" name="button">Create Photo Collection</button>
@@ -25,5 +26,5 @@
           </div>
         </div>
       </a>
-  </body>
-</html>
+
+      <?php include 'inc/footer.php'; ?>

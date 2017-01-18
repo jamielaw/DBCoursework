@@ -1,12 +1,13 @@
 <!--  "Collaborative Filtering System for friend recommendations"-->
 
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>Friend Recommendations</title>
-  </head>
+<?php
+$title = "Friendship Circles";
+$description = "";
+include("inc/header.php");
+ ?>
   <body>
+    <!--  Navigation-->
+    <?php include 'inc/nav-trn.php'; ?>
 
-  </body>
-</html>
+    <h1>Friend Recommendations</h1>
+    <?php include 'inc/footer.php'; ?>

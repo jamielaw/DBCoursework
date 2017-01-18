@@ -1,11 +1,13 @@
 <!--  Maintain a blog and read and search the blogs of friends.  -->
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>Blog</title>
-  </head>
+<?php
+$title = "Blog";
+$description = "";
+include("inc/header.php");
+ ?>
   <body>
+    <!--  Navigation-->
+    <?php include 'inc/nav-trn.php'; ?>
 
-  </body>
-</html>
+    <h1>Blog</h1>
+    <!-- Footer  -->
+    <?php include 'inc/footer.php'; ?>

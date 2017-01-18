@@ -1,13 +1,13 @@
 <!-- Displays friend circles, each friend circle is linked to a chat page,
 also has link to creating friend circles -->
-
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>Friend Circles</title>
-  </head>
+<?php
+$title = "Friendship Circles";
+$description = "";
+include("inc/header.php");
+ ?>
   <body>
+    <!--  Navigation-->
+    <?php include 'inc/nav-trn.php'; ?>
 
     <!--Link to creating friendship circles  -->
     <a href="createcircle.php">
@@ -30,9 +30,8 @@ also has link to creating friend circles -->
           </div>
         </div>
       </a>
-      
+
     </div>
 
-
-  </body>
-</html>
+    <!-- Footer  -->
+    <?php include 'inc/footer.php'; ?>

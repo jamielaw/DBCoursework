@@ -1,7 +1,7 @@
 <?php
-$servername = "localhost:3306";
+$servername = "localhost:8889";
 $username = "root";
-$password = "admin";
+$password = "root";
 
 // Create connection
 $conn = new mysqli($servername, $username, $password);
@@ -20,7 +20,7 @@ $createDatabase = "CREATE DATABASE IF NOT EXISTS MyDB";
 
 //Create roles table
 $createRolesTable = "CREATE TABLE IF NOT EXISTS MyDB.roles(
-  roleID INT NOT NULL AUTO_INCREMENT, 
+  roleID INT NOT NULL AUTO_INCREMENT,
   roleTitle VARCHAR(50),
   PRIMARY KEY(roleID)
 )";
@@ -164,7 +164,7 @@ $createMessagesTable = "CREATE TABLE IF NOT EXISTS myDB.messages(
   dateCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY(messageId),
   FOREIGN KEY(emailTo) REFERENCES MyDB.users(email),
-  FOREIGN KEY(emailFrom) REFERENCES MyDB.users(email) 
+  FOREIGN KEY(emailFrom) REFERENCES MyDB.users(email)
 )";
 
 // Create table for privacy settings

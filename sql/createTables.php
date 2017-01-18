@@ -1,7 +1,7 @@
 <?php
-$servername = "localhost:8889";
+$servername = "localhost:3306";
 $username = "root";
-$password = "root";
+$password = "admin";
 
 // Create connection
 $conn = new mysqli($servername, $username, $password);
@@ -20,7 +20,7 @@ $createDatabase = "CREATE DATABASE IF NOT EXISTS MyDB";
 
 //Create roles table
 $createRolesTable = "CREATE TABLE IF NOT EXISTS MyDB.roles(
-  roleID INT NOT NULL AUTO_INCREMENT,
+  roleID INT NOT NULL AUTO_INCREMENT, 
   roleTitle VARCHAR(50),
   PRIMARY KEY(roleID)
 )";
@@ -73,10 +73,12 @@ $createBlogsTable = "CREATE TABLE IF NOT EXISTS MyDB.blogs(
 //Create posts table
 $createPostsTable = "CREATE TABLE IF NOT EXISTS myDB.posts(
   postId INT NOT NULL AUTO_INCREMENT,
-  postTitle INT,
-  postText TEXT,
+  blogId INT NOT NULL,
+  postTitle VARCHAR(255),
+  postText LONGTEXT,
   dateCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY(postId)
+  PRIMARY KEY(postId),
+  FOREIGN KEY(blogId) REFERENCES MyDB.blogs(blogId)
 )";
 
 // Create table for annotations
@@ -164,7 +166,7 @@ $createMessagesTable = "CREATE TABLE IF NOT EXISTS myDB.messages(
   dateCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY(messageId),
   FOREIGN KEY(emailTo) REFERENCES MyDB.users(email),
-  FOREIGN KEY(emailFrom) REFERENCES MyDB.users(email)
+  FOREIGN KEY(emailFrom) REFERENCES MyDB.users(email) 
 )";
 
 // Create table for privacy settings

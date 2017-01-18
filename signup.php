@@ -1,10 +1,18 @@
-<?php
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Sign Up</title>
+  </head>
+  <body>
+    <h1>Sign Up</h1>
+    <form class="" action="index.html" method="post">
+      <input type="text" name="" value="">
+      <input type="text" name="" value="">
+      <input type="text" name="" value="">
+      <input type="text" name="" value="">
+      <button type="button" name="button">Sign Up</button>
+    </form>
 
-include 'dbh.php';
-
-$first = $_POST['first'];
-$last = $_POST['last'];
-$uid = $_POST['uid'];
-$pwd = $_POST['pwd'];
-
-?>
+  </body>
+</html>

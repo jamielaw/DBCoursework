@@ -4,59 +4,72 @@
     <meta charset="utf-8">
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <script src="../js/min/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 </head>
 
 <body>
     <div class="container">
-    		<div class="row">
-    			<h3>PHP CRUD Grid</h3>
+    		<div class="row" id="friends">
+    			<p><img src="../../images/profile/charles@ucl.ac.uk.jpg" class="rounded float-left" height="200">
+    			<font size="5"> Charles Babbage </font> </p>
     		</div>
-			<div class="row">
-				<p>
-					<a href="create.php" class="btn btn-success">Create</a>
-				</p>
-				
-				<ul class="nav nav-tabs" id="myTab">
-					<li><a href="#home">Profile</a></li>
-					<li class="active"><a href="#friends">Friends</a></li>
-					<li><a href="#messages">Messages</a></li>
-					<li><a href="#photoCollections">Photo Collections</a></li>
-				</ul>
 
-				<br><br>
-				<table class="table table-striped table-bordered">
-		              <thead>
-		                <tr>
-		                  <th>Email</th>
-		                  <th>First Name</th>
-		                  <th>Last Name</th>
-		                  <th>Action</th>
-		                </tr>
-		              </thead>
-		              <tbody>
-		              <?php 
-					   include '..\database.php';
-					   $pdo = Database::connect();
-					   $sql = 'SELECT * FROM users ORDER BY email';
-	 				   foreach ($pdo->query($sql) as $row) {
-						   		echo '<tr>';
-							   	echo '<td>'. $row['email'] . '</td>';
-							   	echo '<td>'. $row['firstName'] . '</td>';
-							   	echo '<td>'. $row['lastName'] . '</td>';
-							   	echo '<td width=250>';
-							   	echo '<a class="btn" href="read.php?email='.$row['email'].'">Read</a>';
-							   	echo '&nbsp;';
-							   	echo '<a class="btn btn-success" href="update.php?email='.$row['email'].'">Update</a>';
-							   	echo '&nbsp;';
-							   	echo '<a class="btn btn-danger" href="delete.php?email='.$row['email'].'">Delete</a>';
-							   	echo '</td>';
-							   	echo '</tr>';
-					   }
-					   Database::disconnect();
-					  ?>
-				      </tbody>
-	            </table>
-    	</div>
+    		<br><br>
+    		<ul class="nav nav-tabs">
+    			<li class="active">
+		        	<a  href="#1" data-toggle="tab">Profile</a>
+				</li>
+				<li>
+					<a href="#2" data-toggle="tab">Friends</a>
+				</li>
+				<li>
+					<a href="#3" data-toggle="tab">Messages</a>
+				</li>
+				<li>
+					<a href="#4" data-toggle="tab">Photo Collections</a>
+				</li>
+		  	</ul>
+
+			<div class="tab-content ">
+				<div class="tab-pane active" id="1">
+		          <h3>Standard tab panel created on bootstrap using nav-tabs</h3>
+				</div>
+				<div class="tab-pane" id="2">
+		          	<table class="table table-striped table-bordered">
+		            	<thead>
+		                	<tr>
+		                  		<th>Email</th>
+		                  		<th>First Name</th>
+		                  		<th>Last Name</th>
+		                  		<th>Action</th>
+		                	</tr>
+		              	</thead>
+		              	<tbody>
+		              		<?php 
+					   			include '..\database.php';
+					   			$pdo = Database::connect();
+					   			$sql = 'SELECT * FROM users ORDER BY email';
+	 				   			foreach ($pdo->query($sql) as $row) {
+							   		echo '<tr>';
+								   	echo '<td>'. $row['email'] . '</td>';
+								   	echo '<td>'. $row['firstName'] . '</td>';
+								   	echo '<td>'. $row['lastName'] . '</td>';
+								   	echo '<td width=250>';
+								   	echo '<a class="btn" href="read.php?email='.$row['email'].'">Read</a>';
+								   	echo '&nbsp;';
+								   	echo '<a class="btn btn-success" href="update.php?email='.$row['email'].'">Update</a>';
+								   	echo '&nbsp;';
+								   	echo '<a class="btn btn-danger" href="delete.php?email='.$row['email'].'">Delete</a>';
+								   	echo '</td>';
+								   	echo '</tr>';
+					  			}
+					   			Database::disconnect();
+					  		?>
+				      	</tbody>
+	            	</table>
+				</div>
+		  	</div>
     </div> <!-- /container -->
   </body>
 </html>

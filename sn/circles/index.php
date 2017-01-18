@@ -3,11 +3,11 @@ also has link to creating friend circles -->
 <?php
 $title = "Friendship Circles";
 $description = "";
-include("inc/header.php");
+include("../inc/header.php");
  ?>
   <body>
     <!--  Navigation-->
-    <?php include 'inc/nav-trn.php'; ?>
+    <?php include '../inc/nav-trn.php'; ?>
 
     <!--Link to creating friendship circles  -->
     <a href="createcircle.php">
@@ -34,4 +34,4 @@ include("inc/header.php");
     </div>
 
     <!-- Footer  -->
-    <?php include 'inc/footer.php'; ?>
+    <?php include '"../inc/footer.php'; ?>

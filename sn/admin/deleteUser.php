@@ -11,6 +11,8 @@ function redirect($url) {
   $argument1 = $_GET['email'];
   //echo $argument1;
 
+  echo $argument1;
+  
   $servername = "localhost:3306";
   $username = "root";
   $password = "root";

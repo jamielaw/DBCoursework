@@ -83,7 +83,7 @@
 		    			<h3>Update a User</h3>
 		    		</div>
     		
-	    			<form class="form-horizontal" action="update.php?email=<?php echo $email?>" method="post">
+	    			<form class="form-horizontal" action="updateprofile.php?email=<?php echo $email?>" method="post">
 					  <div class="control-group <?php echo !empty($emailError)?'error':'';?>">
 					    <label class="control-label">Email Address</label>
 					    <div class="controls">

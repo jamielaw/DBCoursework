@@ -1,7 +1,7 @@
 <?php
 $servername = "localhost:3306";
 $username = "root";
-$password = "root";
+$password = "admin";
 
 // Create connection
 $conn = new mysqli($servername, $username, $password);
@@ -29,7 +29,7 @@ $insertRightsTable = "INSERT INTO MyDB.rights (roleID,rightTitle,rightDescriptio
 (1, \"Edit User's Blog\", \"The user has the right to edit other user's blog\")";
 
 $insertUsersTable = "INSERT INTO MyDB.users (email,roleID,password,firstName,lastName,profileImage) VALUES
-(\"alan@ucl.ac.uk\",2,\"test\",\"Alan\",\"Turing\",\"/images/profile/alan@ucl.ac.uk.jpg\"),
+(\"alan@ucl.ac.uk\",2,\"test\",\"Alan\",\"Turing\",\"/images/profile/alan@ucl.ac.uk.jpg\"), 
 (\"ada@ucl.ac.uk\",2,\"test\",\"Ada\",\"Lovelace\",\"/images/profile/ada@ucl.ac.uk.jpg\"),
 (\"grace@ucl.ac.uk\",2,\"test\",\"Grace\",\"Hopper\",\"/images/profile/grace@ucl.ac.uk.jpg\"),
 (\"john@ucl.ac.uk\",2,\"test\",\"John\",\"von Neumann\",\"/images/profile/john@ucl.ac.uk.jpg\"),
@@ -39,7 +39,7 @@ $insertUsersTable = "INSERT INTO MyDB.users (email,roleID,password,firstName,las
 (\"larry@ucl.ac.uk\",2,\"test\",\"Larry\",\"Page\",\"/images/profile/larry@ucl.ac.uk.jpg\"),
 (\"charles@ucl.ac.uk\",2,\"test\",\"Charles\",\"Babbage\",\"/images/profile/charles@ucl.ac.uk.jpg\")";
 
-$insertFriendshipTable = "INSERT INTO MyDB.friendships (emailFrom,emailTo,status) VALUES
+$insertFriendshipTable = "INSERT INTO MyDB.friendships (emailFrom,emailTo,status) VALUES 
 (\"charles@ucl.ac.uk\",\"larry@ucl.ac.uk\",\"accepted\"),
 (\"charles@ucl.ac.uk\",\"ken@ucl.ac.uk\",\"accepted\"),
 (\"charles@ucl.ac.uk\",\"ada@ucl.ac.uk\",\"accepted\"),
@@ -95,7 +95,7 @@ $insertPhotoCollectionTable = "INSERT INTO MyDB.photocollection (photoCollection
 (1,\"Conferences\",\"charles@ucl.ac.uk\"),
 (2,\"Difference Engine\", \"charles@ucl.ac.uk\")";
 
-$insertPhotosTable = "INSERT INTO MyDB.photos (photoCollectionId,imageReference) VALUES
+$insertPhotosTable = "INSERT INTO MyDB.photos (photoCollectionId,imageReference) VALUES 
 (1, \"/images/photoCollection/12.jpg\"),
 (1, \"/images/photoCollection/13.jpg\"),
 (1, \"/images/photoCollection/14.jpg\"),
@@ -111,7 +111,7 @@ $insertPhotosTable = "INSERT INTO MyDB.photos (photoCollectionId,imageReference)
 (2, \"/images/photoCollection/24.jpg\"),
 (2, \"/images/photoCollection/25.jpg\")";
 
-$populatingTables = [
+$populatingTables = [ 
     $insertRolesTable,
     $insertRightsTable,
     $insertUsersTable,

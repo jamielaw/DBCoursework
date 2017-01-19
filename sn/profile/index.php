@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
     <script src="../js/min/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
@@ -91,10 +92,35 @@
 								echo '</td>';
 								echo '</tr>';
 						  	}
-						  	Database::disconnect();
+						  	//Database::disconnect();
 						?>
 					</tbody>
 				   </table>
+				
+				     <button type="button" class="btn btn-info" data-toggle="modal" data-target="#contact_dialog">Create Collection</button>
+					     
+					<!-- the div that represents the modal dialog -->
+					<div class="modal fade" id="contact_dialog" role="dialog">
+					    <div class="modal-dialog">
+					        <div class="modal-content">
+					            <div class="modal-header">
+					                <button type="button" class="close" data-dismiss="modal">&times;</button>
+					                <h4 class="modal-title">Create New Collection</h4>
+					            </div>
+					                <div class="modal-body">
+					                    <form id="collection_form" action="createcollection.php" method="POST">
+					                        <input type="text" name="albumName" placeholder="Enter Album Name"><br/><br/>
+					                        <input type="text" name="descriptionName" placeholder="Enter Album Description"><br/>
+					                    </form>
+					                </div>
+					                <div class="modal-footer">
+					                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					                    <button type="button" id="submitForm" class="btn btn-default">Create</button>
+					                </div>
+					            </div>
+					        </div>
+					    </div>
+
 		          <form action="uploadphoto.php" method="post" enctype="multipart/form-data">
 			    	Select image to upload:
 			    	<input type="file" name="fileToUpload" id="fileToUpload">
@@ -105,3 +131,32 @@
     </div> <!-- /container -->
   </body>
 </html>
+
+<script>
+/* must apply only after HTML has loaded */
+$(document).ready(function () {
+    $("#collection_form").on("submit", function(e) {
+        var postData = $(this).serializeArray();
+        postData.push({name: "email", value: "charles@ucl.ac.uk"});
+        var formURL = $(this).attr("action");
+        $.ajax({
+            url: formURL,
+            type: "POST",
+            data: postData,
+            success: function(data, textStatus, jqXHR) {
+                $('#contact_dialog .modal-header .modal-title').html("Result");
+                $('#contact_dialog .modal-body').html(data);
+                $("#submitForm").remove();
+            },
+            error: function(jqXHR, status, error) {
+                console.log(status + ": " + error);
+            }
+        });
+        e.preventDefault();
+    });
+     
+    $("#submitForm").on('click', function() {
+        $("#collection_form").submit();
+    });
+});
+</script>

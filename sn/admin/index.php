@@ -1,7 +1,7 @@
 <?php
   $title = "Bookface Social Network";
   $description = "A far superior social network";
-  include("inc/header.php");
+  include("../inc/header.php");
 
   $servername = "localhost:3306";
   $username = "root";
@@ -31,11 +31,12 @@
   if ($result->num_rows > 0) {
       // output data of each row. create a table!
 
-      echo "<table style='width:100%'> <tr> <th> email </th> <th> First name </th> <th> Second Name </th>";
+      echo "<table style='width:100%'> <tr> <th> email </th> <th> First name </th> <th> Second Name </th> <th> Image </th> <th> Action </th> ";
 
       while($row = $result->fetch_assoc()) {
           echo "<tr>";
-          echo "<td>" . $row["email"] . "</td><td> " . $row["firstName"] . "</td><td>" . $row["lastName"]  . "</td>";
+          echo "<td>" . $row["email"] . "</td><td> " . $row["firstName"] . "</td><td>" . $row["lastName"]  . "</td><td> <img style='height:100px;width=100px;' src='" . $row["profileImage"] . "'</td>";
+          echo "<td> <i class='fa fa-pencil' aria-hidden='true'></i> Edit | <i class='fa fa-trash' aria-hidden='true'></i> Delete </td>";
           echo "</tr>";
       }
 

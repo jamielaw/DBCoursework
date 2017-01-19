@@ -34,11 +34,12 @@
 
 
   <form method="POST" action="editUser.php">
-    Email: <input type="text" value=" <?php echo $row['email'] ?> "> <br>
-    First name: <input type="text" value=" <?php echo $row['firstName'] ?> "> <br>
-    Last name: <input type="text" value=" <?php echo $row['lastName'] ?> "> <br>
-    Image url: <input type="textfield" value=" <?php echo $row['profileImage'] ?> "> <br>
-    profile description: <input type="textfield" value=" <?php echo $row['profileDescription'] ?> "> <br>
+    <input type="hidden" name="argument1" value=" <?php echo $argument1; ?>">
+    Email: <input type="text" name="email" value=" <?php echo $row['email'] ?> "> <br>
+    First name: <input type="text" name="firstName" value=" <?php echo $row['firstName'] ?> "> <br>
+    Last name: <input type="text" name="lastName" value=" <?php echo $row['lastName'] ?> "> <br>
+    Image url: <input type="textfield" name="profileImage" value=" <?php echo $row['profileImage'] ?> "> <br>
+    profile description: <input type="textfield" name="profileDescription" value=" <?php echo $row['profileDescription'] ?> "> <br>
 
 
     <button type="submit">Update!</button>

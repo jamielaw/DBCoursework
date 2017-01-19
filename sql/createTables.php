@@ -133,6 +133,7 @@ $createAccessRightsTable = "CREATE TABLE IF NOT EXISTS myDB.accessRights(
 $createPhotoCollectionsTable = "CREATE TABLE IF NOT EXISTS myDB.photoCollection(
   photoCollectionId INT NOT NULL AUTO_INCREMENT,
   dateCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  title VARCHAR(100),
   description VARCHAR(255) ,
   createdBy VARCHAR(255) NOT NULL,
   PRIMARY KEY(photoCollectionId)

@@ -64,7 +64,7 @@
 								   	echo '</td>';
 								   	echo '</tr>';
 					  			}
-					   			Database::disconnect();
+					   			//Database::disconnect();
 					  		?>
 				      	</tbody>
 	            	</table>
@@ -74,6 +74,27 @@
 				</div>
 				<div class="tab-pane" id="4">
 		          <h3>Photo Collections</h3>
+		          <table class="table table-striped table-bordered">
+		         	<thead>
+		            	<tr>
+		                	<th>Album</th>
+		                  	<th>Action</th>
+		                </tr>
+		            </thead>
+			        <tbody>
+			          	<?php 
+						   	$sql = 'SELECT * FROM photocollection WHERE createdBy = "charles@ucl.ac.uk" ORDER BY dateCreated'; // !!! TO BE CHANGED AFTER LOGIN IS IMPLEMENTED
+		 				   	foreach ($pdo->query($sql) as $row) {
+								echo '<td>'. $row['title'] . '</td>';
+								echo '<td width=350>';
+								echo '<a class="btn" href="read.php?createdBy='.$row['createdBy'].'">Read</a>';
+								echo '</td>';
+								echo '</tr>';
+						  	}
+						  	Database::disconnect();
+						?>
+					</tbody>
+				   </table>
 		          <form action="uploadphoto.php" method="post" enctype="multipart/form-data">
 			    	Select image to upload:
 			    	<input type="file" name="fileToUpload" id="fileToUpload">

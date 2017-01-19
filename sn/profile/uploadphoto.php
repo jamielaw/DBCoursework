@@ -1,6 +1,7 @@
 <?php
 $target_dir = $_SERVER['DOCUMENT_ROOT'] . '/images/photoCollection/';
-$target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
+$path_parts = pathinfo($_FILES["fileToUpload"]["name"]);
+$target_file =  $target_dir . $path_parts['filename'].'_'.time().'.'.$path_parts['extension'];
 $uploadOk = 1;
 $imageFileType = pathinfo($target_file,PATHINFO_EXTENSION);
 // Check if image file is a actual image or fake image

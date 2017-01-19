@@ -9,7 +9,7 @@ function redirect($url) {
 
 
   $argument1 = $_GET['email'];
-  echo $argument1;
+  //echo $argument1;
 
   $servername = "localhost:3306";
   $username = "root";
@@ -24,19 +24,21 @@ function redirect($url) {
 
   // sql to delete a record
   $sql = "DELETE FROM MyDB.users WHERE email=". "'" . $argument1 . "'";
-  echo $sql;
+  //echo $sql;
 
   if ($conn->query($sql) === TRUE) {
-      echo "Record deleted successfully";
+      //echo "Record deleted successfully";
   } else {
-      echo "Error deleting record: " . $conn->error;
+      //echo "Error deleting record: " . $conn->error;
   }
 
   $conn->close();
 
-  redirect('http://localhost:8888/sn/admin/');
 
-  echo "here";
+
+  //echo "here";
+
+  redirect('http://localhost:8888/sn/admin/');
 
 
 ?>

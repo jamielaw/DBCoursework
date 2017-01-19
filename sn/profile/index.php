@@ -87,7 +87,7 @@
 		 				   	foreach ($pdo->query($sql) as $row) {
 								echo '<td>'. $row['title'] . '</td>';
 								echo '<td width=350>';
-								echo '<a class="btn" href="readphotocollection.php?createdBy='.$row['createdBy'].'">Read</a>';
+								echo '<a class="btn" href="readphotocollection.php?createdBy='.$row['createdBy'].'&photoCollectionId='.$row['photoCollectionId'].'">Read</a>';
 								echo '</td>';
 								echo '</tr>';
 						  	}

@@ -1,19 +1,24 @@
 <?php 
 	require '../database.php';
-	$email = null;
-	if ( !empty($_GET['email'])) {
-		$email = $_REQUEST['email'];
+	$createdBy = null;
+	$photoCollectionId = null;
+	if ( !empty($_GET['createdBy'])) {
+		$createdBy = $_REQUEST['createdBy'];
+	}
+	if ( !empty($_GET['photoCollectionId'])) {
+		$photoCollectionId = $_REQUEST['photoCollectionId'];
 	}
 	
-	if ( null==$email ) {
+	
+	if ( null==$createdBy || null==$photoCollectionId) {
 		header("Location: index.php");
 	} else {
 		$pdo = Database::connect();
 		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-		$sql = "SELECT * FROM users WHERE email = ?";
+		$sql = "SELECT imageReference FROM photos JOIN photocollection ON photocollection.photoCollectionId = photos.photoCollectionId WHERE photocollection.createdBy = ? AND photocollection.photoCollectionId = ?";
 		$q = $pdo->prepare($sql);
-		$q->execute(array($email));
-		$data = $q->fetch(PDO::FETCH_ASSOC);
+		$q->execute(array($createdBy,$photoCollectionId));
+		//$data = $q->fetch(PDO::FETCH_ASSOC);
 		Database::disconnect();
 	}
 ?>
@@ -37,30 +42,16 @@
 	    			<div class="form-horizontal" >
 					  <div class="control-group">
 					  <div class="controls">
-						    <label class="checkbox">
-						     	<img src="<?php echo $data['profileImage'];?>"  height="200" ></td>
-						    </label>
 					    </div>
-					    <label class="control-label">Email</label>
 					    <div class="controls">
 						    <label class="checkbox">
-						     	<?php echo $data['email'];?>
-						    </label>
-					    </div>
-					  </div>
-					  <div class="control-group">
-					    <label class="control-label">First Name</label>
-					    <div class="controls">
-					      	<label class="checkbox">
-						     	<?php echo $data['firstName'];?>
-						    </label>
-					    </div>
-					  </div>
-					  <div class="control-group">
-					    <label class="control-label">Last Name</label>
-					    <div class="controls">
-					      	<label class="checkbox">
-						     	<?php echo $data['lastName'];?>
+						     	<?php 
+						     	 while ($row = $q->fetch(PDO::FETCH_ASSOC)){
+						     	 	?>
+						     	 	<img src="<?php echo $row['imageReference'];?>"  height="200" ></td>
+						     	 	<?php
+						     	 }
+						     	?>
 						    </label>
 					    </div>
 					  </div>

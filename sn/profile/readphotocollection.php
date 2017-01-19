@@ -36,7 +36,7 @@
     
     			<div class="span10 offset1">
     				<div class="row">
-		    			<h3>Read a User</h3>
+		    			<h3>Collection</h3>
 		    		</div>
 		    		
 	    			<div class="form-horizontal" >

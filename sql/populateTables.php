@@ -91,13 +91,35 @@ The last only of the eleven lives existed when he embarked, and that life expire
 I possess a letter from Richard Babbage, dated on board the ship in which he sailed for America.
 In the year 1773 it became necessary to sell a portion of this property, for the purpose of building a church at Ashbrenton. A private Act of Parliament was passed for that purpose, in which the rights of the true heir were reserved.\");";
 
+$insertPhotoCollectionTable = "INSERT INTO MyDB.photocollection (photoCollectionId,title,createdBy) VALUES
+(1,\"Conferences\",\"charles@ucl.ac.uk\"),
+(2,\"Difference Engine\", \"charles@ucl.ac.uk\")";
+
+$insertPhotosTable = "INSERT INTO MyDB.photos (photoCollectionId,imageReference) VALUES 
+(1, \"/images/photoCollection/12.jpg\"),
+(1, \"/images/photoCollection/13.jpg\"),
+(1, \"/images/photoCollection/14.jpg\"),
+(1, \"/images/photoCollection/15.jpg\"),
+(1, \"/images/photoCollection/16.jpg\"),
+(2, \"/images/photoCollection/17.jpg\"),
+(2, \"/images/photoCollection/18.png\"),
+(2, \"/images/photoCollection/19.jpg\"),
+(2, \"/images/photoCollection/20.jpg\"),
+(2, \"/images/photoCollection/21.jpg\"),
+(2, \"/images/photoCollection/22.jpg\"),
+(2, \"/images/photoCollection/23.jpg\"),
+(2, \"/images/photoCollection/24.jpg\"),
+(2, \"/images/photoCollection/25.jpg\")";
+
 $populatingTables = [ 
     $insertRolesTable,
     $insertRightsTable,
     $insertUsersTable,
     $insertFriendshipTable,
     $insertBlogsTable,
-    $insertPostsTable
+    $insertPostsTable,
+    $insertPhotoCollectionTable,
+    $insertPhotosTable
 ];
 
 

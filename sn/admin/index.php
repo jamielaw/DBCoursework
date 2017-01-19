@@ -36,7 +36,7 @@
       while($row = $result->fetch_assoc()) {
           echo "<tr>";
           echo "<td>" . $row["email"] . "</td><td> " . $row["firstName"] . "</td><td>" . $row["lastName"]  . "</td><td> <img style='height:100px;width=100px;' src='" . $row["profileImage"] . "'</td>";
-          echo "<td> <i class='fa fa-pencil' aria-hidden='true'></i> Edit <br>";
+          echo "<td> <a href='editUserView.php?email=".$row["email"]."'<i class='fa fa-pencil' aria-hidden='true'></i> Edit <br>";
           echo "<a href='deleteUser.php?email=".$row["email"]."' <i class='fa fa-trash' aria-hidden='true'></i> Delete </td> </a>";
           echo "</tr>";
       }

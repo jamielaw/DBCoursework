@@ -39,7 +39,6 @@
 		          	<table class="table table-striped table-bordered">
 		            	<thead>
 		                	<tr>
-		                  		<th>Email</th>
 		                  		<th>First Name</th>
 		                  		<th>Last Name</th>
 		                  		<th>Action</th>
@@ -49,18 +48,18 @@
 		              		<?php 
 					   			include '..\database.php';
 					   			$pdo = Database::connect();
-					   			$sql = 'SELECT * FROM users ORDER BY email';
+					   			// !!! HARDCODED STUFF -  TO BE CHANGED AFTER LOGIN IS IMPLEMENTED
+					   			$sql = 'SELECT DISTINCT email, firstName, lastName FROM users JOIN friendships ON users.email = friendships.emailFrom OR users.email=friendships.emailTo WHERE (friendships.emailFrom=\'charles@ucl.ac.uk\' OR friendships.emailTo=\'charles@ucl.ac.uk\') AND users.email!=\'charles@ucl.ac.uk\' AND status=\'accepted\';';
 	 				   			foreach ($pdo->query($sql) as $row) {
 							   		echo '<tr>';
-								   	echo '<td>'. $row['email'] . '</td>';
 								   	echo '<td>'. $row['firstName'] . '</td>';
 								   	echo '<td>'. $row['lastName'] . '</td>';
 								   	echo '<td width=250>';
-								   	echo '<a class="btn" href="read.php?email='.$row['email'].'">Read</a>';
+								   	echo '<a class="btn" href="readprofile.php?email='.$row['email'].'">Read</a>';
 								   	echo '&nbsp;';
-								   	echo '<a class="btn btn-success" href="update.php?email='.$row['email'].'">Update</a>';
+								   	echo '<a class="btn btn-success" href="updateprofile.php?email='.$row['email'].'">Update</a>';
 								   	echo '&nbsp;';
-								   	echo '<a class="btn btn-danger" href="delete.php?email='.$row['email'].'">Delete</a>';
+								   	echo '<a class="btn btn-danger" href="deleteprofile.php?email='.$row['email'].'">Delete</a>';
 								   	echo '</td>';
 								   	echo '</tr>';
 					  			}
@@ -83,11 +82,12 @@
 		            </thead>
 			        <tbody>
 			          	<?php 
-						   	$sql = 'SELECT * FROM photocollection WHERE createdBy = "charles@ucl.ac.uk" ORDER BY dateCreated'; // !!! TO BE CHANGED AFTER LOGIN IS IMPLEMENTED
+			          		// !!! HARDCODED STUFF - TO BE CHANGED AFTER LOGIN IS IMPLEMENTED
+						   	$sql = 'SELECT * FROM photocollection WHERE createdBy = "charles@ucl.ac.uk" ORDER BY dateCreated'; 
 		 				   	foreach ($pdo->query($sql) as $row) {
 								echo '<td>'. $row['title'] . '</td>';
 								echo '<td width=350>';
-								echo '<a class="btn" href="read.php?createdBy='.$row['createdBy'].'">Read</a>';
+								echo '<a class="btn" href="readphotocollection.php?createdBy='.$row['createdBy'].'">Read</a>';
 								echo '</td>';
 								echo '</tr>';
 						  	}

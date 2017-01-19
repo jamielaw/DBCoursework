@@ -56,7 +56,7 @@
 								   	echo '<td>'. $row['firstName'] . '</td>';
 								   	echo '<td>'. $row['lastName'] . '</td>';
 								   	echo '<td width=250>';
-								   	echo '<a class="btn" href="readprofile.php?email='.$row['email'].'">Read</a>';
+								   	echo '<a class="btn btn-info" href="readprofile.php?email='.$row['email'].'">Read</a>';
 								   	echo '&nbsp;';
 								   	echo '<a class="btn btn-success" href="updateprofile.php?email='.$row['email'].'">Update</a>';
 								   	echo '&nbsp;';
@@ -88,7 +88,11 @@
 		 				   	foreach ($pdo->query($sql) as $row) {
 								echo '<td>'. $row['title'] . '</td>';
 								echo '<td width=350>';
-								echo '<a class="btn" href="readphotocollection.php?createdBy='.$row['createdBy'].'&photoCollectionId='.$row['photoCollectionId'].'">Read</a>';
+								echo '<a class="btn btn-info" href="readphotocollection.php?createdBy='.$row['createdBy'].'&photoCollectionId='.$row['photoCollectionId'].'">Read</a>';
+								echo '&nbsp;';
+								echo '<a data-title="'.$row['title'].'" data-description="'.$row['description'].'" data-id="'.$row['photoCollectionId'].'" class="open-update_dialog btn btn-success" data-toggle="modal" href="#update_dialog"">Update</a>';
+								echo '&nbsp;';
+								echo '<a class="btn btn-danger" href="deletephotocollection.php?email='.$row['createdBy'].'">Delete</a>';
 								echo '</td>';
 								echo '</tr>';
 						  	}
@@ -97,10 +101,10 @@
 					</tbody>
 				   </table>
 				
-				     <button type="button" class="btn btn-info" data-toggle="modal" data-target="#contact_dialog">Create Collection</button>
+				    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#collection_dialog">Create Collection</button>
 					     
 					<!-- the div that represents the modal dialog -->
-					<div class="modal fade" id="contact_dialog" role="dialog">
+					<div class="modal fade" id="collection_dialog" role="dialog">
 					    <div class="modal-dialog">
 					        <div class="modal-content">
 					            <div class="modal-header">
@@ -121,6 +125,28 @@
 					        </div>
 					    </div>
 
+					<!-- the div that represents the modal dialog -->
+					<div class="modal fade" id="update_dialog" role="dialog">
+					    <div class="modal-dialog">
+					        <div class="modal-content">
+					            <div class="modal-header">
+					                <button type="button" class="close" data-dismiss="modal">&times;</button>
+					                <h4 class="modal-title">Update Collection</h4>
+					            </div>
+					                <div class="modal-body">
+					                    <form id="update_form" action="updatephotocollection.php" method="POST">
+					                        Collection Title: <input type="text" name="albumName" id="albumName" placeholder="Edit Album Name"><br/><br/>
+					                        Collection Description: <input type="text" name="albumDescription" id="albumDescription" placeholder="Edit Album Description"><br/>
+					                    </form>
+					                </div>
+					                <div class="modal-footer">
+					                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					                    <button type="button" id="submitForm2" class="btn btn-default">Update</button>
+					                </div>
+					            </div>
+					        </div>
+					    </div>
+
 		          <form action="uploadphoto.php" method="post" enctype="multipart/form-data">
 			    	Select image to upload:
 			    	<input type="file" name="fileToUpload" id="fileToUpload">
@@ -135,6 +161,8 @@
 <script>
 /* must apply only after HTML has loaded */
 $(document).ready(function () {
+
+	// Create Collection Button
     $("#collection_form").on("submit", function(e) {
         var postData = $(this).serializeArray();
         postData.push({name: "email", value: "charles@ucl.ac.uk"});
@@ -144,8 +172,8 @@ $(document).ready(function () {
             type: "POST",
             data: postData,
             success: function(data, textStatus, jqXHR) {
-                $('#contact_dialog .modal-header .modal-title').html("Result");
-                $('#contact_dialog .modal-body').html(data);
+                $('#collection_dialog .modal-header .modal-title').html("Result");
+                $('#collection_dialog .modal-body').html(data);
                 $("#submitForm").remove();
             },
             error: function(jqXHR, status, error) {
@@ -158,5 +186,46 @@ $(document).ready(function () {
     $("#submitForm").on('click', function() {
         $("#collection_form").submit();
     });
+
+    
+
 });
+
+var albumName = null;
+var albumDescription = null;
+var albumId = null;
+
+$(document).on("click", ".open-update_dialog", function () {
+     albumName = $(this).data('title');
+     $(".modal-body #albumName").val(albumName);
+     albumDescription = $(this).data('description');
+     $(".modal-body #albumDescription").val(albumDescription);
+     albumId = $(this).data('id');
+
+    // Update Collection Button
+    $("#update_form").on("submit", function(e) {
+        var postData2 =  $(this).serializeArray();
+        postData2.push({name: "photoCollectionId", value: albumId});
+        var formURL = $(this).attr("action");
+        $.ajax({
+            url: formURL,
+            type: "POST",
+            data: postData2,
+            success: function(data, textStatus, jqXHR) {
+                $('#update_dialog .modal-header .modal-title').html("Result");
+                $('#update_dialog .modal-body').html(data);
+                $("#submitForm2").remove();
+            },
+            error: function(jqXHR, status, error) {
+                console.log(status + ": " + error);
+            }
+        });
+        e.preventDefault();
+    });
+     
+    $("#submitForm2").on('click', function() {
+        $("#update_form").submit();
+    });
+});
+
 </script>

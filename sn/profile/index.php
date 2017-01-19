@@ -15,7 +15,7 @@
     			<font size="5"> Charles Babbage </font> </p>
     		</div>
 
-    		<br><br>
+    			<br><br>
     		<ul class="nav nav-tabs">
     			<li class="active">
 		        	<a  href="#1" data-toggle="tab">Profile</a>
@@ -68,6 +68,17 @@
 					  		?>
 				      	</tbody>
 	            	</table>
+				</div>
+				<div class="tab-pane" id="3">
+		          <h3>Messages</h3>
+				</div>
+				<div class="tab-pane" id="4">
+		          <h3>Photo Collections</h3>
+		          <form action="uploadphoto.php" method="post" enctype="multipart/form-data">
+			    	Select image to upload:
+			    	<input type="file" name="fileToUpload" id="fileToUpload">
+			    	<input type="submit" value="Upload Image" name="submit">
+				  </form>
 				</div>
 		  	</div>
     </div> <!-- /container -->

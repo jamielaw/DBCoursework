@@ -5,10 +5,12 @@
   include("../inc/header.php");
 
 
+
   $pdo = Database::connect();
   $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
   $argument1 = $_GET['email'];
+
 
   echo $argument1;
   $sql = "SELECT * FROM users WHERE email=" . "'" . $argument1 . "'";
@@ -18,10 +20,13 @@
   $q->execute();
   $row = $q->fetch(PDO::FETCH_ASSOC);
 
+
   //echo $row;
 ?>
 
 <body>
+      <!--  Navigation-->
+    <?php include '../inc/nav-trn.php'; ?>
 
   <h3> Edit a user account </h3>
 

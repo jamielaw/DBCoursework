@@ -8,7 +8,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 </head>
-
+<!--  Navigation-->
+<?php include '../inc/nav-trn.php'; ?>
 <body>
     <div class="container">
     		<div class="row" id="friends">

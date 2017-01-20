@@ -6,25 +6,12 @@
   $description = "A far superior social network";
   include("../inc/header.php");
 
-  // $servername = "localhost:3306";
-  // $username = "root";
-  // $password = "admin";
-  //
-  // //Create connection
-  // $conn = new mysqli($servername, $username, $password);
-  // // Check connection
-  // if ($conn->connect_error) {
-  //     die("Connection failed: " . $conn->connect_error);
-  // }else{
-  //     echo "Connection established";
-  // }
-
-
-
 
 
 ?>
 <body>
+      <!--  Navigation-->
+    <?php include '../inc/nav-trn.php'; ?>
   <h1> Admin page </h1>
 
   <h2> Something that the admin will be able to see. For now, just show all the data! </h2>

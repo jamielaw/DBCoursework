@@ -5,6 +5,8 @@
     <title>Search Result for Query: $QUERY</title>
   </head>
   <body>
+      <!--  Navigation-->
+    <?php include '../inc/nav-trn.php'; ?>
     <h1>$X Number Of User Results for $Query</h1>
 
     <!--  Repeat for $X -->

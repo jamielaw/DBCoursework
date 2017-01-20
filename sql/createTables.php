@@ -1,7 +1,7 @@
 <?php
-$servername = "localhost:8889";
+$servername = "localhost:3306";
 $username = "root";
-$password = "root";
+$password = "admin";
 
 // Create connection
 $conn = new mysqli($servername, $username, $password);
@@ -20,7 +20,7 @@ $createDatabase = "CREATE DATABASE IF NOT EXISTS MyDB";
 
 //Create roles table
 $createRolesTable = "CREATE TABLE IF NOT EXISTS MyDB.roles(
-  roleID INT NOT NULL AUTO_INCREMENT,
+  roleID INT NOT NULL AUTO_INCREMENT, 
   roleTitle VARCHAR(50),
   PRIMARY KEY(roleID)
 )";
@@ -71,16 +71,18 @@ $createBlogsTable = "CREATE TABLE IF NOT EXISTS MyDB.blogs(
 
 
 //Create posts table
-$createPostsTable = "CREATE TABLE IF NOT EXISTS myDB.posts(
+$createPostsTable = "CREATE TABLE IF NOT EXISTS MyDB.posts(
   postId INT NOT NULL AUTO_INCREMENT,
-  postTitle INT,
-  postText TEXT,
+  blogId INT NOT NULL,
+  postTitle VARCHAR(255),
+  postText LONGTEXT,
   dateCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY(postId)
+  PRIMARY KEY(postId),
+  FOREIGN KEY(blogId) REFERENCES MyDB.blogs(blogId)
 )";
 
 // Create table for annotations
-$createAnnotationsTable = "CREATE TABLE IF NOT EXISTS myDB.annotations(
+$createAnnotationsTable = "CREATE TABLE IF NOT EXISTS MyDB.annotations(
   annotationsId INT NOT NULL AUTO_INCREMENT,
   photoId INT,
   email VARCHAR(50) NOT NULL,
@@ -94,7 +96,7 @@ $createAnnotationsTable = "CREATE TABLE IF NOT EXISTS myDB.annotations(
 
 
 // Create table for Photos
-$createPhotosTable = "CREATE TABLE IF NOT EXISTS myDB.photos(
+$createPhotosTable = "CREATE TABLE IF NOT EXISTS MyDB.photos(
   photoId INT NOT NULL AUTO_INCREMENT,
   photoCollectionId INT NOT NULL,
   dateAdded TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -104,7 +106,7 @@ $createPhotosTable = "CREATE TABLE IF NOT EXISTS myDB.photos(
 )";
 
 // Create table for comments (on photos)
-$createCommentsTable = "CREATE TABLE IF NOT EXISTS myDB.comments(
+$createCommentsTable = "CREATE TABLE IF NOT EXISTS MyDB.comments(
   commentId INT NOT NULL AUTO_INCREMENT,
   photoId INT NOT NULL,
   email VARCHAR(50) ,
@@ -116,7 +118,7 @@ $createCommentsTable = "CREATE TABLE IF NOT EXISTS myDB.comments(
 )";
 
 // Create table for Access Rights
-$createAccessRightsTable = "CREATE TABLE IF NOT EXISTS myDB.accessRights(
+$createAccessRightsTable = "CREATE TABLE IF NOT EXISTS MyDB.accessRights(
   accessRightsId INT NOT NULL AUTO_INCREMENT,
   photoCollectionId INT NOT NULL,
   email VARCHAR(50) NOT NULL,
@@ -131,6 +133,7 @@ $createAccessRightsTable = "CREATE TABLE IF NOT EXISTS myDB.accessRights(
 $createPhotoCollectionsTable = "CREATE TABLE IF NOT EXISTS myDB.photoCollection(
   photoCollectionId INT NOT NULL AUTO_INCREMENT,
   dateCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  title VARCHAR(100),
   description VARCHAR(255) ,
   createdBy VARCHAR(255) NOT NULL,
   PRIMARY KEY(photoCollectionId)
@@ -138,7 +141,7 @@ $createPhotoCollectionsTable = "CREATE TABLE IF NOT EXISTS myDB.photoCollection(
 
 
 // Create table for user circle relationships
-$createUserCircleRelationshipsTable = "CREATE TABLE IF NOT EXISTS myDB.userCircleRelationships(
+$createUserCircleRelationshipsTable = "CREATE TABLE IF NOT EXISTS MyDB.userCircleRelationships(
   email VARCHAR(50) NOT NULL,
   circleFriendsId INT NOT NULL,
   PRIMARY KEY(email, circleFriendsID),
@@ -148,7 +151,7 @@ $createUserCircleRelationshipsTable = "CREATE TABLE IF NOT EXISTS myDB.userCircl
 
 
 // Create table for Circle of friends
-$createCircleOfFriendsTable = "CREATE TABLE IF NOT EXISTS myDB.circleOfFriends(
+$createCircleOfFriendsTable = "CREATE TABLE IF NOT EXISTS MyDB.circleOfFriends(
   circleFriendsId INT NOT NULL AUTO_INCREMENT,
   circleOfFriendsName VARCHAR(50),
   dateCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -156,7 +159,7 @@ $createCircleOfFriendsTable = "CREATE TABLE IF NOT EXISTS myDB.circleOfFriends(
 )";
 
 // Create table for messages
-$createMessagesTable = "CREATE TABLE IF NOT EXISTS myDB.messages(
+$createMessagesTable = "CREATE TABLE IF NOT EXISTS MyDB.messages(
   messageId INT NOT NULL AUTO_INCREMENT,
   emailTo VARCHAR(50) NOT NULL,
   emailFrom VARCHAR(50) NOT NULL,
@@ -164,11 +167,11 @@ $createMessagesTable = "CREATE TABLE IF NOT EXISTS myDB.messages(
   dateCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY(messageId),
   FOREIGN KEY(emailTo) REFERENCES MyDB.users(email),
-  FOREIGN KEY(emailFrom) REFERENCES MyDB.users(email)
+  FOREIGN KEY(emailFrom) REFERENCES MyDB.users(email) 
 )";
 
 // Create table for privacy settings
-$createPrivacySettingsTable = "CREATE TABLE IF NOT EXISTS myDB.privacySettings(
+$createPrivacySettingsTable = "CREATE TABLE IF NOT EXISTS MyDB.privacySettings(
   privacySettingsId INT NOT NULL AUTO_INCREMENT,
   email VARCHAR(50) NOT NULL,
   privacySettingsTitle VARCHAR(255) ,
@@ -187,8 +190,8 @@ $creatingTables = [ //make sure you create in the right order! foreign keys must
     $createUsersTable,
     $createRightsTable,
     $createFriendshipsTable,
-    $createPostsTable,
     $createBlogsTable,
+    $createPostsTable,
     $createPrivacySettingsTable,
     $createCircleOfFriendsTable,
     $createMessagesTable,

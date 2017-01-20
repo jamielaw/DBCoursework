@@ -5,7 +5,7 @@ include("../inc/header.php");
  ?>
   <body>
     <!--  Navigation-->
-    <?php include 'inc/nav-trn.php'; ?>
+    <?php include '../inc/nav-trn.php'; ?>
     <!--Link to creating photo collections  -->
     <a href="createphotocollection.php">
       <button type="button" name="button">Create Photo Collection</button>

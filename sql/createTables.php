@@ -1,16 +1,8 @@
 <?php
-$servername = "localhost:3306";
-$username = "root";
-$password = "admin";
+//require '../sn/database.php'; //uncomment this if you need to call this individual script
 
-// Create connection
-$conn = new mysqli($servername, $username, $password);
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}else{
-  echo "Connection established";
-}
+$pdo = Database::connect_fordrop();
+$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 // Drop database if necessary
 $dropDatabase = "DROP DATABASE IF EXISTS MyDB";
@@ -209,12 +201,13 @@ foreach ($creatingTables as $sqlquery){
   echo "<b>Executing SQL statement: </b>";
   echo $sqlquery; //Dispay statement being executed
   echo nl2br("\n");
-  if ($conn->query($sqlquery) === TRUE) {
+  $q= $pdo->prepare($sqlquery);
+  if ($q->execute() === TRUE) {
       echo "<b><font color='green'>SQL statement performed correctly</b></font>";
   } else {
-      echo "<b><font color='red'>Error executing statement: </b></font>" . $conn->error;
+      echo "<b><font color='red'>Error executing statement: </b></font>" . $pdo->error;
   }
 }
 
-$conn->close();
+  Database::disconnect();
 ?>

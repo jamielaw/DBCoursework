@@ -29,6 +29,23 @@ class Database
        return self::$cont;
 	}
 
+	public static function connect_fordrop()
+	{
+	   // One connection through whole application
+       if ( null == self::$cont )
+       {
+        try
+        {
+          self::$cont =  new PDO( "mysql:host=".self::$dbHost.";", self::$dbUsername, self::$dbUserPassword);
+        }
+        catch(PDOException $e)
+        {
+          die($e->getMessage());
+        }
+       }
+       return self::$cont;
+	}
+
 	public static function disconnect()
 	{
 		self::$cont = null;

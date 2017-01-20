@@ -32,7 +32,6 @@
 
   <h3> Edit a user account </h3>
 
-
   <form method="POST" action="editUser.php">
     <input type="hidden" name="argument1" value="<?php echo $argument1;?>">
     Email: <input type="text" name="email" value="<?php echo $row['email'];?>"> <br>

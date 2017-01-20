@@ -1,7 +1,7 @@
 <?php
 $title = "Photo Collections";
 $description = "";
-include("inc/header.php");
+include("../inc/header.php");
  ?>
   <body>
     <!--  Navigation-->
@@ -27,4 +27,4 @@ include("inc/header.php");
         </div>
       </a>
 
-      <?php include 'inc/footer.php'; ?>
+      <?php include '../inc/footer.php'; ?>

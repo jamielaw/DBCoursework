@@ -15,23 +15,24 @@ include("../inc/header.php");
     </a>
 
 
-    <div class="row">
+    <?php
+      require("../database.php");
+      $pdo = Database::connect();
+      $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+      $sql = "SELECT * FROM circleOfFriends";
+      // $result = $pdo->query($sql);
+      // if ($result->num_rows > 0) {
+        echo "<table style='width:100%'> <tr> <th> Circle of Friends ID </th> <th> Circle of Friends Name </th> <th> Date created </th> <th> Action </th> ";
+        foreach ($pdo->query($sql) as $row)  {
+            echo "<tr>";
+            echo "<td>" . $row["circleFriendsId"] . "</td><td> " . $row["circleOfFriendsName"] . "</td><td>" . $row["dateCreated"]  . "</td><td> test </td>";
+            echo "</tr>";
+        }
 
-      <!--  Repeat for $Y number of friendship circles-->
-      <a href="circlechat.php">
-        <div class="col-sm-6 col-md-4">
-          <div class="thumbnail">
-            <img src="..." alt="...">
-            <div class="caption">
-              <h3>Thumbnail label</h3>
-              <p>...</p>
-              <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
-            </div>
-          </div>
-        </div>
-      </a>
+        echo "</table>";
+        Database::disconnect();
 
-    </div>
+      ?>
 
     <!-- Footer  -->
     <?php include '../inc/footer.php'; ?>

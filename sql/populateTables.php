@@ -45,6 +45,10 @@ $insertFriendshipTable = "INSERT INTO MyDB.friendships (emailFrom,emailTo,status
 (\"grace@ucl.ac.uk\",\"denis@ucl.ac.uk\",\"accepted\"),
 (\"grace@ucl.ac.uk\",\"ken@ucl.ac.uk\",\"accepted\")";
 
+$insertCircleOfFriendsTable = "INSERT INTO MyDB.circleOfFriends (circleFriendsId,circleOfFriendsName,dateCreated) VALUES 
+(1,\"lmao\",2008-11-11),
+(2,\"lol\",2009-11-11)";
+
 $insertBlogsTable = "INSERT INTO MyDB.blogs (blogId,email,blogTitle,blogDescription) VALUES
 (1,\"charles@ucl.ac.uk\",\"Passeges from the Life of a Philosophe\",\"Perhaps it would be better for science, that all criticism should be avowed.\"),
 (2,\"larry@ucl.ac.uk\",\"Changing the world\",\"You never lose a dream. It just incubates as a hobby.\"),

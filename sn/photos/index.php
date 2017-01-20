@@ -1,11 +1,11 @@
 <?php
 $title = "Photo Collections";
 $description = "";
-include("../inc/header.php");
+include("inc/header.php");
  ?>
   <body>
     <!--  Navigation-->
-    <?php include '../inc/nav-trn.php'; ?>
+    <?php include 'inc/nav-trn.php'; ?>
     <!--Link to creating photo collections  -->
     <a href="createphotocollection.php">
       <button type="button" name="button">Create Photo Collection</button>
@@ -27,4 +27,4 @@ include("../inc/header.php");
         </div>
       </a>
 
-      <?php include '"../inc/footer.php'; ?>
+      <?php include 'inc/footer.php'; ?>

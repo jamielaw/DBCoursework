@@ -1,5 +1,7 @@
 <?php
 
+  require '../database.php';
+
   function wrapArgument($arg){
     return "'" . $arg . "'";
   }
@@ -15,18 +17,9 @@
     die();
   }
 
-  $servername = "localhost:3306";
-  $username = "root";
-  $password = "root";
 
-
-  $conn = new mysqli($servername, $username, $password);
-
-  if ($conn->connect_error) {
-      //die("Connection failed: " . $conn->connect_error);
-  }else{
-      //echo "Connection established";
-  }
+  $pdo = Database::connect();
+  $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 
   $sql = "UPDATE MyDB.users SET
@@ -39,10 +32,11 @@
 
   //echo $sql;
 
-  if($conn->query($sql) == TRUE){
-    $conn->close();
-    redirect('http://localhost:8888/sn/admin/');
-  }
+  $pdo->exec($sql);
+
+  Database::disconnect();
+  redirect('http://localhost:8888/sn/admin/');
+
 
 
 

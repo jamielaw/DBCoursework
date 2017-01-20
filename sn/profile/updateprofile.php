@@ -1,34 +1,34 @@
-<?php 
-	
+<?php
+
 	require '../database.php';
 
 	$email = null;
 	if ( !empty($_GET['email'])) {
 		$email = $_REQUEST['email'];
 	}
-	
+
 	if ( null==$email ) {
 		header("Location: index.php");
 	}
-	
+
 	if ( !empty($_POST)) {
 		// keep track validation errors
 		$firstNameError = null;
 		$emailError = null;
 		$lastNameError = null;
-		
+
 		// keep track post values
 		$firstName = $_POST['firstName'];
 		$email = $_POST['email'];
 		$lastName = $_POST['lastName'];
-		
+
 		// validate input
 		$valid = true;
 		if (empty($firstName)) {
 			$firstNameError = 'Please enter Name';
 			$valid = false;
 		}
-		
+
 		if (empty($email)) {
 			$emailError = 'Please enter Email Address';
 			$valid = false;
@@ -36,12 +36,12 @@
 			$emailError = 'Please enter a valid Email Address';
 			$valid = false;
 		}
-		
+
 		if (empty($lastName)) {
 			$lastNameError = 'Please enter Mobile Number';
 			$valid = false;
 		}
-		
+
 		// update data
 		if ($valid) {
 			$pdo = Database::connect();
@@ -77,12 +77,12 @@
 
 <body>
     <div class="container">
-    
+
     			<div class="span10 offset1">
     				<div class="row">
 		    			<h3>Update a User</h3>
 		    		</div>
-    		
+
 	    			<form class="form-horizontal" action="updateprofile.php?email=<?php echo $email?>" method="post">
 					  <div class="control-group <?php echo !empty($emailError)?'error':'';?>">
 					    <label class="control-label">Email Address</label>
@@ -117,7 +117,7 @@
 						</div>
 					</form>
 				</div>
-				
+
     </div> <!-- /container -->
   </body>
 </html>

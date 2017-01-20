@@ -45,6 +45,10 @@ $insertFriendshipTable = "INSERT INTO MyDB.friendships (emailFrom,emailTo,status
 (\"grace@ucl.ac.uk\",\"denis@ucl.ac.uk\",\"accepted\"),
 (\"grace@ucl.ac.uk\",\"ken@ucl.ac.uk\",\"accepted\")";
 
+$insertCircleOfFriendsTable = "INSERT INTO MyDB.circleOfFriends (circleFriendsId,circleOfFriendsName) VALUES 
+(1,\"lmao\"),
+(2,\"lol\")";
+
 $insertBlogsTable = "INSERT INTO MyDB.blogs (blogId,email,blogTitle,blogDescription) VALUES
 (1,\"charles@ucl.ac.uk\",\"Passeges from the Life of a Philosophe\",\"Perhaps it would be better for science, that all criticism should be avowed.\"),
 (2,\"larry@ucl.ac.uk\",\"Changing the world\",\"You never lose a dream. It just incubates as a hobby.\"),
@@ -112,7 +116,8 @@ $populatingTables = [
     $insertBlogsTable,
     $insertPostsTable,
     $insertPhotoCollectionTable,
-    $insertPhotosTable
+    $insertPhotosTable,
+    $insertCircleOfFriendsTable
 ];
 
 

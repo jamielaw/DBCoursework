@@ -20,6 +20,7 @@
         <li><a href="../circles/index.php">Circles</a></li>
         <li><a href="../blog/index.php">Blog</a></li>
         <li><a href="../explore/index.php">Explore</a></li>
+        <li><a href="../admin/index.php">Admin</a></li>
       </ul>
 
       <!--search bar-->

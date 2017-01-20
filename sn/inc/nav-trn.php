@@ -15,42 +15,42 @@
 
                  <!-- Photo Collections -->
                  <li>
-                    <a href="photos/index.php">
+                    <a href="../photos/index.php">
                         Photos
                     </a>
                 </li>
 
                 <!-- Search -->
                 <li>
-                   <a href="search/index.php">
+                   <a href="../search/index.php">
                        Search
                    </a>
                </li>
 
                <!-- Explore -->
                <li>
-                  <a href="explore/index.php">
+                  <a href="../explore/index.php">
                       Explore
                   </a>
               </li>
 
               <!-- Circles -->
               <li>
-                 <a href="circles/index.php">
+                 <a href="../circles/index.php">
                      Circles
                  </a>
              </li>
 
              <!-- Blog -->
              <li>
-                <a href="blog/index.php">
+                <a href="../blog/index.php">
                     Blog
                 </a>
             </li>
 
             <!-- Explore -->
             <li>
-               <a href="profile/index.php">
+               <a href="../profile/index.php">
                    Profile
                </a>
            </li>

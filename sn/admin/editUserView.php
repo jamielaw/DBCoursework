@@ -1,31 +1,24 @@
 <?php
+  require '../database.php';
   $title = "Bookface Social Network";
   $description = "A far superior social network";
   include("../inc/header.php");
 
-  $servername = "localhost:3306";
-  $username = "root";
-  $password = "admin";
 
-  //Create connection
-  $conn = new mysqli($servername, $username, $password);
-  // Check connection
-  if ($conn->connect_error) {
-      die("Connection failed: " . $conn->connect_error);
-  }else{
-      echo "Connection established";
-  }
-
+  $pdo = Database::connect();
+  $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
   $argument1 = $_GET['email'];
 
   echo $argument1;
-  $sql = "SELECT * FROM MyDB.users WHERE email=" . "'" . $argument1 . "'";
+  $sql = "SELECT * FROM users WHERE email=" . "'" . $argument1 . "'";
   echo $sql;
-  $result = $conn->query($sql);
+  //$result = $pdo->q($sql);
+  $q= $pdo->prepare($sql);
+  $q->execute();
+  $row = $q->fetch(PDO::FETCH_ASSOC);
 
-  $row =  $result->fetch_assoc();
-
+  //echo $row;
 ?>
 
 <body>
@@ -44,6 +37,7 @@
     <button type="submit">Update!</button>
   </form>
 
+  <?php Database::disconnect(); ?>
 
 
 </body>

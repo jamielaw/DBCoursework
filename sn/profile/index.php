@@ -90,9 +90,9 @@
 								echo '<td width=350>';
 								echo '<a class="btn btn-info" href="readphotocollection.php?createdBy='.$row['createdBy'].'&photoCollectionId='.$row['photoCollectionId'].'">Read</a>';
 								echo '&nbsp;';
-								echo '<a data-title="'.$row['title'].'" data-description="'.$row['description'].'" data-id="'.$row['photoCollectionId'].'" class="open-update_dialog btn btn-success" data-toggle="modal" href="#update_dialog"">Update</a>';
+								echo '<a data-title="'.$row['title'].'" data-description="'.$row['description'].'" data-id="'.$row['photoCollectionId'].'" class="open-update_dialog btn btn-success" data-toggle="modal" href="#update_dialog">Update</a>';
 								echo '&nbsp;';
-								echo '<a class="btn btn-danger" href="deletephotocollection.php?email='.$row['createdBy'].'">Delete</a>';
+								echo '<a data-title="'.$row['title'].'" data-id="'.$row['photoCollectionId'].'" class="open-delete_dialog btn btn-danger" data-toggle="modal" href="#delete_dialog">Delete</a>';
 								echo '</td>';
 								echo '</tr>';
 						  	}
@@ -102,7 +102,9 @@
 				   </table>
 				
 				    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#collection_dialog">Create Collection</button>
-					     
+					
+
+					<!-- modal to create new collection -->
 					<!-- the div that represents the modal dialog -->
 					<div class="modal fade" id="collection_dialog" role="dialog">
 					    <div class="modal-dialog">
@@ -125,6 +127,7 @@
 					        </div>
 					    </div>
 
+					<!-- modal to update collection -->
 					<!-- the div that represents the modal dialog -->
 					<div class="modal fade" id="update_dialog" role="dialog">
 					    <div class="modal-dialog">
@@ -141,7 +144,29 @@
 					                </div>
 					                <div class="modal-footer">
 					                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-					                    <button type="button" id="submitForm2" class="btn btn-default">Update</button>
+					                    <button type="button" id="submitForm2" class="btn btn-success">Update</button>
+					                </div>
+					            </div>
+					        </div>
+					    </div>
+
+					<!-- modal to delete collection -->
+					<!-- the div that represents the modal dialog -->
+					<div class="modal fade" id="delete_dialog" role="dialog">
+					    <div class="modal-dialog">
+					        <div class="modal-content">
+					            <div class="modal-header">
+					                <button type="button" class="close" data-dismiss="modal">&times;</button>
+					                <h4 class="modal-title">Delete Collection</h4>
+					            </div>
+					                <div class="modal-body">
+					                    <form id="delete_form" action="deletephotocollection.php" method="POST">
+					                        Are you sure you want to delete the collection  <input type="text" name="deletealbumName" id="deletealbumName"> ?
+					                    </form>
+					                </div>
+					                <div class="modal-footer">
+					                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					                    <button type="button" id="submitForm3" class="btn btn-danger">Delete</button>
 					                </div>
 					            </div>
 					        </div>
@@ -186,11 +211,10 @@ $(document).ready(function () {
     $("#submitForm").on('click', function() {
         $("#collection_form").submit();
     });
-
-    
-
 });
 
+
+// Update Collection
 var albumName = null;
 var albumDescription = null;
 var albumId = null;
@@ -225,6 +249,40 @@ $(document).on("click", ".open-update_dialog", function () {
      
     $("#submitForm2").on('click', function() {
         $("#update_form").submit();
+    });
+});
+
+// Delete Collection
+var deletealbumName = null;
+
+$(document).on("click", ".open-delete_dialog", function () {
+     deletealbumName = $(this).data('title');
+     $(".modal-body #deletealbumName").val(deletealbumName);
+     albumId = $(this).data('id');
+
+    // Delete Collection Button
+    $("#delete_form").on("submit", function(e) {
+        var postData3 =  $(this).serializeArray();
+        postData3.push({name: "photoCollectionId", value: albumId});
+        var formURL = $(this).attr("action");
+        $.ajax({
+            url: formURL,
+            type: "POST",
+            data: postData3,
+            success: function(data, textStatus, jqXHR) {
+                $('#delete_dialog .modal-header .modal-title').html("Result");
+                $('#delete_dialog .modal-body').html(data);
+                $("#submitForm3").remove();
+            },
+            error: function(jqXHR, status, error) {
+                console.log(status + ": " + error);
+            }
+        });
+        e.preventDefault();
+    });
+     
+    $("#submitForm3").on('click', function() {
+        $("#delete_form").submit();
     });
 });
 

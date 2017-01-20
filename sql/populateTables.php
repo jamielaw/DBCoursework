@@ -29,7 +29,8 @@ $insertUsersTable = "INSERT INTO MyDB.users (email,roleID,password,firstName,las
 (\"dennis@ucl.ac.uk\",2,\"test\",\"Dennis\",\"Ritchie\",\"/images/profile/dennis@ucl.ac.uk.jpg\"),
 (\"ken@ucl.ac.uk\",2,\"test\",\"Ken\",\"Thompson\",\"/images/profile/ken@ucl.ac.uk.jpg\"),
 (\"larry@ucl.ac.uk\",2,\"test\",\"Larry\",\"Page\",\"/images/profile/larry@ucl.ac.uk.jpg\"),
-(\"charles@ucl.ac.uk\",2,\"test\",\"Charles\",\"Babbage\",\"/images/profile/charles@ucl.ac.uk.jpg\")";
+(\"charles@ucl.ac.uk\",2,\"test\",\"Charles\",\"Babbage\",\"/images/profile/charles@ucl.ac.uk.jpg\"),
+(\"vicky@ucl.ac.uk\",2,\"test\",\"Vicky\",\"LovesPHP\",\"/images/profile/vicky@ucl.ac.uk.jpg\")";
 
 $insertFriendshipTable = "INSERT INTO MyDB.friendships (emailFrom,emailTo,status) VALUES 
 (\"charles@ucl.ac.uk\",\"larry@ucl.ac.uk\",\"accepted\"),

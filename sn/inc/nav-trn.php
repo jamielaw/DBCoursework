@@ -21,12 +21,14 @@
         <li><a href="../blog/index.php">Blog</a></li>
         <li><a href="../explore/index.php">Explore</a></li>
       </ul>
-      <form class="navbar-form navbar-left">
-      <div class="form-group">
-        <input type="text" class="form-control" placeholder="Search for friends">
-      </div>
-      <button type="submit" class="btn btn-default">Submit</button>
-    </form>
+
+      <!--search bar-->
+      <form class="navbar-form navbar-left" action="../search/searchresult.php" method="get">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search for friends">
+        </div>
+        <button type="submit" name="submit" id="submit" class="btn btn-default"><i class="glyphicon glyphicon-search"></i></button>
+      </form>
     </div>
   </div>
 </nav>

@@ -34,9 +34,10 @@
 
   $pdo->exec($sql);
 
+  Database::disconnect();
   redirect('http://localhost:8888/sn/admin/');
 
-  Database::disconnect();
+
 
 
 

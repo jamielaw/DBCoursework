@@ -3,8 +3,13 @@
 	$photoId = null;
 	$photoCollectionId = null;
 	$imageReference = null;
+	$comment = null;
 	if ( !empty($_GET['photoId'])) {
 		$photoId = $_REQUEST['photoId'];
+	}
+	if ( !empty($_GET['comment'])) {
+		$comment = $_REQUEST['comment'];
+		sendToDatabase($photoId,"charles@ucl.ac.uk",$comment);
 	}
 	$imageReference = $_GET['imageReference'];
 	$photoCollectionId = $_GET['photoCollectionId'];
@@ -34,6 +39,13 @@
 		$q3->execute(array($photoId));
 		$result = $q3->fetch(PDO::FETCH_ASSOC);
 		return $result;
+	}
+	function sendToDatabase($photoId,$email,$comment) {
+		$pdo = Database::connect();
+		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		$sql4 = "INSERT INTO comments (photoId,email,commentText) VALUES (?,?,?)";
+		$q4 = $pdo->prepare($sql4);
+		$q4->execute(array($photoId,$email,$comment));
 	}
 	function date_difference ($date_1, $date_2) {   
     $val_1 = new DateTime($date_1);
@@ -100,6 +112,12 @@
 }
 ?>
 
+<script>
+function sendData() {
+    alert("The form was submitted");
+}
+</script>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -150,11 +168,15 @@
 
 
       <h4>Leave a Comment:</h4>
-      <form role="form">
+      <form action="readphoto.php">
         <div class="form-group">
-          <textarea class="form-control" rows="3" required></textarea>
+          <input type="hidden" name="photoId" value=<?php echo $photoId?>>
+          <input type="hidden" name="imageReference" value=<?php echo $imageReference?>>
+          <input type="hidden" name="photoCollectionId" value=<?php echo $photoCollectionId?>>
+
+          <textarea name="comment" class="form-control" rows="3" required></textarea>
         </div>
-        <button type="submit" class="btn btn-success">Submit</button>
+        <button class="btn btn-success">Submit</button>
       </form>
       <br><br>
       

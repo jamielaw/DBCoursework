@@ -100,14 +100,9 @@
     }
     
     if ($ok==0){
-    	if($second > 0){
-        	if ($second > 1){
-            	$output .= $second." minutes ";       
-        	} else {
-            	$output .= $second." minute ";
-        	}
-    	}
+    	$output .= $second." seconds ";       
     }
+    
     return $output;
 }
 ?>
@@ -193,7 +188,8 @@ function sendData() {
         <div class="col-sm-10">
           <h4><b><?php echo getUserDetails($email)['firstName'];?> <?php echo getUserDetails($email)['lastName'];?></b> 
           	<small><?php
-          		$date1=date("Y-m-d h:i:s");
+          		date_default_timezone_set('Europe/London');
+				$date1 = date('m/d/Y h:i:s a', time());
 			    $date2=$row['dateCreated'];
 			    echo date_difference($date1,$date2);
 			    ?>

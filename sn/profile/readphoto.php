@@ -245,6 +245,7 @@
     
 	// Remove tags.
     $( '#taglist' ).on('click', '.remove', function() {
+      console.log("<<<<", id);
       id = $(this).parent().attr("id");
       // Remove the tag
 	  $.ajax({

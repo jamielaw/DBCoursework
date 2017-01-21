@@ -22,7 +22,7 @@ if( !empty( $_POST['type'] ) && $_POST['type'] == "remove")
   $tag_id = $_POST['tag_id'];
   $pdo = Database::connect();
   $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-  $sql = "DELETE FROM annotations WHERE photoId = ?";
+  $sql = "DELETE FROM annotations WHERE annotationsId = ?";
   $q = $pdo->prepare($sql);
   $q->execute(array($tag_id));
 }

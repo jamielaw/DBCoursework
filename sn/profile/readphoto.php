@@ -4,12 +4,15 @@
 	$photoCollectionId = null;
 	$imageReference = null;
 	$comment = null;
+	$ok=1;
 	if ( !empty($_GET['photoId'])) {
 		$photoId = $_REQUEST['photoId'];
 	}
-	if ( !empty($_GET['comment'])) {
+	if ( $ok==1 && !empty($_GET['comment'])) {
 		$comment = $_REQUEST['comment'];
+		$ok==0;
 		sendToDatabase($photoId,"charles@ucl.ac.uk",$comment);
+		$comment = null;
 	}
 	$imageReference = $_GET['imageReference'];
 	$photoCollectionId = $_GET['photoCollectionId'];
@@ -46,6 +49,7 @@
 		$sql4 = "INSERT INTO comments (photoId,email,commentText) VALUES (?,?,?)";
 		$q4 = $pdo->prepare($sql4);
 		$q4->execute(array($photoId,$email,$comment));
+		$comment=null;
 	}
 	function date_difference ($date_1, $date_2) {   
     $val_1 = new DateTime($date_1);
@@ -107,12 +111,6 @@
 }
 ?>
 
-<script>
-function sendData() {
-    alert("The form was submitted");
-}
-</script>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -121,8 +119,265 @@ function sendData() {
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+
+
+<body>
+<div class="container-fluid">
+  <div class="row content">
+    <div id="imgtag" class="paddingImage col-sm-3 sidenav">
+    	<img id="<?php echo $photoId?>" src="<?php echo $imageReference?>" width="300">
+    	<div id="tagbox"></div>
+		
+		<div id="taglist"> <ol></ol> </div>
+	</div>
+
+    <div class="col-sm-9">
+      <br>
+      <h4>Leave a Comment:</h4>
+      <form action="readphoto.php">
+        <div class="form-group">
+          <input type="hidden" name="photoId" value=<?php echo $photoId?>>
+          <input type="hidden" name="imageReference" value=<?php echo $imageReference?>>
+          <input type="hidden" name="photoCollectionId" value=<?php echo $photoCollectionId?>>
+
+          <textarea name="comment" class="form-control" rows="3" required></textarea>
+        </div>
+        <button class="btn btn-success">Submit</button>
+      </form>
+      <br><br>
+      
+      <p><span class="badge"><?php echo returnNumberOfComments($photoId)['COUNT(*)'];?> </span> Comments:</p><br>
+      
+      <div class="row">
+       <?php
+       	while ($row = $q->fetch(PDO::FETCH_ASSOC)){
+		?>
+        <div class="col-sm-2 text-center">
+         	<?php $email = $row['email']; ?>
+			<img src="<?php echo getUserDetails($email)['profileImage'];?>" class="img-circle" height="65" width="65" alt="Avatar">
+        </div>
+        <div class="col-sm-10">
+          <h4 href='#'><b><?php echo getUserDetails($email)['firstName'];?> <?php echo getUserDetails($email)['lastName'];?></b> 
+          	<small><?php
+          		date_default_timezone_set('Europe/London');
+				$date1 = date('m/d/Y h:i:s a', time());
+			    $date2=$row['dateCreated'];
+			    echo date_difference($date1,$date2);
+			    ?>
+			ago</small>
+          </h4>
+          <p><?php echo $row['commentText'];?></p>
+        <br>
+        </div>
+        <?php
+    	}
+    	?>
+     </div>
+    </div>
+    </div>
+  </div>
+</div>
+<footer class="container-fluid">
+  <p>Footer Text</p>
+</footer>
+</body>
+</html>
+
+
+<script>
+
+ $(document).ready(function(){
+    var counter = 0;
+    var mouseX = 0;
+    var mouseY = 0;
+    
+    $("#imgtag img").click(function(e) { // make sure the image is click
+      var imgtag = $(this).parent(); // get the div to append the tagging list
+      mouseX = ( e.pageX - $(imgtag).offset().left ) - 50; // x and y axis
+      mouseY = ( e.pageY - $(imgtag).offset().top ) - 50;
+      $( '#tagit' ).remove( ); // remove any tagit div first
+      $( imgtag ).append( '<div id="tagit"><div class="box"></div><div class="name"><div class="text">Type any name or tag</div><input type="text" name="txtname" id="tagname" /><input type="button" name="btnsave" value="Save" id="btnsave" /><input type="button" name="btncancel" value="Cancel" id="btncancel" /></div></div>' );
+      $( '#tagit' ).css({ top:mouseY, left:mouseX });
+      
+      $('#tagname').focus();
+    });
+    
+	// Save button click - save tags
+    $( document ).on( 'click',  '#tagit #btnsave', function(){
+      	name = $('#tagname').val();
+		var img = $('#imgtag').find( 'img' );
+		var id = $( img ).attr( 'id' );
+      $.ajax({
+        type: "POST", 
+        url: "savetag.php", 
+        data: "pic_id=" + id + "&name=" + name + "&pic_x=" + mouseX + "&pic_y=" + mouseY + "&type=insert",
+        cache: true, 
+        success: function(data){
+          console.log(">>>>> ", id, name, mouseX, mouseY);
+          viewtag( id );
+          $('#tagit').fadeOut();
+        }
+      });
+      
+    });
+    
+	// Cancel the tag box.
+    $( document ).on( 'click', '#tagit #btncancel', function() {
+      $('#tagit').fadeOut();
+    });
+    
+	// mouseover the taglist 
+	$('#taglist').on( 'mouseover', 'li', function( ) {
+      id = $(this).attr("id");
+      $('#view_' + id).css({ opacity: 1.0 });
+    }).on( 'mouseout', 'li', function( ) {
+        $('#view_' + id).css({ opacity: 0.0 });
+    });
+	
+	// mouseover the tagboxes that is already there but opacity is 0.
+	$( '#tagbox' ).on( 'mouseover', '.tagview', function( ) {
+		var pos = $( this ).position();
+		$(this).css({ opacity: 1.0 }); // div appears when opacity is set to 1.
+	}).on( 'mouseout', '.tagview', function( ) {
+		$(this).css({ opacity: 0.0 }); // hide the div by setting opacity to 0.
+	});
+    
+	// Remove tags.
+    $( '#taglist' ).on('click', '.remove', function() {
+      id = $(this).parent().attr("id");
+      // Remove the tag
+	  $.ajax({
+        type: "POST", 
+        url: "savetag.php", 
+        data: "tag_id=" + id + "&type=remove",
+        success: function(data) {
+			var img = $('#imgtag').find( 'img' );
+			var id = $( img ).attr( 'id' );
+			//get tags if present
+			viewtag( id );
+        }
+      });
+    });
+	
+	// load the tags for the image when page loads.
+    var img = $('#imgtag').find( 'img' );
+	var id = $( img ).attr( 'id' );
+	
+	viewtag( id ); // view all tags available on page load
+    
+    function viewtag( pic_id )
+    {
+       console.log("I am in view tag!", pic_id);
+      // get the tag list with action remove and tag boxes and place it on the image.
+	  $.post( "taglist.php" ,  "pic_id=" + pic_id, function( data ) {
+	  	$('#taglist ol').html(data.lists);
+		 $('#tagbox').html(data.boxes);
+	  }, "json");
+	
+    }
+    
+    
+  });
+</script>
+
   <style>
- 	
+	#container
+	{
+		display: block;
+		margin: 0 auto;
+	}
+	#imgtag
+	{
+		position: relative;
+		cursor: crosshair;
+	}
+
+	.tagview
+	{
+		border: 1px solid #F10303;
+		width: 100px;
+		height: 100px;
+		position: absolute;
+	/*display:none;*/
+		opacity: 0;
+		color: #FFFFFF;
+		text-align: center;
+	}
+	.square
+	{
+		display: block;
+		height: 79px;
+	}
+	.person
+	{
+		background: #282828;
+		border-top: 1px solid #F10303;
+	}
+
+	#tagit
+	{
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 240px;
+		border: 1px solid #D7C7C7;
+	}
+	#tagit .box
+	{
+		border: 1px solid #F10303;
+		width: 100px;
+		height: 100px;
+		float: left;
+	}
+	#tagit .name
+	{
+		float: left;
+		background-color: #FFF;
+		width: 127px;
+		height: 92px;
+		padding: 5px;
+		font-size: 10pt;
+	}
+	#tagit DIV.text
+	{
+		margin-bottom: 5px;
+	}
+	#tagit INPUT[type=text]
+	{
+		margin-bottom: 5px;
+	}
+	#tagit #tagname
+	{
+		width: 110px;
+	}
+	#taglist
+	{
+		width: 300px;
+		min-height: 200px;
+		height: 200px;
+		float: left;
+		color: #000;
+	}
+	#taglist OL
+	{
+		cursor: pointer;
+	}
+	#taglist OL A
+	{
+	}
+	#taglist OL A:hover
+	{
+		text-decoration: underline;
+	}
+	.tagtitle
+	{
+		font-size: 14px;
+		text-align: center;
+		width: 100%;
+		float: left;
+	}
+		
  	.paddingImage {padding-left: 50px; padding-top: 20px}
     /* Set height of the grid so .sidenav can be 100% (adjust if needed) */
     .row.content {height: 1500px}
@@ -149,67 +404,3 @@ function sendData() {
       .row.content {height: auto;} 
     }
   </style>
-</head>
-<body>
-
-<div class="container-fluid">
-  <div class="row content">
-    <div class="paddingImage col-sm-3 sidenav">
-    	<img src="<?php echo $imageReference?>" width="300">
-    </div>
-
-    <div class="col-sm-9">
-      <br>
-
-
-      <h4>Leave a Comment:</h4>
-      <form action="readphoto.php">
-        <div class="form-group">
-          <input type="hidden" name="photoId" value=<?php echo $photoId?>>
-          <input type="hidden" name="imageReference" value=<?php echo $imageReference?>>
-          <input type="hidden" name="photoCollectionId" value=<?php echo $photoCollectionId?>>
-
-          <textarea name="comment" class="form-control" rows="3" required></textarea>
-        </div>
-        <button class="btn btn-success">Submit</button>
-      </form>
-      <br><br>
-      
-      <p><span class="badge"><?php echo returnNumberOfComments($photoId)['COUNT(*)'];?> </span> Comments:</p><br>
-      
-      <div class="row">
-       <?php
-       	while ($row = $q->fetch(PDO::FETCH_ASSOC)){
-		?>
-        <div class="col-sm-2 text-center">
-         	<?php $email = $row['email']; ?>
-			<img src="<?php echo getUserDetails($email)['profileImage'];?>" class="img-circle" height="65" width="65" alt="Avatar">
-        </div>
-        <div class="col-sm-10">
-          <h4><b><?php echo getUserDetails($email)['firstName'];?> <?php echo getUserDetails($email)['lastName'];?></b> 
-          	<small><?php
-          		date_default_timezone_set('Europe/London');
-				$date1 = date('m/d/Y h:i:s a', time());
-			    $date2=$row['dateCreated'];
-			    echo date_difference($date1,$date2);
-			    ?>
-			ago</small>
-          </h4>
-          <p><?php echo $row['commentText'];?></p>
-        <br>
-        </div>
-        <?php
-    	}
-    	?>
-     </div>
-    </div>
-    </div>
-  </div>
-</div>
-
-<footer class="container-fluid">
-  <p>Footer Text</p>
-</footer>
-
-</body>
-</html>

@@ -11,7 +11,6 @@ if ($conn->connect_error) {
 }else{
   echo "Connection established";
 }
-
 $insertRolesTable = "INSERT INTO MyDB.roles (roleID,roleTitle) VALUES (1,\"administartor\"), (2,\"user\")";
 
 $insertRightsTable = "INSERT INTO MyDB.rights (roleID,rightTitle,rightDescription) VALUES
@@ -29,15 +28,15 @@ $insertRightsTable = "INSERT INTO MyDB.rights (roleID,rightTitle,rightDescriptio
 (1, \"Edit User's Blog\", \"The user has the right to edit other user's blog\")";
 
 $insertUsersTable = "INSERT INTO MyDB.users (email,roleID,password,firstName,lastName,profileImage) VALUES
-(\"alan@ucl.ac.uk\",2,\"test\",\"Alan\",\"Turing\",\"/images/profile/alan@ucl.ac.uk.jpg\"), 
-(\"ada@ucl.ac.uk\",2,\"test\",\"Ada\",\"Lovelace\",\"/images/profile/ada@ucl.ac.uk.jpg\"),
-(\"grace@ucl.ac.uk\",2,\"test\",\"Grace\",\"Hopper\",\"/images/profile/grace@ucl.ac.uk.jpg\"),
-(\"john@ucl.ac.uk\",2,\"test\",\"John\",\"von Neumann\",\"/images/profile/john@ucl.ac.uk.jpg\"),
-(\"tim@ucl.ac.uk\",2,\"test\",\"Tim\",\"Berners-Lee\",\"/images/profile/tim@ucl.ac.uk.jpg\"),
-(\"dennis@ucl.ac.uk\",2,\"test\",\"Dennis\",\"Ritchie\",\"/images/profile/dennis@ucl.ac.uk.jpg\"),
-(\"ken@ucl.ac.uk\",2,\"test\",\"Ken\",\"Thompson\",\"/images/profile/ken@ucl.ac.uk.jpg\"),
-(\"larry@ucl.ac.uk\",2,\"test\",\"Larry\",\"Page\",\"/images/profile/larry@ucl.ac.uk.jpg\"),
-(\"charles@ucl.ac.uk\",2,\"test\",\"Charles\",\"Babbage\",\"/images/profile/charles@ucl.ac.uk.jpg\")";
+(\"alan@ucl.ac.uk\",2,\"test\",\"Alan\",\"Turing\",\"../../images/profile/alan@ucl.ac.uk.jpg\"), 
+(\"ada@ucl.ac.uk\",2,\"test\",\"Ada\",\"Lovelace\",\"../../images/profile/ada@ucl.ac.uk.jpg\"),
+(\"grace@ucl.ac.uk\",2,\"test\",\"Grace\",\"Hopper\",\"../../images/profile/grace@ucl.ac.uk.jpg\"),
+(\"john@ucl.ac.uk\",2,\"test\",\"John\",\"von Neumann\",\"../../images/profile/john@ucl.ac.uk.jpg\"),
+(\"tim@ucl.ac.uk\",2,\"test\",\"Tim\",\"Berners-Lee\",\"../../images/profile/tim@ucl.ac.uk.jpg\"),
+(\"dennis@ucl.ac.uk\",2,\"test\",\"Dennis\",\"Ritchie\",\"../../images/profile/dennis@ucl.ac.uk.jpg\"),
+(\"ken@ucl.ac.uk\",2,\"test\",\"Ken\",\"Thompson\",\"../../images/profile/ken@ucl.ac.uk.jpg\"),
+(\"larry@ucl.ac.uk\",2,\"test\",\"Larry\",\"Page\",\"../../images/profile/larry@ucl.ac.uk.jpg\"),
+(\"charles@ucl.ac.uk\",2,\"test\",\"Charles\",\"Babbage\",\"../../images/profile/charles@ucl.ac.uk.jpg\")";
 
 $insertFriendshipTable = "INSERT INTO MyDB.friendships (emailFrom,emailTo,status) VALUES 
 (\"charles@ucl.ac.uk\",\"larry@ucl.ac.uk\",\"accepted\"),
@@ -96,20 +95,20 @@ $insertPhotoCollectionTable = "INSERT INTO MyDB.photocollection (photoCollection
 (2,\"Difference Engine\", \"charles@ucl.ac.uk\")";
 
 $insertPhotosTable = "INSERT INTO MyDB.photos (photoCollectionId,imageReference) VALUES 
-(1, \"/images/photoCollection/12.jpg\"),
-(1, \"/images/photoCollection/13.jpg\"),
-(1, \"/images/photoCollection/14.jpg\"),
-(1, \"/images/photoCollection/15.jpg\"),
-(1, \"/images/photoCollection/16.jpg\"),
-(2, \"/images/photoCollection/17.jpg\"),
-(2, \"/images/photoCollection/18.png\"),
-(2, \"/images/photoCollection/19.jpg\"),
-(2, \"/images/photoCollection/20.jpg\"),
-(2, \"/images/photoCollection/21.jpg\"),
-(2, \"/images/photoCollection/22.jpg\"),
-(2, \"/images/photoCollection/23.jpg\"),
-(2, \"/images/photoCollection/24.jpg\"),
-(2, \"/images/photoCollection/25.jpg\")";
+(1, \"../../images/photoCollection/12.jpg\"),
+(1, \"../../images/photoCollection/13.jpg\"),
+(1, \"../../images/photoCollection/14.jpg\"),
+(1, \"../../images/photoCollection/15.jpg\"),
+(1, \"../../images/photoCollection/16.jpg\"),
+(2, \"../../images/photoCollection/17.jpg\"),
+(2, \"../../images/photoCollection/18.png\"),
+(2, \"../../images/photoCollection/19.jpg\"),
+(2, \"../../images/photoCollection/20.jpg\"),
+(2, \"../../images/photoCollection/21.jpg\"),
+(2, \"../../images/photoCollection/22.jpg\"),
+(2, \"../../images/photoCollection/23.jpg\"),
+(2, \"../../images/photoCollection/24.jpg\"),
+(2, \"../../images/photoCollection/25.jpg\")";
 
 $insertCommentsTable = "INSERT INTO MyDB.comments (photoId,email,commentText) VALUES 
 (1,\"ada@ucl.ac.uk\", \"Which conference was this one?\"),
@@ -129,7 +128,6 @@ $populatingTables = [
     $insertPhotosTable,
     $insertCommentsTable
 ];
-
 
 foreach ($populatingTables as $sqlquery){
   echo nl2br("\n"); //Line break in HTML conversion

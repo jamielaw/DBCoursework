@@ -8,8 +8,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 </head>
-<!--  Navigation-->
-<?php include '../inc/nav-trn.php'; ?>
+
 <body>
     <div class="container">
     		<div class="row" id="friends">
@@ -122,7 +121,7 @@
 					                </div>
 					                <div class="modal-footer">
 					                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-					                    <button type="button" id="submitForm" class="btn btn-success	">Create</button>
+					                    <button type="button" id="submitForm" class="btn btn-success">Create</button>
 					                </div>
 					            </div>
 					        </div>

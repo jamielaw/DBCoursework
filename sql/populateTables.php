@@ -1,8 +1,16 @@
 <?php
-//require '../sn/database.php'; //uncomment this if you need to call this individual script
+$servername = "localhost:3306";
+$username = "root";
+$password = "admin";
 
-$pdo = Database::connect();
-$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+// Create connection
+$conn = new mysqli($servername, $username, $password);
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}else{
+  echo "Connection established";
+}
 
 $insertRolesTable = "INSERT INTO MyDB.roles (roleID,roleTitle) VALUES (1,\"administartor\"), (2,\"user\")";
 
@@ -29,8 +37,7 @@ $insertUsersTable = "INSERT INTO MyDB.users (email,roleID,password,firstName,las
 (\"dennis@ucl.ac.uk\",2,\"test\",\"Dennis\",\"Ritchie\",\"/images/profile/dennis@ucl.ac.uk.jpg\"),
 (\"ken@ucl.ac.uk\",2,\"test\",\"Ken\",\"Thompson\",\"/images/profile/ken@ucl.ac.uk.jpg\"),
 (\"larry@ucl.ac.uk\",2,\"test\",\"Larry\",\"Page\",\"/images/profile/larry@ucl.ac.uk.jpg\"),
-(\"charles@ucl.ac.uk\",2,\"test\",\"Charles\",\"Babbage\",\"/images/profile/charles@ucl.ac.uk.jpg\"),
-(\"vicky@ucl.ac.uk\",2,\"test\",\"Vicky\",\"LovesPHP\",\"/images/profile/vicky@ucl.ac.uk.jpg\")";
+(\"charles@ucl.ac.uk\",2,\"test\",\"Charles\",\"Babbage\",\"/images/profile/charles@ucl.ac.uk.jpg\")";
 
 $insertFriendshipTable = "INSERT INTO MyDB.friendships (emailFrom,emailTo,status) VALUES 
 (\"charles@ucl.ac.uk\",\"larry@ucl.ac.uk\",\"accepted\"),
@@ -44,10 +51,6 @@ $insertFriendshipTable = "INSERT INTO MyDB.friendships (emailFrom,emailTo,status
 (\"grace@ucl.ac.uk\",\"tim@ucl.ac.uk\",\"pending\"),
 (\"grace@ucl.ac.uk\",\"denis@ucl.ac.uk\",\"accepted\"),
 (\"grace@ucl.ac.uk\",\"ken@ucl.ac.uk\",\"accepted\")";
-
-$insertCircleOfFriendsTable = "INSERT INTO MyDB.circleOfFriends (circleFriendsId,circleOfFriendsName) VALUES 
-(1,\"lmao\"),
-(2,\"lol\")";
 
 $insertBlogsTable = "INSERT INTO MyDB.blogs (blogId,email,blogTitle,blogDescription) VALUES
 (1,\"charles@ucl.ac.uk\",\"Passeges from the Life of a Philosophe\",\"Perhaps it would be better for science, that all criticism should be avowed.\"),
@@ -108,6 +111,13 @@ $insertPhotosTable = "INSERT INTO MyDB.photos (photoCollectionId,imageReference)
 (2, \"/images/photoCollection/24.jpg\"),
 (2, \"/images/photoCollection/25.jpg\")";
 
+$insertCommentsTable = "INSERT INTO MyDB.comments (photoId,email,commentText) VALUES 
+(1,\"ada@ucl.ac.uk\", \"Which conference was this one?\"),
+(1,\"ken@ucl.ac.uk\", \"This is a good photo!\"),
+(1,\"larry@ucl.ac.uk\", \"I think the light in this picture isn't that good. Could have been better! And why didn't you invite me to this conference?\"),
+(2,\"ken@ucl.ac.uk\", \"This reminded me...Have you seen where the annual conference is going to take place this year?\"),
+(2,\"charles@ucl.ac.uk\",\"Yes, I have. Have you seen who the guest speakers are?\")";
+
 $populatingTables = [ 
     $insertRolesTable,
     $insertRightsTable,
@@ -117,7 +127,7 @@ $populatingTables = [
     $insertPostsTable,
     $insertPhotoCollectionTable,
     $insertPhotosTable,
-    $insertCircleOfFriendsTable
+    $insertCommentsTable
 ];
 
 
@@ -126,14 +136,13 @@ foreach ($populatingTables as $sqlquery){
   echo "<b>Executing SQL statement: </b>";
   echo $sqlquery; //Dispay statement being executed
   echo nl2br("\n");
-  $q= $pdo->prepare($sqlquery);
-  if ($q->execute() === TRUE) {
+  if ($conn->query($sqlquery) === TRUE) {
       echo "<b><font color='green'>SQL statement performed correctly</b></font>";
   } else {
-      echo "<b><font color='red'>Error executing statement: </b></font>" . $pdo->error;
+      echo "<b><font color='red'>Error executing statement: </b></font>" . $conn->error;
   }
 }
 
 
-  Database::disconnect();
+$conn->close();
 ?>

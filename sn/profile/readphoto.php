@@ -6,7 +6,6 @@
 	if ( !empty($_GET['photoId'])) {
 		$photoId = $_REQUEST['photoId'];
 	}
-
 	$imageReference = $_GET['imageReference'];
 	$photoCollectionId = $_GET['photoCollectionId'];
 	if ( null==$photoId) {
@@ -18,7 +17,6 @@
 		$q = $pdo->prepare($sql);
 		$q->execute(array($photoId));
 	}
-
 	function getUserDetails($email) {
 		$pdo = Database::connect();
 		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -26,16 +24,20 @@
 		$q2 = $pdo->prepare($sql2);
 		$q2->execute(array($email));
 		$user = $q2->fetch(PDO::FETCH_ASSOC);
-
 		return $user;
 	}
-
+	function returnNumberOfComments($photoId) {
+		$pdo = Database::connect();
+		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		$sql3 = "SELECT COUNT(*) FROM comments WHERE photoId = ? ";
+		$q3 = $pdo->prepare($sql3);
+		$q3->execute(array($photoId));
+		$result = $q3->fetch(PDO::FETCH_ASSOC);
+		return $result;
+	}
 	function date_difference ($date_1, $date_2) {   
-
-
     $val_1 = new DateTime($date_1);
     $val_2 = new DateTime($date_2);
-
     $interval = $val_1->diff($val_2);
     $year     = $interval->y;
     $month    = $interval->m;
@@ -43,10 +45,8 @@
     $hour	  = $interval->h;
     $minute   = $interval->i;
     $second   = $interval->s;
-
     $output   = '';
     $ok = 0;
-
     if($year > 0){
         if ($year > 1){
             $output .= $year." years ";     
@@ -55,7 +55,6 @@
         }
         $ok=1;
     }
-
     if($month > 0){
         if ($month > 1){
             $output .= $month." months ";       
@@ -63,7 +62,6 @@
             $output .= $month." month ";
         }
     }
-
     if($day > 0){
         if ($day > 1){
             $output .= $day." days ";       
@@ -72,7 +70,6 @@
         }
         $ok=1;
     }
-
     if($hour > 0){
         if ($hour > 1){
             $output .= $hour." hours ";       
@@ -81,7 +78,6 @@
         }
         $ok=1;
     }
-
     if($minute > 0){
         if ($minute > 1){
             $output .= $minute." minutes ";       
@@ -100,7 +96,6 @@
         	}
     	}
     }
-
     return $output;
 }
 ?>
@@ -108,198 +103,95 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-
-    <script src="../js/min/bootstrap.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <style>
+ 	
+ 	.paddingImage {padding-left: 50px; padding-top: 20px}
+    /* Set height of the grid so .sidenav can be 100% (adjust if needed) */
+    .row.content {height: 1500px}
+    
+    /* Set gray background color and 100% height */
+    .sidenav {
+      background-color: #f1f1f1;
+      height: 100%;
+    }
+    
+    /* Set black background color, white text and some padding */
+    footer {
+      background-color: #555;
+      color: white;
+      padding: 15px;
+    }
+    
+    /* On small screens, set height to 'auto' for sidenav and grid */
+    @media screen and (max-width: 767px) {
+      .sidenav {
+        height: auto;
+        padding: 15px;
+      }
+      .row.content {height: auto;} 
+    }
+  </style>
 </head>
-
 <body>
-    <div class="container">
-    <div class="span10 offset1">
-	    <div class="row padding">
-		  <div class="col-md-4"><img src="<?php echo $imageReference?>" height="400">
-		  	<div class="text-center">Tags</div>
-		  </div>
-		  
-		  <div class="col-md-6 scroll">
-		  <?php 
-		  	while ($row = $q->fetch(PDO::FETCH_ASSOC)){
-		  ?>
-			  <div class="row inner">
-			  	<div class="col-sm-8">
-			  		<div class="panel panel-white post panel-shadow">
-			            <div class="post-heading">
-			                <div class="pull-left image">
-			                <?php
-			                	$email = $row['email'];
-			                ?>
-			                    <img src="<?php echo getUserDetails($email)['profileImage'];?>" class="img-circle avatar" alt="user profile image">
 
-			                </div>
-			                <div class="pull-left meta">
-			                    <div class="title h5">
-			                        <a href="#"><b><?php echo getUserDetails($email)['firstName'];?> <?php echo getUserDetails($email)['lastName'];?></b></a>
-			                            made a post.
-			                    </div>
-			                    <h6 class="text-muted time">
-			                    	<?php
-			                    		$date1=date("Y-m-d h:i:s");
-			                    		$date2=$row['dateCreated'];
-			                    		echo '<h6 class="text-muted time">'.date_difference($date1,$date2);'</h6>'
-			                    	?>
-			                    	ago
-			                    </h6>
-			                </div>
-			            </div> 
-			            <div class="post-description"> 
-			                <p><?php echo $row['commentText'];?></p>
-			                <div class="stats">
-			                    <a href="#" class="btn btn-default stat-item">
-			                        <i class="fa fa-thumbs-up icon"></i>2
-			                    </a>
-			                    <a href="#" class="btn btn-default stat-item">
-			                        <i class="fa fa-thumbs-down icon"></i>12
-			                    </a>
-			                </div>
-			            </div>
-			        </div>
-			    </div>
-			   </div>
-			 <?php
-				}
-			?>
+<div class="container-fluid">
+  <div class="row content">
+    <div class="paddingImage col-sm-3 sidenav">
+    	<img src="<?php echo $imageReference?>" width="300">
+    </div>
+
+    <div class="col-sm-9">
+      <br>
 
 
-		  </div>
-		</div>
-	   	</div>
-	</div>
-  </body>
+      <h4>Leave a Comment:</h4>
+      <form role="form">
+        <div class="form-group">
+          <textarea class="form-control" rows="3" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-success">Submit</button>
+      </form>
+      <br><br>
+      
+      <p><span class="badge"><?php echo returnNumberOfComments($photoId)['COUNT(*)'];?> </span> Comments:</p><br>
+      
+      <div class="row">
+       <?php
+       	while ($row = $q->fetch(PDO::FETCH_ASSOC)){
+		?>
+        <div class="col-sm-2 text-center">
+         	<?php $email = $row['email']; ?>
+			<img src="<?php echo getUserDetails($email)['profileImage'];?>" class="img-circle" height="65" width="65" alt="Avatar">
+        </div>
+        <div class="col-sm-10">
+          <h4><b><?php echo getUserDetails($email)['firstName'];?> <?php echo getUserDetails($email)['lastName'];?></b> 
+          	<small><?php
+          		$date1=date("Y-m-d h:i:s");
+			    $date2=$row['dateCreated'];
+			    echo date_difference($date1,$date2);
+			    ?>
+			ago</small>
+          </h4>
+          <p><?php echo $row['commentText'];?></p>
+        <br>
+        </div>
+        <?php
+    	}
+    	?>
+     </div>
+    </div>
+    </div>
+  </div>
+</div>
+
+<footer class="container-fluid">
+  <p>Footer Text</p>
+</footer>
+
+</body>
 </html>
-
-
-
-<style>
-.scroll {
-    height: 700px;
-    overflow: auto;
-}
-
-.inner {
-    margin: 0 auto; 
-    position: center;
-}
-.test {background-color: lightblue;}
-.test2 {background-color: yellow;}
-.test3 {background-color: red;}
-.padding {
-    padding-top: 1.5cm;
-}
-
-.panel-shadow {
-    box-shadow: rgba(0, 0, 0, 0.3) 7px 7px 7px;
-}
-.panel-white {
-  border: 1px solid #dddddd;
-}
-.panel-white  .panel-heading {
-  color: #333;
-  background-color: #fff;
-  border-color: #ddd;
-}
-.panel-white  .panel-footer {
-  background-color: #fff;
-  border-color: #ddd;
-}
-
-.post .post-heading {
-  height: 95px;
-  padding: 20px 15px;
-}
-.post .post-heading .avatar {
-  width: 60px;
-  height: 60px;
-  display: block;
-  margin-right: 15px;
-}
-.post .post-heading .meta .title {
-  margin-bottom: 0;
-}
-.post .post-heading .meta .title a {
-  color: black;
-}
-.post .post-heading .meta .title a:hover {
-  color: #aaaaaa;
-}
-.post .post-heading .meta .time {
-  margin-top: 8px;
-  color: #999;
-}
-.post .post-image .image {
-  width: 100%;
-  height: auto;
-}
-.post .post-description {
-  padding: 15px;
-}
-.post .post-description p {
-  font-size: 14px;
-}
-.post .post-description .stats {
-  margin-top: 20px;
-}
-.post .post-description .stats .stat-item {
-  display: inline-block;
-  margin-right: 15px;
-}
-.post .post-description .stats .stat-item .icon {
-  margin-right: 8px;
-}
-.post .post-footer {
-  border-top: 1px solid #ddd;
-  padding: 15px;
-}
-.post .post-footer .input-group-addon a {
-  color: #454545;
-}
-.post .post-footer .comments-list {
-  padding: 0;
-  margin-top: 20px;
-  list-style-type: none;
-}
-.post .post-footer .comments-list .comment {
-  display: block;
-  width: 100%;
-  margin: 20px 0;
-}
-.post .post-footer .comments-list .comment .avatar {
-  width: 35px;
-  height: 35px;
-}
-.post .post-footer .comments-list .comment .comment-heading {
-  display: block;
-  width: 100%;
-}
-.post .post-footer .comments-list .comment .comment-heading .user {
-  font-size: 14px;
-  font-weight: bold;
-  display: inline;
-  margin-top: 0;
-  margin-right: 10px;
-}
-.post .post-footer .comments-list .comment .comment-heading .time {
-  font-size: 12px;
-  color: #aaa;
-  margin-top: 0;
-  display: inline;
-}
-.post .post-footer .comments-list .comment .comment-body {
-  margin-left: 50px;
-}
-.post .post-footer .comments-list .comment > .comments-list {
-  margin-left: 50px;
-}
-</style>

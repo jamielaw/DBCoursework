@@ -8,6 +8,7 @@
 	}
 
 	$imageReference = $_GET['imageReference'];
+	$photoCollectionId = $_GET['photoCollectionId'];
 	if ( null==$photoId) {
 		header("Location: index.php");
 	} else {
@@ -16,7 +17,17 @@
 		$sql = "SELECT * FROM comments WHERE photoId = ? ORDER BY dateCreated DESC";
 		$q = $pdo->prepare($sql);
 		$q->execute(array($photoId));
-		Database::disconnect();
+	}
+
+	function getUserDetails($email) {
+		$pdo = Database::connect();
+		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		$sql2 = "SELECT * FROM users WHERE email = ?";
+		$q2 = $pdo->prepare($sql2);
+		$q2->execute(array($email));
+		$user = $q2->fetch(PDO::FETCH_ASSOC);
+
+		return $user;
 	}
 
 	function date_difference ($date_1, $date_2) {   
@@ -122,11 +133,15 @@
 			  		<div class="panel panel-white post panel-shadow">
 			            <div class="post-heading">
 			                <div class="pull-left image">
-			                    <img src="http://bootdey.com/img/Content/user_1.jpg" class="img-circle avatar" alt="user profile image">
+			                <?php
+			                	$email = $row['email'];
+			                ?>
+			                    <img src="<?php echo getUserDetails($email)['profileImage'];?>" class="img-circle avatar" alt="user profile image">
+
 			                </div>
 			                <div class="pull-left meta">
 			                    <div class="title h5">
-			                        <a href="#"><b><?php echo $row['email'];?></b></a>
+			                        <a href="#"><b><?php echo getUserDetails($email)['firstName'];?> <?php echo getUserDetails($email)['lastName'];?></b></a>
 			                            made a post.
 			                    </div>
 			                    <h6 class="text-muted time">

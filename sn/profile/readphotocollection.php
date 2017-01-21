@@ -61,7 +61,7 @@
 						     	<?php 
 						     	 while ($row = $q->fetch(PDO::FETCH_ASSOC)){
 						     	 	?>
-						     	 	<a href="readphoto.php?photoId=<?php echo $row['photoId']?>&imageReference=<?php echo $row['imageReference'];?>" id="bottle" >
+						     	 	<a href="readphoto.php?photoId=<?php echo $row['photoId']?>&imageReference=<?php echo $row['imageReference']?>&photoCollectionId=<?php echo $row['photoCollectionId'];?>" id="bottle" >
 										<img src="<?php echo $row['imageReference'];?>"  height="200" ></td></a>
 						     	 	<?php
 						     	 }

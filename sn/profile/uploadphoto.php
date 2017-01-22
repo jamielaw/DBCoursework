@@ -1,7 +1,15 @@
 <?php
+require '../database.php';
+
+$photoCollectionId = null;
+if ( !empty($_GET['photoCollectionId'])) {
+    $photoCollectionId = $_REQUEST['photoCollectionId'];
+}
+
 $target_dir = $_SERVER['DOCUMENT_ROOT'] . '/images/photoCollection/';
 $path_parts = pathinfo($_FILES["fileToUpload"]["name"]);
-$target_file =  $target_dir . $path_parts['filename'].'_'.time().'.'.$path_parts['extension'];
+$name = $path_parts['filename'].'_'.time().'.'.$path_parts['extension'];
+$target_file =  $target_dir . $name;
 $uploadOk = 1;
 $imageFileType = pathinfo($target_file,PATHINFO_EXTENSION);
 // Check if image file is a actual image or fake image
@@ -37,9 +45,22 @@ if ($uploadOk == 0) {
 // if everything is ok, try to upload file
 } else {
     if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
-        echo "The file ". basename( $_FILES["fileToUpload"]["name"]). " has been uploaded at ". basename($target_dir);
+        echo "The file ". basename( $_FILES["fileToUpload"]["name"]). " has been uploaded at ". basename($target_dir) . "  ";
+        savePhoto($photoCollectionId,$name);
     } else {
         echo "Sorry, there was an error uploading your file.";
     }
 }
+
+function savePhoto($photoCollectionId,$name) {
+
+  $imageReference = '../../images/photoCollection/' . $name;
+  $pdo = Database::connect();
+  $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+  $sql = "INSERT INTO photos (photoCollectionId,imageReference) VALUES (?,?)";
+  $q = $pdo->prepare($sql);
+  $q->execute(array($photoCollectionId, $imageReference));
+
+}
+
 ?>

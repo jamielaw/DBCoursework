@@ -40,37 +40,42 @@
 
 <body>
     <div class="container">
-    
-    			<div class="span10 offset1">
-    				<div class="row">
-    					<?php 
-    						$row = $q2->fetch(PDO::FETCH_ASSOC)
-    						?> 
-		    				<h3 class="text-center"><?php echo $row['title'];?></h3>
-		    				<h5 class="text-center"><?php echo $row['description'];?></h5>
-		    		</div>
-		    		<div class="form-actions">
-						<a class="btn btn-info" href="index.php">Back</a>
-					</div><br>
-	    			<div class="form-horizontal" >
-					  <div class="control-group">
-					  <div class="controls">
-					    </div>
-					    <div class="controls">
-						    <label class="checkbox">
-						     	<?php 
-						     	 while ($row = $q->fetch(PDO::FETCH_ASSOC)){
-						     	 	?>
-						     	 	<a href="readphoto.php?photoId=<?php echo $row['photoId']?>&imageReference=<?php echo $row['imageReference']?>&photoCollectionId=<?php echo $row['photoCollectionId'];?>" id="bottle" >
-										<img src="<?php echo $row['imageReference'];?>"  height="200" ></td></a>
-						     	 	<?php
+    	<div class="span10 offset1">
+    		<div class="row">
+    			<?php 
+    				$row = $q2->fetch(PDO::FETCH_ASSOC)
+    			?> 
+		    	<h3 class="text-center"><?php echo $row['title'];?></h3>
+		    	<h5 class="text-center"><?php echo $row['description'];?></h5>
+		    </div>
+		    <div class="form-actions">
+				<a class="btn btn-info" href="index.php">Back</a>
+			</div><br>
+	    	<div class="form-horizontal" >
+			  <div class="control-group">
+				  	<div class="controls"></div>
+					<div class="controls">
+						   <label class="checkbox">
+						    	<?php 
+						   	 	while ($row = $q->fetch(PDO::FETCH_ASSOC)){
+						     	?>
+						     	<a href="readphoto.php?photoId=<?php echo $row['photoId']?>&imageReference=<?php echo $row['imageReference']?>&photoCollectionId=<?php echo $row['photoCollectionId'];?>" id="bottle" >
+									<img src="<?php echo $row['imageReference'];?>"  height="200" ></td></a>
+						     	<?php
 						     	 }
 						     	?>
 						    </label>
-					    </div>
-					  </div>
 					</div>
-				</div>
+					</div>
+			  </div>
+		   </div>
+
+		    <form action="uploadphoto.php?photoCollectionId=<?php echo $photoCollectionId; ?>" method="post" enctype="multipart/form-data">
+			    Select image to upload:
+			    <input type="file" name="fileToUpload" id="fileToUpload">
+			    <input type="submit" value="Upload Image" name="submit">
+			</form>
+		</div>
 				
     </div> <!-- /container -->
   </body>

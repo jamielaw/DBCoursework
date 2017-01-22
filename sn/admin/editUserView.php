@@ -23,7 +23,7 @@
 ?>
 
 <body>
-      <!--  Navigation-->
+  <!--  Navigation-->
   <?php include '../inc/nav-trn.php'; ?>
   <div class="container">
     <div class="span10 offset1">

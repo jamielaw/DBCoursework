@@ -1,15 +1,16 @@
 <?php
-
+  // DB Auth Script
   require '../database.php';
 
+  // Given "string", returns "'string'" - useful for SQL queries
   function wrapArgument($arg){
     return "'" . $arg . "'";
   }
-
+  // Removes spaces
   function removeSpaces($arg){
     return str_replace(' ', '', $arg);
   }
-
+  // All functions should be moved to utils.php at some point
   function redirect($url) {
     ob_start();
     header('Location: '.$url);
@@ -30,11 +31,14 @@
   . "profileDescription =" . wrapArgument($_POST['profileDescription'])
   . " WHERE email='" . removeSpaces($_POST['argument1']) . "'";
 
-  //echo $sql;
 
   $pdo->exec($sql);
 
+  // Need to handle error catching etc
+
   Database::disconnect();
+
+  // Direct back to sn/admin
   redirect('http://localhost:8888/sn/admin/');
 
 

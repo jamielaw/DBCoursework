@@ -24,12 +24,11 @@
       </ul>
 
       <!--search bar-->
-      <form class="navbar-form navbar-left" action="../search/searchresult.php" method="get">
-        <div class="form-group">
-          <input type="text" class="form-control" placeholder="Search for friends">
-        </div>
-        <button type="submit" name="submit" id="submit" class="btn btn-default"><i class="glyphicon glyphicon-search"></i></button>
+      <form class="navbar-form navbar-left" action="../search/searchresult.php?go" method="get" id="searchform">
+          <input type="text" class="form-control" placeholder="Search for friends" name="submit">
+        <button type="submit" id="submit" class="btn btn-default"><i class="glyphicon glyphicon-search"></i></button>
       </form>
+
     </div>
   </div>
 </nav>

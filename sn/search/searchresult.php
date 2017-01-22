@@ -7,20 +7,37 @@
   <body>
       <!--  Navigation-->
     <?php include '../inc/nav-trn.php'; ?>
-    <h1>$X Number Of User Results for $Query</h1>
 
-    <!--  Repeat for $X -->
-    <div class="media">
-      <div class="media-left">
-        <a href="#">
-          <img class="media-object" src="..." alt="...">
-        </a>
-      </div>
-      <div class="media-body">
-        <h4 class="media-heading">Media heading</h4>
-        ...
-      </div>
-    </div>
+      <!--php for search-->
+      <?php 
+      require("../database.php");
+      echo "<h1>Search first/last name results for: ". $_GET['submit'] ."</h1>";
+       if(isset($_GET['submit'])){ 
+          if(preg_match("/^[  a-zA-Z]+/", $_GET['submit'])){ //check search string isn't empty
+            $name=$_GET['submit']; 
+            //connect  to the database 
+            $pdo = Database::connect();
+            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            //-query  the database table 
+            //currently searches to see if the first or last name contains the search string at any location
+            $sql="SELECT email, firstName, lastName, profileImage FROM MyDB.users WHERE firstName LIKE '%" . $name .  "%' OR lastName LIKE '%" . $name ."%'"; 
+            //echo $sql;
+
+            echo "<table style='width:100%'> <tr> <th> Email </th> <th> First name </th> <th> Last Name </th> <th> Image </th>";
+            //- loop through result set 
+            foreach($pdo->query($sql) as $row){
+                //-display the result of the array 
+                echo "<tr>"; 
+                echo "<td>" . $row["email"] . "</td><td> " . $row["firstName"] . "</td><td>" . $row["lastName"]  . "</td><td> <img style='height:100px;width=100px;' src='" . $row["profileImage"] . "'</td>";
+                echo "</tr>"; 
+            } 
+          } 
+          else{ 
+            echo  "<p>Please enter a search query</p>" .$_GET['submit']; 
+          }  
+        }
+      Database::disconnect(); 
+    ?>
 
   </body>
 </html>

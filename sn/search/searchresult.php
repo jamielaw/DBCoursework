@@ -11,7 +11,7 @@
       <!--php for search-->
       <?php 
       require("../database.php");
-      echo "<h1>Search first/last name results for: ". $_GET['submit'] ."</h1>";
+      echo "<h1>Search results for first/last name containing: ". $_GET['submit'] ."</h1>";
        if(isset($_GET['submit'])){ 
           if(preg_match("/^[  a-zA-Z]+/", $_GET['submit'])){ //check search string isn't empty
             $name=$_GET['submit']; 

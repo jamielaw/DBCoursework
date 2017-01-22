@@ -1,5 +1,7 @@
 <?php 
 	require '../database.php';
+
+	$email="charles@ucl.ac.uk";
 	$photoId = null;
 	$photoCollectionId = null;
 	$imageReference = null;
@@ -134,6 +136,8 @@
 
     <div class="col-sm-9">
       <br>
+      <button class="btn btn-info">Access Rights</button>
+      <button data-title = <?php echo $photoId?> class="open-delete_dialog btn btn-danger" data-toggle="modal" href="#delete_dialog">Delete Photo</button>
       <h4>Leave a Comment:</h4>
       <form action="readphoto.php">
         <div class="form-group">
@@ -147,6 +151,27 @@
       </form>
       <br><br>
       
+		<div class="modal fade" id="delete_dialog" role="dialog">
+			<div class="modal-dialog">
+				<div class="modal-content">
+				    <div class="modal-header">
+				        <button type="button" class="close" data-dismiss="modal">&times;</button>
+				            <h4 class="modal-title">Delete Photo</h4>
+					</div>
+					<div class="modal-body">
+						<form id="delete_form" action="deletephoto.php" method="POST">
+						    Are you sure you want to delete the photo?
+						</form>
+					 </div>
+					 <div class="modal-footer">
+					    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					    <button type="button" id="submitForm3" class="btn btn-danger">Delete</button>
+					 </div>
+				 </div>
+			 </div>
+		</div>
+
+
       <p><span class="badge"><?php echo returnNumberOfComments($photoId)['COUNT(*)'];?> </span> Comments:</p><br>
       
       <div class="row">
@@ -186,6 +211,44 @@
 
 
 <script>
+
+// Delete Photo
+var deletephotoName = null;
+
+$(document).on("click", ".open-delete_dialog", function () {
+     deletephotoName = $(this).data('title');
+     console.log("id ", deletephotoName);
+     $(".modal-body #deletephotoName").val(deletephotoName);
+     albumId = $(this).data('id');
+
+    // Delete Collection Button
+    $("#delete_form").on("submit", function(e) {
+        var postData3 =  $(this).serializeArray();
+        postData3.push({name: "deletephotoName", value: deletephotoName});
+        var formURL = $(this).attr("action");
+        $.ajax({
+            url: formURL,
+            type: "POST",
+            data: postData3,
+            success: function(data, textStatus, jqXHR) {
+                $('#delete_dialog .modal-header .modal-title').html("Result");
+                $('#delete_dialog .modal-body').html(data);
+                $("#submitForm3").remove();
+                location.href = "readphotocollection.php?createdBy=<?php echo $email?>&photoCollectionId=<?php echo $photoCollectionId ?>;";
+
+            },
+            error: function(jqXHR, status, error) {
+                console.log(status + ": " + error);
+            }
+        });
+        e.preventDefault();
+    });
+     
+    $("#submitForm3").on('click', function() {
+        $("#delete_form").submit();
+    });
+});
+
 
  $(document).ready(function(){
     var counter = 0;

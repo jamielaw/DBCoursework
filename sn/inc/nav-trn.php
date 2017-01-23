@@ -15,7 +15,16 @@
     </div>
     <div>
       <ul class="nav navbar-nav">
-        <li><a href="../profile">Profile</a></li>
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">Profile
+          <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="../profile/index.php">My Blog</a></li>
+            <li><a href="../profile/index.php#2">My Friends</a></li>
+            <li><a href="../profile/index.php#3">Messages</a></li>
+            <li><a href="../profile/index.php#4">My Photo Collections</a></li>
+          </ul>
+        </li>
         <li><a href="../photos/index.php">Photos</a></li>
         <li><a href="../circles/index.php">Circles</a></li>
         <li><a href="../blog/index.php">Blog</a></li>

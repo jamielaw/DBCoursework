@@ -1,18 +1,8 @@
 <?php
-$servername = "localhost:3306";
-$username = "root";
-$password = "admin";
-
-// Create connection
-$conn = new mysqli($servername, $username, $password);
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}else{
-  echo "Connection established";
-}
+//require '../sn/database.php'; //uncomment this if you need to call this individual script
+$pdo = Database::connect();
+$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 $insertRolesTable = "INSERT INTO MyDB.roles (roleID,roleTitle) VALUES (1,\"administartor\"), (2,\"user\")";
-
 $insertRightsTable = "INSERT INTO MyDB.rights (roleID,rightTitle,rightDescription) VALUES
 (1, \"Delete User\", \"The user has the right to delete other user\"),
 (1, \"Delete User's Photos\", \"The user has the right to delete other user's photos\"),
@@ -26,18 +16,16 @@ $insertRightsTable = "INSERT INTO MyDB.rights (roleID,rightTitle,rightDescriptio
 (1, \"Edit User's Annotations\", \"The user has the right to edit other user's annotations\"),
 (1, \"Edit User's Blog Posts\", \"The user has the right to edit other user's blog posts\"),
 (1, \"Edit User's Blog\", \"The user has the right to edit other user's blog\")";
-
 $insertUsersTable = "INSERT INTO MyDB.users (email,roleID,password,firstName,lastName,profileImage) VALUES
-(\"alan@ucl.ac.uk\",2,\"test\",\"Alan\",\"Turing\",\"../../images/profile/alan@ucl.ac.uk.jpg\"), 
-(\"ada@ucl.ac.uk\",2,\"test\",\"Ada\",\"Lovelace\",\"../../images/profile/ada@ucl.ac.uk.jpg\"),
-(\"grace@ucl.ac.uk\",2,\"test\",\"Grace\",\"Hopper\",\"../../images/profile/grace@ucl.ac.uk.jpg\"),
-(\"john@ucl.ac.uk\",2,\"test\",\"John\",\"von Neumann\",\"../../images/profile/john@ucl.ac.uk.jpg\"),
-(\"tim@ucl.ac.uk\",2,\"test\",\"Tim\",\"Berners-Lee\",\"../../images/profile/tim@ucl.ac.uk.jpg\"),
-(\"dennis@ucl.ac.uk\",2,\"test\",\"Dennis\",\"Ritchie\",\"../../images/profile/dennis@ucl.ac.uk.jpg\"),
-(\"ken@ucl.ac.uk\",2,\"test\",\"Ken\",\"Thompson\",\"../../images/profile/ken@ucl.ac.uk.jpg\"),
-(\"larry@ucl.ac.uk\",2,\"test\",\"Larry\",\"Page\",\"../../images/profile/larry@ucl.ac.uk.jpg\"),
-(\"charles@ucl.ac.uk\",2,\"test\",\"Charles\",\"Babbage\",\"../../images/profile/charles@ucl.ac.uk.jpg\")";
-
+(\"alan@ucl.ac.uk\",2,\"test\",\"Alan\",\"Turing\",\"/images/profile/alan@ucl.ac.uk.jpg\"), 
+(\"ada@ucl.ac.uk\",2,\"test\",\"Ada\",\"Lovelace\",\"/images/profile/ada@ucl.ac.uk.jpg\"),
+(\"grace@ucl.ac.uk\",2,\"test\",\"Grace\",\"Hopper\",\"/images/profile/grace@ucl.ac.uk.jpg\"),
+(\"john@ucl.ac.uk\",2,\"test\",\"John\",\"von Neumann\",\"/images/profile/john@ucl.ac.uk.jpg\"),
+(\"tim@ucl.ac.uk\",2,\"test\",\"Tim\",\"Berners-Lee\",\"/images/profile/tim@ucl.ac.uk.jpg\"),
+(\"dennis@ucl.ac.uk\",2,\"test\",\"Dennis\",\"Ritchie\",\"/images/profile/dennis@ucl.ac.uk.jpg\"),
+(\"ken@ucl.ac.uk\",2,\"test\",\"Ken\",\"Thompson\",\"/images/profile/ken@ucl.ac.uk.jpg\"),
+(\"larry@ucl.ac.uk\",2,\"test\",\"Larry\",\"Page\",\"/images/profile/larry@ucl.ac.uk.jpg\"),
+(\"charles@ucl.ac.uk\",2,\"test\",\"Charles\",\"Babbage\",\"/images/profile/charles@ucl.ac.uk.jpg\")";
 $insertFriendshipTable = "INSERT INTO MyDB.friendships (emailFrom,emailTo,status) VALUES 
 (\"charles@ucl.ac.uk\",\"larry@ucl.ac.uk\",\"accepted\"),
 (\"charles@ucl.ac.uk\",\"ken@ucl.ac.uk\",\"accepted\"),
@@ -50,12 +38,10 @@ $insertFriendshipTable = "INSERT INTO MyDB.friendships (emailFrom,emailTo,status
 (\"grace@ucl.ac.uk\",\"tim@ucl.ac.uk\",\"pending\"),
 (\"grace@ucl.ac.uk\",\"denis@ucl.ac.uk\",\"accepted\"),
 (\"grace@ucl.ac.uk\",\"ken@ucl.ac.uk\",\"accepted\")";
-
 $insertBlogsTable = "INSERT INTO MyDB.blogs (blogId,email,blogTitle,blogDescription) VALUES
 (1,\"charles@ucl.ac.uk\",\"Passeges from the Life of a Philosophe\",\"Perhaps it would be better for science, that all criticism should be avowed.\"),
 (2,\"larry@ucl.ac.uk\",\"Changing the world\",\"You never lose a dream. It just incubates as a hobby.\"),
 (3,\"ken@ucl.ac.uk\",\"Belle\",\"If you want to go somewhere, goto is the best way to get there.\")";
-
 $insertPostsTable = "INSERT INTO MyDB.posts (blogId,postTitle,postText) VALUES
 (1,\"Preface\", \"Some men write their lives to save themselves from ennui, careless of the amount they inflict on their readers.
 Others write their personal history, lest some kind friend should survive them, and, in showing off his own talent, unwittingly show them up.
@@ -89,26 +75,24 @@ Ten of these lives had dropped, and the eleventh was in a consumption, when Rich
 The last only of the eleven lives existed when he embarked, and that life expired within twelve months after Richard Babbage sailed. The estates remained in possession of the representatives of the eleventh in the entail. If it could have been proved that Richard Babbage had survived twelve months after his voyage to America, these estates would have remained in my own branch of the family.
 I possess a letter from Richard Babbage, dated on board the ship in which he sailed for America.
 In the year 1773 it became necessary to sell a portion of this property, for the purpose of building a church at Ashbrenton. A private Act of Parliament was passed for that purpose, in which the rights of the true heir were reserved.\");";
-
 $insertPhotoCollectionTable = "INSERT INTO MyDB.photocollection (photoCollectionId,title,createdBy) VALUES
 (1,\"Conferences\",\"charles@ucl.ac.uk\"),
 (2,\"Difference Engine\", \"charles@ucl.ac.uk\")";
-
 $insertPhotosTable = "INSERT INTO MyDB.photos (photoCollectionId,imageReference) VALUES 
-(1, \"../../images/photoCollection/12.jpg\"),
-(1, \"../../images/photoCollection/13.jpg\"),
-(1, \"../../images/photoCollection/14.jpg\"),
-(1, \"../../images/photoCollection/15.jpg\"),
-(1, \"../../images/photoCollection/16.jpg\"),
-(2, \"../../images/photoCollection/17.jpg\"),
-(2, \"../../images/photoCollection/18.png\"),
-(2, \"../../images/photoCollection/19.jpg\"),
-(2, \"../../images/photoCollection/20.jpg\"),
-(2, \"../../images/photoCollection/21.jpg\"),
-(2, \"../../images/photoCollection/22.jpg\"),
-(2, \"../../images/photoCollection/23.jpg\"),
-(2, \"../../images/photoCollection/24.jpg\"),
-(2, \"../../images/photoCollection/25.jpg\")";
+(1, \"/images/photoCollection/12.jpg\"),
+(1, \"/images/photoCollection/13.jpg\"),
+(1, \"/images/photoCollection/14.jpg\"),
+(1, \"/images/photoCollection/15.jpg\"),
+(1, \"/images/photoCollection/16.jpg\"),
+(2, \"/images/photoCollection/17.jpg\"),
+(2, \"/images/photoCollection/18.png\"),
+(2, \"/images/photoCollection/19.jpg\"),
+(2, \"/images/photoCollection/20.jpg\"),
+(2, \"/images/photoCollection/21.jpg\"),
+(2, \"/images/photoCollection/22.jpg\"),
+(2, \"/images/photoCollection/23.jpg\"),
+(2, \"/images/photoCollection/24.jpg\"),
+(2, \"/images/photoCollection/25.jpg\")";
 
 $insertCommentsTable = "INSERT INTO MyDB.comments (photoId,email,commentText) VALUES 
 (1,\"ada@ucl.ac.uk\", \"Which conference was this one?\"),
@@ -126,21 +110,19 @@ $populatingTables = [
     $insertPostsTable,
     $insertPhotoCollectionTable,
     $insertPhotosTable,
-    $insertCommentsTable
+    $insertCommentsTable  
 ];
-
 foreach ($populatingTables as $sqlquery){
   echo nl2br("\n"); //Line break in HTML conversion
   echo "<b>Executing SQL statement: </b>";
   echo $sqlquery; //Dispay statement being executed
   echo nl2br("\n");
-  if ($conn->query($sqlquery) === TRUE) {
+  $q= $pdo->prepare($sqlquery);
+  if ($q->execute() === TRUE) {
       echo "<b><font color='green'>SQL statement performed correctly</b></font>";
   } else {
-      echo "<b><font color='red'>Error executing statement: </b></font>" . $conn->error;
+      echo "<b><font color='red'>Error executing statement: </b></font>" . $pdo->error;
   }
 }
-
-
-$conn->close();
+  Database::disconnect();
 ?>

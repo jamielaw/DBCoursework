@@ -95,11 +95,11 @@ $insertPhotosTable = "INSERT INTO MyDB.photos (photoCollectionId,imageReference)
 (2, \"/images/photoCollection/25.jpg\")";
 
 
-$insertCircleOfFriendsTable = "INSERT INTO MyDB.circleOfFriends (circleFriendsId,circleOfFriendsName) VALUES 
+$insertCircleOfFriendsTable = "INSERT INTO MyDB.circleOfFriends (circleFriendsId,circleOfFriendsName) VALUES
 (1,\"lmao\"),
 (2,\"lol\")";
 
-$insertCommentsTable = "INSERT INTO MyDB.comments (photoId,email,commentText) VALUES 
+$insertCommentsTable = "INSERT INTO MyDB.comments (photoId,email,commentText) VALUES
 (1,\"ada@ucl.ac.uk\", \"Which conference was this one?\"),
 (1,\"ken@ucl.ac.uk\", \"This is a good photo!\"),
 (1,\"larry@ucl.ac.uk\", \"I think the light in this picture isn't that good. Could have been better! And why didn't you invite me to this conference?\"),
@@ -125,7 +125,8 @@ $populatingTables = [
     $insertPhotoCollectionTable,
     $insertPhotosTable,
     $insertCircleOfFriendsTable,
-    $insertCommentsTable  
+    $insertCommentsTable,
+    $insertAnnotationsTable
 ];
 foreach ($populatingTables as $sqlquery){
   echo nl2br("\n"); //Line break in HTML conversion

@@ -48,9 +48,9 @@
 
     foreach ($pdo->query($annotationsInfo) as $row)  {
             echo "<tr>";
-            echo "<td>" . $row["email"] . "</td><td> " . $row["coordinateX"] . "</td><td>" . $row["coordinateY"]  . "</td><td> <img style='height:100px;width=100px;' src='" . "skip" . "'</td>";
-            echo "<td> <a class='btn btn-success' href='editUserView.php?email=".$row["email"]."'<i class='fa fa-pencil' aria-hidden='true'></i> Edit <br>";
-            echo "<a class='btn btn-danger' href='deleteUser.php?id=".$row["annotationsId"]."' <i class='fa fa-trash' aria-hidden='true'></i> Delete </td> </a>";
+            echo "<td>" . $row["email"] . "</td><td> " . $row["coordinateX"] . "</td><td>" . $row["coordinateY"]  . "</td><td>" . $row['annotationText'] . "</td>";
+            echo "<td> <a class='btn btn-success' href='annotations/editAnnotationView.php?annotationsId=".$row["annotationsId"]."'<i class='fa fa-pencil' aria-hidden='true'></i> Edit <br>";
+            echo "<a class='btn btn-danger' href='annotations/deleteAnnotation.php?annotationsId=".$row["annotationsId"]."' <i class='fa fa-trash' aria-hidden='true'></i> Delete </td> </a>";
             echo "</tr>";
     }
 

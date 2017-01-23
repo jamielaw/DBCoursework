@@ -1,19 +1,27 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>Create Friendship Circle</title>
-  </head>
-  <body>
-    <form class="" action="index.html" method="post">
+<?php
+  // Import DB Auth Script
+  require '../database.php';
 
-      <!-- Name of circle -->
-      <input type="text" name="" value="">
-      <!--  Photo of circle, use file uploader-->
-      <input type="file" name="" value="">
-      <!--  Requires multi select friends, use http://davidstutz.github.io/bootstrap-multiselect/#further-examples-->
+  //function to redirect - to be moved into a utils.php file later?
+  function redirect($url) {
+    ob_start();
+    header('Location: '.$url);
+    ob_end_flush();
+    die();
+  }
 
-      <button type="submit" name="button">Create Circle</button>
-    </form>
-  </body>
-</html>
+  // Get PK of Table
+  $argument1 = $_GET['email'];
+  // sql to delete a record
+  $sql = "DELETE FROM users WHERE email=". "'" . $argument1 . "'";
+  $pdo = Database::connect();
+  $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+  $pdo->exec($sql);
+  Database::disconnect();
+
+  //Redirect to /sn/admin page to create "refresh "
+  // URL TO BE MADE RELATIVE LATER
+  redirect('http://localhost:8888/sn/admin/');
+
+
+?>

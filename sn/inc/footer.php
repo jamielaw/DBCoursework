@@ -19,15 +19,12 @@
         <div class="container">
           <div class="row">
             <div class="col-md-6">
-            <p>© 2017 Bookface Ltd.</p>  
+            <footer class="container-fluid">
+            	<p>© 2017 Bookface Ltd.</p>  
+			</footer>
             </div>
-
           </div>
-
         </div>
-
 </footer>
-
 </body>
-
 </html>

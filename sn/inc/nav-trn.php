@@ -6,9 +6,8 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
-<body>
 
-<nav class="navbar navbar-inverse">
+<nav class="navbar navbar-inverse navbar-fixed-top">
   <div class="container-fluid">
     <div class="navbar-header">
       <a class="navbar-brand" href="#">BookFace</a>
@@ -32,6 +31,8 @@
     </div>
   </div>
 </nav>
-
-</body>
 </html>
+
+<style type="text/css">
+  body { padding-top: 50px; }
+</style>

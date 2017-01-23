@@ -17,7 +17,7 @@ $insertRightsTable = "INSERT INTO MyDB.rights (roleID,rightTitle,rightDescriptio
 (1, \"Edit User's Blog Posts\", \"The user has the right to edit other user's blog posts\"),
 (1, \"Edit User's Blog\", \"The user has the right to edit other user's blog\")";
 $insertUsersTable = "INSERT INTO MyDB.users (email,roleID,password,firstName,lastName,profileImage) VALUES
-(\"alan@ucl.ac.uk\",2,\"test\",\"Alan\",\"Turing\",\"/images/profile/alan@ucl.ac.uk.jpg\"), 
+(\"alan@ucl.ac.uk\",2,\"test\",\"Alan\",\"Turing\",\"/images/profile/alan@ucl.ac.uk.jpg\"),
 (\"ada@ucl.ac.uk\",2,\"test\",\"Ada\",\"Lovelace\",\"/images/profile/ada@ucl.ac.uk.jpg\"),
 (\"grace@ucl.ac.uk\",2,\"test\",\"Grace\",\"Hopper\",\"/images/profile/grace@ucl.ac.uk.jpg\"),
 (\"john@ucl.ac.uk\",2,\"test\",\"John\",\"von Neumann\",\"/images/profile/john@ucl.ac.uk.jpg\"),
@@ -26,7 +26,7 @@ $insertUsersTable = "INSERT INTO MyDB.users (email,roleID,password,firstName,las
 (\"ken@ucl.ac.uk\",2,\"test\",\"Ken\",\"Thompson\",\"/images/profile/ken@ucl.ac.uk.jpg\"),
 (\"larry@ucl.ac.uk\",2,\"test\",\"Larry\",\"Page\",\"/images/profile/larry@ucl.ac.uk.jpg\"),
 (\"charles@ucl.ac.uk\",2,\"test\",\"Charles\",\"Babbage\",\"/images/profile/charles@ucl.ac.uk.jpg\")";
-$insertFriendshipTable = "INSERT INTO MyDB.friendships (emailFrom,emailTo,status) VALUES 
+$insertFriendshipTable = "INSERT INTO MyDB.friendships (emailFrom,emailTo,status) VALUES
 (\"charles@ucl.ac.uk\",\"larry@ucl.ac.uk\",\"accepted\"),
 (\"charles@ucl.ac.uk\",\"ken@ucl.ac.uk\",\"accepted\"),
 (\"charles@ucl.ac.uk\",\"ada@ucl.ac.uk\",\"accepted\"),
@@ -78,7 +78,7 @@ In the year 1773 it became necessary to sell a portion of this property, for the
 $insertPhotoCollectionTable = "INSERT INTO MyDB.photocollection (photoCollectionId,title,createdBy) VALUES
 (1,\"Conferences\",\"charles@ucl.ac.uk\"),
 (2,\"Difference Engine\", \"charles@ucl.ac.uk\")";
-$insertPhotosTable = "INSERT INTO MyDB.photos (photoCollectionId,imageReference) VALUES 
+$insertPhotosTable = "INSERT INTO MyDB.photos (photoCollectionId,imageReference) VALUES
 (1, \"/images/photoCollection/12.jpg\"),
 (1, \"/images/photoCollection/13.jpg\"),
 (1, \"/images/photoCollection/14.jpg\"),
@@ -106,7 +106,16 @@ $insertCommentsTable = "INSERT INTO MyDB.comments (photoId,email,commentText) VA
 (2,\"ken@ucl.ac.uk\", \"This reminded me...Have you seen where the annual conference is going to take place this year?\"),
 (2,\"charles@ucl.ac.uk\",\"Yes, I have. Have you seen who the guest speakers are?\")";
 
-$populatingTables = [ 
+$insertAnnotationsTable = "INSERT INTO MyDB.annotations
+(`annotationsId`, `photoId`, `email`, `coordinateX`, `coordinateY`, `annotationText`)
+VALUES
+('1', '1', 'charles@ucl.ac.uk', '10', '11', 'Annotations!'),
+('2', '2', 'charles@ucl.ac.uk', '20', '30', 'Annotations!'),
+('3', '3', 'charles@ucl.ac.uk', '40', '40', 'Annotations!'),
+('4', '4', 'charles@ucl.ac.uk', '20', '10', 'Annotations!'),
+('5', '5', 'charles@ucl.ac.uk', '11', '1', 'Annotations!');"
+
+$populatingTables = [
     $insertRolesTable,
     $insertRightsTable,
     $insertUsersTable,

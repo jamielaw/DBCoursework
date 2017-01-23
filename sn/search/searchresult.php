@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <!--  Navigation-->
-    <?php include '../inc/nav-trn.php';
-          include '../inc/header.php';
+    <?php include '../inc/header.php'; 
+    include '../inc/nav-trn.php';
      ?>
     <title>Search Results</title>
   </head>

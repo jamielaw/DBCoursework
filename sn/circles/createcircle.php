@@ -11,17 +11,17 @@
   }
 
   // Get PK of Table
-  $argument1 = $_GET['email'];
+  $circlename = $_GET['circlename'];
   // sql to delete a record
-  $sql = "DELETE FROM users WHERE email=". "'" . $argument1 . "'";
+  $sql = "INSERT INTO MyDB.circleOfFriends (circleOfFriendsName) VALUES (\"" . $circlename . "\")";
   $pdo = Database::connect();
   $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
   $pdo->exec($sql);
   Database::disconnect();
 
-  //Redirect to /sn/admin page to create "refresh "
+  //Redirect to /sn/circle/createcircleview page to create "refresh "
   // URL TO BE MADE RELATIVE LATER
-  redirect('http://localhost:8888/sn/admin/');
+  redirect('http://localhost:8888/sn/circles/index.php');
 
 
 ?>

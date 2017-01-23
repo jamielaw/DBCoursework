@@ -10,7 +10,7 @@ include("../inc/header.php");
     <?php include '../inc/nav-trn.php'; ?>
 
     <!--Link to creating friendship circles  -->
-    <a href="createcircle.php">
+    <a href="createcircleview.php">
       <button type="button" name="button">Create Circle</button>
     </a>
 

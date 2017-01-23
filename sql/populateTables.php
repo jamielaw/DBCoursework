@@ -95,9 +95,9 @@ $insertPhotosTable = "INSERT INTO MyDB.photos (photoCollectionId,imageReference)
 (2, \"/images/photoCollection/25.jpg\")";
 
 
-$insertCircleOfFriendsTable = "INSERT INTO MyDB.circleOfFriends (circleFriendsId,circleOfFriendsName) VALUES 
-(1,\"lmao\"),
-(2,\"lol\")";
+$insertCircleOfFriendsTable = "INSERT INTO MyDB.circleOfFriends (circleOfFriendsName) VALUES 
+(\"lmao\"),
+(\"lol\")";
 
 $insertCommentsTable = "INSERT INTO MyDB.comments (photoId,email,commentText) VALUES 
 (1,\"ada@ucl.ac.uk\", \"Which conference was this one?\"),

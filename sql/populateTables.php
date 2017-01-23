@@ -94,6 +94,11 @@ $insertPhotosTable = "INSERT INTO MyDB.photos (photoCollectionId,imageReference)
 (2, \"/images/photoCollection/24.jpg\"),
 (2, \"/images/photoCollection/25.jpg\")";
 
+
+$insertCircleOfFriendsTable = "INSERT INTO MyDB.circleOfFriends (circleFriendsId,circleOfFriendsName) VALUES 
+(1,\"lmao\"),
+(2,\"lol\")";
+
 $insertCommentsTable = "INSERT INTO MyDB.comments (photoId,email,commentText) VALUES 
 (1,\"ada@ucl.ac.uk\", \"Which conference was this one?\"),
 (1,\"ken@ucl.ac.uk\", \"This is a good photo!\"),
@@ -110,6 +115,7 @@ $populatingTables = [
     $insertPostsTable,
     $insertPhotoCollectionTable,
     $insertPhotosTable,
+    $insertCircleOfFriendsTable,
     $insertCommentsTable  
 ];
 foreach ($populatingTables as $sqlquery){

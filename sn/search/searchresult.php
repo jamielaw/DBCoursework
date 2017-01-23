@@ -2,11 +2,13 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Search Result for Query: $QUERY</title>
+    <!--  Navigation-->
+    <?php include '../inc/nav-trn.php';
+          include '../inc/header.php';
+     ?>
+    <title>Search Results</title>
   </head>
   <body>
-      <!--  Navigation-->
-    <?php include '../inc/nav-trn.php'; ?>
 
       <!--php for search-->
       <?php 
@@ -40,4 +42,6 @@
     ?>
 
   </body>
+  <!-- Footer  -->
+  <?php include '../inc/footer.php'; ?>
 </html>

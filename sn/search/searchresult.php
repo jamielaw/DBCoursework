@@ -2,16 +2,18 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Search Result for Query: $QUERY</title>
+    <!--  Navigation-->
+    <?php include '../inc/header.php'; 
+    include '../inc/nav-trn.php';
+     ?>
+    <title>Search Results</title>
   </head>
   <body>
-      <!--  Navigation-->
-    <?php include '../inc/nav-trn.php'; ?>
 
       <!--php for search-->
       <?php 
       require("../database.php");
-      echo "<h1>Search results for first/last name containing: ". $_GET['submit'] ."</h1>";
+      echo "<h1>Search results for first/last name starting with: ". $_GET['submit'] ."</h1>";
        if(isset($_GET['submit'])){ 
           if(preg_match("/^[  a-zA-Z]+/", $_GET['submit'])){ //check search string isn't empty
             $name=$_GET['submit']; 
@@ -20,7 +22,7 @@
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             //-query  the database table 
             //currently searches to see if the first or last name contains the search string at any location
-            $sql="SELECT email, firstName, lastName, profileImage FROM MyDB.users WHERE firstName LIKE '%" . $name .  "%' OR lastName LIKE '%" . $name ."%'"; 
+            $sql="SELECT email, firstName, lastName, profileImage FROM MyDB.users WHERE firstName LIKE '" . $name .  "%' OR lastName LIKE '" . $name ."%'"; 
             //echo $sql;
 
             echo "<table style='width:100%'> <tr> <th> Email </th> <th> First name </th> <th> Last Name </th> <th> Image </th>";
@@ -40,4 +42,6 @@
     ?>
 
   </body>
+  <!-- Footer  -->
+  <?php include '../inc/footer.php'; ?>
 </html>

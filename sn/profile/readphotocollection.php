@@ -67,7 +67,7 @@
 
     <div class="container">
 	    	<div class="form-horizontal" >
-			  <div class="control-group">
+			  <div class="control-group">	
 				  	<div class="controls"></div>
 					<div class="controls">
 						   <label class="checkbox">

@@ -1,23 +1,37 @@
+<?php 
+
+    $title = "Bookface Social Network";
+    $description = "A far superior social network";
+    include("../inc/nav-trn.php"); 
+    include("../inc/header.php"); 
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-
-    <script src="../js/min/bootstrap.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
-<!--  Navigation-->
-<?php include '../inc/nav-trn.php'; ?>
+
+<style type="text/css">
+	.padding {
+		padding-left: 50px;
+		padding-right: 50px;
+	}
+</style>
+
 <body>
-    <div class="container">
+    <div class="container-fullwidth padding">
     		<div class="row" id="friends">
     			<p><img src="../../images/profile/charles@ucl.ac.uk.jpg" class="rounded float-left" height="200">
     			<font size="5"> Charles Babbage </font> </p>
     		</div>
 
-    			<br><br>
+    		<br><br>
     		<ul class="nav nav-tabs">
     			<li class="active">
 		        	<a  href="#1" data-toggle="tab">Profile</a>
@@ -74,7 +88,6 @@
 		          <h3>Messages</h3>
 				</div>
 				<div class="tab-pane" id="4">
-		          <h3>Photo Collections</h3>
 		          <table class="table table-striped table-bordered">
 		         	<thead>
 		            	<tr>
@@ -122,7 +135,7 @@
 					                </div>
 					                <div class="modal-footer">
 					                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-					                    <button type="button" id="submitForm" class="btn btn-success	">Create</button>
+					                    <button type="button" id="submitForm" class="btn btn-success">Create</button>
 					                </div>
 					            </div>
 					        </div>
@@ -172,12 +185,6 @@
 					            </div>
 					        </div>
 					    </div>
-
-		          <form action="uploadphoto.php" method="post" enctype="multipart/form-data">
-			    	Select image to upload:
-			    	<input type="file" name="fileToUpload" id="fileToUpload">
-			    	<input type="submit" value="Upload Image" name="submit">
-				  </form>
 				</div>
 		  	</div>
     </div> <!-- /container -->

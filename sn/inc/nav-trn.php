@@ -6,16 +6,24 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
-<body>
 
-<nav class="navbar navbar-inverse">
+<nav class="navbar navbar-inverse navbar-fixed-top">
   <div class="container-fluid">
     <div class="navbar-header">
       <a class="navbar-brand" href="#">BookFace</a>
     </div>
     <div>
       <ul class="nav navbar-nav">
-        <li><a href="../profile">Profile</a></li>
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">Profile
+          <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="../profile/index.php">My Blog</a></li>
+            <li><a href="../profile/index.php#2">My Friends</a></li>
+            <li><a href="../profile/index.php#3">Messages</a></li>
+            <li><a href="../profile/index.php#4">My Photo Collections</a></li>
+          </ul>
+        </li>
         <li><a href="../photos/index.php">Photos</a></li>
         <li><a href="../circles/index.php">Circles</a></li>
         <li><a href="../blog/index.php">Blog</a></li>
@@ -24,15 +32,16 @@
       </ul>
 
       <!--search bar-->
-      <form class="navbar-form navbar-left" action="../search/searchresult.php" method="get">
-        <div class="form-group">
-          <input type="text" class="form-control" placeholder="Search for friends">
-        </div>
-        <button type="submit" name="submit" id="submit" class="btn btn-default"><i class="glyphicon glyphicon-search"></i></button>
+      <form class="navbar-form navbar-left" action="../search/searchresult.php?go" method="get" id="searchform">
+          <input type="text" class="form-control" placeholder="Search for friends" name="submit">
+        <button type="submit" id="submit" class="btn btn-default"><i class="glyphicon glyphicon-search"></i></button>
       </form>
+
     </div>
   </div>
 </nav>
-
-</body>
 </html>
+
+<style type="text/css">
+  body { padding-top: 50px; }
+</style>

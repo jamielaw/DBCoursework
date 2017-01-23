@@ -1,22 +1,17 @@
 <?php
 //require '../sn/database.php'; //uncomment this if you need to call this individual script
-
 $pdo = Database::connect_fordrop();
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
 // Drop database if necessary
 $dropDatabase = "DROP DATABASE IF EXISTS MyDB";
-
 // Create users database
 $createDatabase = "CREATE DATABASE IF NOT EXISTS MyDB";
-
 //Create roles table
 $createRolesTable = "CREATE TABLE IF NOT EXISTS MyDB.roles(
   roleID INT NOT NULL AUTO_INCREMENT, 
   roleTitle VARCHAR(50),
   PRIMARY KEY(roleID)
 )";
-
 //Create users table
 $createUsersTable = "CREATE TABLE IF NOT EXISTS MyDB.users(
   email VARCHAR(50) NOT NULL,
@@ -29,7 +24,6 @@ $createUsersTable = "CREATE TABLE IF NOT EXISTS MyDB.users(
   PRIMARY KEY(email),
   FOREIGN KEY(roleID) REFERENCES MyDB.roles(roleID)
 )";
-
 //Create rights table
 $createRightsTable = "CREATE TABLE IF NOT EXISTS MyDB.rights(
   rightID INT NOT NULL AUTO_INCREMENT,
@@ -39,7 +33,6 @@ $createRightsTable = "CREATE TABLE IF NOT EXISTS MyDB.rights(
   PRIMARY KEY(rightID),
   FOREIGN KEY(roleID) REFERENCES MyDB.roles(roleID)
 )";
-
 // Create table friendships
 $createFriendshipsTable = "CREATE TABLE IF NOT EXISTS MyDB.friendships(
   friendshipID INT NOT NULL AUTO_INCREMENT,
@@ -48,8 +41,6 @@ $createFriendshipsTable = "CREATE TABLE IF NOT EXISTS MyDB.friendships(
   status VARCHAR(20), -- status can take the values of {accepted, pending,denied}
   PRIMARY KEY(friendshipID)
 )";
-
-
 //Create blogs table
 $createBlogsTable = "CREATE TABLE IF NOT EXISTS MyDB.blogs(
   blogId INT NOT NULL AUTO_INCREMENT,
@@ -60,8 +51,6 @@ $createBlogsTable = "CREATE TABLE IF NOT EXISTS MyDB.blogs(
   PRIMARY KEY(blogId),
   FOREIGN KEY(email) REFERENCES MyDB.users(email)
 )";
-
-
 //Create posts table
 $createPostsTable = "CREATE TABLE IF NOT EXISTS MyDB.posts(
   postId INT NOT NULL AUTO_INCREMENT,
@@ -72,7 +61,6 @@ $createPostsTable = "CREATE TABLE IF NOT EXISTS MyDB.posts(
   PRIMARY KEY(postId),
   FOREIGN KEY(blogId) REFERENCES MyDB.blogs(blogId)
 )";
-
 // Create table for annotations
 $createAnnotationsTable = "CREATE TABLE IF NOT EXISTS MyDB.annotations(
   annotationsId INT NOT NULL AUTO_INCREMENT,
@@ -84,9 +72,7 @@ $createAnnotationsTable = "CREATE TABLE IF NOT EXISTS MyDB.annotations(
   PRIMARY KEY(annotationsId),
   FOREIGN KEY(photoId) REFERENCES MyDB.photos(photoId),
   FOREIGN KEY(email) REFERENCES MyDB.users(email)
-	)";
-
-
+  )";
 // Create table for Photos
 $createPhotosTable = "CREATE TABLE IF NOT EXISTS MyDB.photos(
   photoId INT NOT NULL AUTO_INCREMENT,
@@ -96,7 +82,6 @@ $createPhotosTable = "CREATE TABLE IF NOT EXISTS MyDB.photos(
   PRIMARY KEY(photoId),
   FOREIGN KEY(photoCollectionId) REFERENCES MyDB.photoCollection(photoCollectionId)
 )";
-
 // Create table for comments (on photos)
 $createCommentsTable = "CREATE TABLE IF NOT EXISTS MyDB.comments(
   commentId INT NOT NULL AUTO_INCREMENT,
@@ -108,7 +93,6 @@ $createCommentsTable = "CREATE TABLE IF NOT EXISTS MyDB.comments(
   FOREIGN KEY(photoId) REFERENCES MyDB.photos(photoId),
   FOREIGN KEY(email) REFERENCES MyDB.users(email)
 )";
-
 // Create table for Access Rights
 $createAccessRightsTable = "CREATE TABLE IF NOT EXISTS MyDB.accessRights(
   accessRightsId INT NOT NULL AUTO_INCREMENT,
@@ -120,7 +104,6 @@ $createAccessRightsTable = "CREATE TABLE IF NOT EXISTS MyDB.accessRights(
   FOREIGN KEY(email) REFERENCES myDB.users(email),
   FOREIGN KEY(circleFriendsId) REFERENCES myDB.circleOfFriends(circleFriendsId)
 )";
-
 // Create table for Photo Collections
 $createPhotoCollectionsTable = "CREATE TABLE IF NOT EXISTS myDB.photoCollection(
   photoCollectionId INT NOT NULL AUTO_INCREMENT,
@@ -130,8 +113,6 @@ $createPhotoCollectionsTable = "CREATE TABLE IF NOT EXISTS myDB.photoCollection(
   createdBy VARCHAR(255) NOT NULL,
   PRIMARY KEY(photoCollectionId)
 )";
-
-
 // Create table for user circle relationships
 $createUserCircleRelationshipsTable = "CREATE TABLE IF NOT EXISTS MyDB.userCircleRelationships(
   email VARCHAR(50) NOT NULL,
@@ -140,8 +121,6 @@ $createUserCircleRelationshipsTable = "CREATE TABLE IF NOT EXISTS MyDB.userCircl
   FOREIGN KEY(email) REFERENCES myDB.users(email),
   FOREIGN KEY(circleFriendsID) REFERENCES myDB.circleOfFriends(circleFriendsId)
 )";
-
-
 // Create table for Circle of friends
 $createCircleOfFriendsTable = "CREATE TABLE IF NOT EXISTS MyDB.circleOfFriends(
   circleFriendsId INT NOT NULL AUTO_INCREMENT,
@@ -149,7 +128,6 @@ $createCircleOfFriendsTable = "CREATE TABLE IF NOT EXISTS MyDB.circleOfFriends(
   dateCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY(circleFriendsId)
 )";
-
 // Create table for messages
 $createMessagesTable = "CREATE TABLE IF NOT EXISTS MyDB.messages(
   messageId INT NOT NULL AUTO_INCREMENT,
@@ -161,7 +139,6 @@ $createMessagesTable = "CREATE TABLE IF NOT EXISTS MyDB.messages(
   FOREIGN KEY(emailTo) REFERENCES MyDB.users(email),
   FOREIGN KEY(emailFrom) REFERENCES MyDB.users(email) 
 )";
-
 // Create table for privacy settings
 $createPrivacySettingsTable = "CREATE TABLE IF NOT EXISTS MyDB.privacySettings(
   privacySettingsId INT NOT NULL AUTO_INCREMENT,
@@ -172,9 +149,6 @@ $createPrivacySettingsTable = "CREATE TABLE IF NOT EXISTS MyDB.privacySettings(
   PRIMARY KEY(privacySettingsId),
   FOREIGN KEY(email) REFERENCES MyDB.users(email)
 )";
-
-
-
 $creatingTables = [ //make sure you create in the right order! foreign keys must refer to a primary key in an existing table
     //$dropDatabase, //uncomment this if there is a wrong format in any table
     $createDatabase,
@@ -194,8 +168,6 @@ $creatingTables = [ //make sure you create in the right order! foreign keys must
     $createAnnotationsTable,
     $createAccessRightsTable
 ];
-
-
 foreach ($creatingTables as $sqlquery){
   echo nl2br("\n"); //Line break in HTML conversion
   echo "<b>Executing SQL statement: </b>";
@@ -208,6 +180,5 @@ foreach ($creatingTables as $sqlquery){
       echo "<b><font color='red'>Error executing statement: </b></font>" . $pdo->error;
   }
 }
-
   Database::disconnect();
 ?>

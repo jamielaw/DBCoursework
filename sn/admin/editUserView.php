@@ -12,37 +12,63 @@
   $argument1 = $_GET['email'];
 
 
-  echo $argument1;
+
   $sql = "SELECT * FROM users WHERE email=" . "'" . $argument1 . "'";
-  echo $sql;
-  //$result = $pdo->q($sql);
+
   $q= $pdo->prepare($sql);
   $q->execute();
   $row = $q->fetch(PDO::FETCH_ASSOC);
 
 
-  //echo $row;
 ?>
 
 <body>
-      <!--  Navigation-->
-    <?php include '../inc/nav-trn.php'; ?>
+  <!--  Navigation-->
+  <?php include '../inc/nav-trn.php'; ?>
+  <div class="container">
+    <div class="span10 offset1">
+      <div class="row">
+        <font size="5">Update User</font>
+      </div>
 
-  <h3> Edit a user account </h3>
+      <form class="form-horizontal" method="POST" action="editUser.php">
+        <input type="hidden" name="argument1" value="<?php echo $argument1;?>">
+        <div class="control-group">
+          <label class="control-label">Email:</label>
+          <div class="controls">
+            <input type="text" name="email" value="<?php echo $row['email'];?>"> <br>
+          </div>
+        </div>
+        <div class="control-group">
+          <label class="control-label">First name:</label>
+          <div class="controls">
+            <input type="text" name="firstName" value="<?php echo $row['firstName'];?>"> <br>
+          </div>
+        </div>
+        <div class="control-group">
+          <label class="control-label">Second Name:</label>
+          <div class="controls">
+            <input type="text" name="lastName" value="<?php echo $row['lastName'];?>"> <br>
+          </div>
+        </div>
+        <div class="control-group">
+          <label class="control-label">Image URL:</label>
+          <div class="controls">
+            <input type="textfield" name="profileImage" value="<?php echo $row['profileImage']?>"> <br>
+          </div>
+        </div>
+        <div class="control-group">
+          <label class="control-label">Profile Description</label>
+          <div class="controls">
+            <input type="text" name="profileDescription" value="<?php echo $row['profileDescription'];?>"> <br>
+          </div>
+        </div>
+        <button type="submit">Update!</button>
+      </form>
+    </div>
+    </div>
 
-  <form method="POST" action="editUser.php">
-    <input type="hidden" name="argument1" value="<?php echo $argument1;?>">
-    Email: <input type="text" name="email" value="<?php echo $row['email'];?>"> <br>
-    First name: <input type="text" name="firstName" value="<?php echo $row['firstName'];?>"> <br>
-    Last name: <input type="text" name="lastName" value="<?php echo $row['lastName']?>"> <br>
-    Image url: <input type="textfield" name="profileImage" value="<?php echo $row['profileImage']?>"> <br>
-    profile description: <input type="textfield" name="profileDescription" value="<?php echo $row['profileDescription']?>"> <br>
-
-
-    <button type="submit">Update!</button>
-  </form>
-
-  <?php Database::disconnect(); ?>
+<?php Database::disconnect(); ?>
 
 
 </body>

@@ -6,6 +6,9 @@ $description = "";
 include("../inc/header.php");
  ?>
   <body>
+    <!-- to do: split circles that currently logged in user is in, and others (as well as join/leave options). 
+    implement messaging
+    add friends to circle in create circle -->
     <!--  Navigation-->
     <?php include '../inc/nav-trn.php'; ?>
 

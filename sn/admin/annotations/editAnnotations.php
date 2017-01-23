@@ -4,6 +4,7 @@
 
   // Given "string", returns "'string'" - useful for SQL queries
   function wrapArgument($arg){
+
     return "'" . $arg . "'";
   }
   // Removes spaces
@@ -25,13 +26,26 @@
 
   $sql = "UPDATE MyDB.annotations SET
   email=" . removeSpaces(wrapArgument($_POST['email'])) .  ","
-  . "coordinateX=" . removeSpaces(wrapArgument($_POST['coordinateX'])) .  ","
-  . "coordinateY=" . removeSpaces(wrapArgument($_POST['coordinateY'])) .  ","
-  . "annotationText=" . removeSpaces(wrapArgument($_POST['annotationText'])) .  ","
-  . " WHERE annotationsId='" . removeSpaces($_POST['argument1']) . "'";
+  . "coordinateX=" . $_POST['coordinateX'] .  ","
+  . "coordinateY=" . $_POST['coordinateY'].  ","
+  . "annotationText=" . wrapArgument($_POST['annotationText'])
+  . " WHERE annotationsId=" . $_POST['argument1'];
+
+  // echo $sql;
+
+    $q = $pdo->prepare($sql);
+    $q->execute();
 
 
-  $pdo->exec($sql);
+  //   echo $q->rowCount() . " records UPDATED successfully";
+  // }
+  // catch(PDOException $e)
+  // {
+  //   echo $sql . "<br>" . $e->getMessage();
+  // }
+
+
+
 
   // Need to handle error catching etc
 

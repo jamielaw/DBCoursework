@@ -27,7 +27,7 @@
         <font size="5">Update annotations</font>
       </div>
 
-      <form class="form-horizontal" method="POST" action="editUser.php">
+      <form class="form-horizontal" method="POST" action="editAnnotations.php">
         <input type="hidden" name="argument1" value="<?php echo $argument1;?>">
         <div class="control-group">
           <label class="control-label">Annotator:</label>

@@ -1,20 +1,17 @@
 <?php
 class Database
 {
-	private static $dbName = 'mydb' ;
-	private static $dbHost = 'localhost';
-	private static $dbUsername = 'root';
-	private static $dbUserPassword = 'root';
-
-	private static $cont  = null;
-
-	public function __construct() {
-		exit('Init function is not allowed');
-	}
-
-	public static function connect()
-	{
-	   // One connection through whole application
+  private static $dbName = 'mydb' ;
+  private static $dbHost = 'localhost';
+  private static $dbUsername = 'root';
+  private static $dbUserPassword = 'root';
+  private static $cont  = null;
+  public function __construct() {
+    exit('Init function is not allowed');
+  }
+  public static function connect()
+  {
+     // One connection through whole application
        if ( null == self::$cont )
        {
         try
@@ -27,11 +24,10 @@ class Database
         }
        }
        return self::$cont;
-	}
-
-	public static function connect_fordrop()
-	{
-	   // One connection through whole application
+  }
+  public static function connect_fordrop()
+  {
+     // One connection through whole application
        if ( null == self::$cont )
        {
         try
@@ -44,11 +40,10 @@ class Database
         }
        }
        return self::$cont;
-	}
-
-	public static function disconnect()
-	{
-		self::$cont = null;
-	}
+  }
+  public static function disconnect()
+  {
+    self::$cont = null;
+  }
 }
 ?>

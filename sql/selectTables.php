@@ -1,17 +1,8 @@
 <?php
-$servername = "localhost:3306";
-$username = "root";
-$password = "root";
+require '../sn/database.php'; //uncomment this if you need to call this individual script
 
-// create connection
-$conn = new mysqli($servername, $username, $password);
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}else{
-  echo "Connection established";
-}
-
+$pdo = Database::connect_fordrop();
+$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 //select roles table
 $selectRolesTable = "SELECT * FROM MyDB.roles";

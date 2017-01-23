@@ -1,5 +1,10 @@
 <?php 
-	require '../database.php';
+
+    $title = "Bookface Social Network";
+    $description = "A far superior social network";
+    include("../inc/nav-trn.php"); 
+    include("../inc/header.php"); 
+	  require '../database.php';
 
 	$email="charles@ucl.ac.uk";
 	$photoId = null;
@@ -177,20 +182,23 @@
       <div class="row">
        <?php
        	while ($row = $q->fetch(PDO::FETCH_ASSOC)){
-		?>
+		   ?>
         <div class="col-sm-2 text-center">
          	<?php $email = $row['email']; ?>
-			<img src="<?php echo getUserDetails($email)['profileImage'];?>" class="img-circle" height="65" width="65" alt="Avatar">
+			     <img src="<?php echo getUserDetails($email)['profileImage'];?>" class="img-circle" height="65" width="65" alt="Avatar">
         </div>
         <div class="col-sm-10">
           <h4 href='#'><b><?php echo getUserDetails($email)['firstName'];?> <?php echo getUserDetails($email)['lastName'];?></b> 
           	<small><?php
-          		date_default_timezone_set('Europe/London');
-				$date1 = date('m/d/Y h:i:s a', time());
-			    $date2=$row['dateCreated'];
-			    echo date_difference($date1,$date2);
-			    ?>
-			ago</small>
+              date_default_timezone_set('Europe/London');
+      				$date1 = date('m/d/Y h:i:s a', time());
+      			    $date2=$row['dateCreated'];
+      			    echo date_difference($date1,$date2);
+      			    ?>
+      			ago</small>
+
+          <small> <strong data-id= "<?php echo $row['commentId']; ?>" data-title= "<?php echo $row['commentText']; ?>" class="hover open-delete_dialog2 text-danger text-right" data-toggle="modal" href="#delete_dialog2">Delete</strong></small>
+          
           </h4>
           <p><?php echo $row['commentText'];?></p>
         <br>
@@ -203,6 +211,28 @@
     </div>
   </div>
 </div>
+<!-- modal to delete collection -->
+<!-- the div that represents the modal dialog -->
+<div class="modal fade" id="delete_dialog2" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="delete_form2" action="deletecomment.php" method="POST">
+          Are you sure you want to delete the comment  <input type="text" name="deleteComment" id="deleteComment"> ?
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" id="submitForm4" class="btn btn-danger">Delete</button>
+      </div>
+    </div>
+   </div>
+  </div>
+</div>
+
 <footer class="container-fluid">
   <p>Footer Text</p>
 </footer>
@@ -214,13 +244,11 @@
 
 // Delete Photo
 var deletephotoName = null;
-
 $(document).on("click", ".open-delete_dialog", function () {
      deletephotoName = $(this).data('title');
      console.log("id ", deletephotoName);
      $(".modal-body #deletephotoName").val(deletephotoName);
      albumId = $(this).data('id');
-
     // Delete Collection Button
     $("#delete_form").on("submit", function(e) {
         var postData3 =  $(this).serializeArray();
@@ -235,7 +263,6 @@ $(document).on("click", ".open-delete_dialog", function () {
                 $('#delete_dialog .modal-body').html(data);
                 $("#submitForm3").remove();
                 location.href = "readphotocollection.php?createdBy=<?php echo $email?>&photoCollectionId=<?php echo $photoCollectionId ?>;";
-
             },
             error: function(jqXHR, status, error) {
                 console.log(status + ": " + error);
@@ -246,6 +273,41 @@ $(document).on("click", ".open-delete_dialog", function () {
      
     $("#submitForm3").on('click', function() {
         $("#delete_form").submit();
+    });
+});
+
+// Delete Comment
+var deleteComment = null;
+
+$(document).on("click", ".open-delete_dialog2", function () {
+     deleteComment = $(this).data('title');
+     console.log("comment: ", deleteComment);
+     $(".modal-body #deleteComment").val(deleteComment);
+     commentId = $(this).data('id');
+
+    // Delete Collection Button
+    $("#delete_form2").on("submit", function(e) {
+        var postData3 =  $(this).serializeArray();
+        postData3.push({name: "commentId", value: commentId});
+        var formURL = $(this).attr("action");
+        $.ajax({
+            url: formURL,
+            type: "POST",
+            data: postData3,
+            success: function(data, textStatus, jqXHR) {
+                $('#delete_dialog2 .modal-header .modal-title').html("Result");
+                $('#delete_dialog2 .modal-body').html(data);
+                $("#submitForm4").remove();
+            },
+            error: function(jqXHR, status, error) {
+                console.log(status + ": " + error);
+            }
+        });
+        e.preventDefault();
+    });
+     
+    $("#submitForm4").on('click', function() {
+        $("#delete_form2").submit();
     });
 });
 
@@ -346,6 +408,11 @@ $(document).on("click", ".open-delete_dialog", function () {
 </script>
 
   <style>
+  .hover {
+    color: red;
+    text-decoration: underline;
+    cursor: pointer;
+  }
 	#container
 	{
 		display: block;

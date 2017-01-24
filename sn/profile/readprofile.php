@@ -32,7 +32,18 @@
 		$data = $q->fetch(PDO::FETCH_ASSOC);
 		//echo $data;
 		return $data;
-  }
+  	}
+
+  	function getPhoto($photoId) {
+  		$pdo = Database::connect();
+	    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	    $sql = 'SELECT imageReference FROM photos WHERE photoCollectionId = ? LIMIT 1;';
+      	$q = $pdo->prepare($sql);
+		$q->execute(array($photoId));
+		$data = $q->fetch(PDO::FETCH_ASSOC);
+		//echo $data;
+		return $data;
+  	}
 
 
 ?>
@@ -157,7 +168,6 @@
 
 						<?php 
 						    $pdo = Database::connect();
-     						// !!! HARDCODED STUFF -  TO BE CHANGED AFTER LOGIN IS IMPLEMENTED
       						$sql = 'SELECT DISTINCT email, firstName, lastName, profileImage FROM users JOIN friendships ON users.email = friendships.emailFrom OR users.email=friendships.emailTo WHERE (friendships.emailFrom= ? OR friendships.emailTo= ?) AND users.email!= ? AND status=\'accepted\';';
  							$q1 = $pdo->prepare($sql);
     						$q1->execute(array($email,$email,$email));
@@ -186,197 +196,49 @@
 					</div>
 				</div><!-- /#friends -->
 
+
 				<div id="pictures" class="tab-pane">
-					<ul class="ace-thumbnails">
-						<li>
-							<a href="#" data-rel="colorbox">
-								<img alt="150x150" src="http://lorempixel.com/200/200/nature/1/">
-								<div class="text">
-									<div class="inner">Sample Caption on Hover</div>
-								</div>
-							</a>
 
-							<div class="tools tools-bottom">
-								<a href="#">
-									<i class="ace-icon fa fa-link"></i>
-								</a>
+					<?php 
+						    //$pdo = Database::connect();
+						    $sql = 'SELECT photoCollectionId, dateCreated, title, description FROM photocollection WHERE createdBy = ?;';
+ 							$q1 = $pdo->prepare($sql);
+    						$q1->execute(array($email));
+ 							foreach ($q1->fetchAll() as $row) {
 
-								<a href="#">
-									<i class="ace-icon fa fa-paperclip"></i>
-								</a>
+ 								$imageReference = getPhoto($row['photoCollectionId'])['imageReference'];
 
-								<a href="#">
-									<i class="ace-icon fa fa-pencil"></i>
-								</a>
+ 								echo ' 
+ 								<ul class="ace-thumbnails">
+									<li>
+		 								<a href="#" data-rel="colorbox">
+											<img height="300" src=" ' . $imageReference . ' ">
+											<div class="text">
+												<div class="inner"> ' . $row['title'] . ' </div>
+											</div>
+										</a>
 
-								<a href="#">
-									<i class="ace-icon fa fa-times red"></i>
-								</a>
-							</div>
-						</li>
+										<div class="tools tools-bottom">
+											<a href="#">
+												<i class="ace-icon fa fa-link"></i>
+											</a>
 
-						<li>
-							<a href="#" data-rel="colorbox">
-								<img alt="150x150" src="http://lorempixel.com/200/200/nature/2/">
-								<div class="text">
-									<div class="inner">Sample Caption on Hover</div>
-								</div>
-							</a>
+											<a href="#">
+												<i class="ace-icon fa fa-paperclip"></i>
+											</a>
 
-							<div class="tools tools-bottom">
-								<a href="#">
-									<i class="ace-icon fa fa-link"></i>
-								</a>
+											<a href="#">
+												<i class="ace-icon fa fa-pencil"></i>
+											</a>
 
-								<a href="#">
-									<i class="ace-icon fa fa-paperclip"></i>
-								</a>
-
-								<a href="#">
-									<i class="ace-icon fa fa-pencil"></i>
-								</a>
-
-								<a href="#">
-									<i class="ace-icon fa fa-times red"></i>
-								</a>
-							</div>
-						</li>
-
-						<li>
-							<a href="#" data-rel="colorbox">
-								<img alt="150x150" src="http://lorempixel.com/200/200/nature/3/">
-								<div class="text">
-									<div class="inner">Sample Caption on Hover</div>
-								</div>
-							</a>
-
-							<div class="tools tools-bottom">
-								<a href="#">
-									<i class="ace-icon fa fa-link"></i>
-								</a>
-
-								<a href="#">
-									<i class="ace-icon fa fa-paperclip"></i>
-								</a>
-
-								<a href="#">
-									<i class="ace-icon fa fa-pencil"></i>
-								</a>
-
-								<a href="#">
-									<i class="ace-icon fa fa-times red"></i>
-								</a>
-							</div>
-						</li>
-
-						<li>
-							<a href="#" data-rel="colorbox">
-								<img alt="150x150" src="http://lorempixel.com/200/200/nature/4/">
-								<div class="text">
-									<div class="inner">Sample Caption on Hover</div>
-								</div>
-							</a>
-
-							<div class="tools tools-bottom">
-								<a href="#">
-									<i class="ace-icon fa fa-link"></i>
-								</a>
-
-								<a href="#">
-									<i class="ace-icon fa fa-paperclip"></i>
-								</a>
-
-								<a href="#">
-									<i class="ace-icon fa fa-pencil"></i>
-								</a>
-
-								<a href="#">
-									<i class="ace-icon fa fa-times red"></i>
-								</a>
-							</div>
-						</li>
-
-						<li>
-							<a href="#" data-rel="colorbox">
-								<img alt="150x150" src="http://lorempixel.com/200/200/nature/5/">
-								<div class="text">
-									<div class="inner">Sample Caption on Hover</div>
-								</div>
-							</a>
-
-							<div class="tools tools-bottom">
-								<a href="#">
-									<i class="ace-icon fa fa-link"></i>
-								</a>
-
-								<a href="#">
-									<i class="ace-icon fa fa-paperclip"></i>
-								</a>
-
-								<a href="#">
-									<i class="ace-icon fa fa-pencil"></i>
-								</a>
-
-								<a href="#">
-									<i class="ace-icon fa fa-times red"></i>
-								</a>
-							</div>
-						</li>
-
-						<li>
-							<a href="#" data-rel="colorbox">
-								<img alt="150x150" src="http://lorempixel.com/200/200/nature/6/">
-								<div class="text">
-									<div class="inner">Sample Caption on Hover</div>
-								</div>
-							</a>
-
-							<div class="tools tools-bottom">
-								<a href="#">
-									<i class="ace-icon fa fa-link"></i>
-								</a>
-
-								<a href="#">
-									<i class="ace-icon fa fa-paperclip"></i>
-								</a>
-
-								<a href="#">
-									<i class="ace-icon fa fa-pencil"></i>
-								</a>
-
-								<a href="#">
-									<i class="ace-icon fa fa-times red"></i>
-								</a>
-							</div>
-						</li>
-
-						<li>
-							<a href="#" data-rel="colorbox">
-								<img alt="150x150" src="http://lorempixel.com/200/200/nature/7/">
-								<div class="text">
-									<div class="inner">Sample Caption on Hover</div>
-								</div>
-							</a>
-
-							<div class="tools tools-bottom">
-								<a href="#">
-									<i class="ace-icon fa fa-link"></i>
-								</a>
-
-								<a href="#">
-									<i class="ace-icon fa fa-paperclip"></i>
-								</a>
-
-								<a href="#">
-									<i class="ace-icon fa fa-pencil"></i>
-								</a>
-
-								<a href="#">
-									<i class="ace-icon fa fa-times red"></i>
-								</a>
-							</div>
-						</li>
-					</ul>
+											<a href="#">
+												<i class="ace-icon fa fa-times red"></i>
+											</a>
+										</div> 
+									</li>		
+								</ul>';
+ 							}
+ 						?>
 				</div><!-- /#pictures -->
 			</div>
 		</div>

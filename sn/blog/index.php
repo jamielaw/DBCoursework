@@ -12,9 +12,9 @@
 
   $personalPostsQuery = "SELECT * FROM blogs WHERE email='" . $loggedInUser . "'";
   #echo $personalPostsQuery;
-  $y = $pdo->prepare($personalPostsQuery);
-  $y->execute();
-  $personalPostsResults = $y->fetch(PDO::FETCH_ASSOC);
+  // $y = $pdo->prepare($personalPostsQuery);
+  // $y->execute();
+  // $personalPostsResults = $y->fetch(PDO::FETCH_ASSOC);
 
   $friendPostsQuery = "SELECT * FROM blogs WHERE email='" . $loggedInUser . "'";
   #echo $personalPostsQuery;
@@ -40,13 +40,14 @@
         <p>
           Posts you've written:
         </p>
-        <div class="blog-section">
 
+        <?php foreach($pdo->query($personalPostsQuery) as $personalPostsResults){ ?>
+        <div class="blog-section">
           <a href="viewPost.php?blogId=<?php echo $personalPostsResults["blogId"] ?>" class="blog-section personal-post-container">
             <?php echo $personalPostsResults["blogTitle"]; ?>
           </a>
-
         </div>
+        <?php } ?>
 
         <p>
           Posts your friends have written:

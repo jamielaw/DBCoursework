@@ -4,7 +4,7 @@
     $description = "A far superior social network";
     include("../inc/nav-trn.php"); 
     include("../inc/header.php"); 
-    
+
     function nrOfFriends($email) {
     $pdo = Database::connect();
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -35,40 +35,6 @@
     return $nr;
   }
 ?>
-
-<style type="text/css">
-.list-content{
- min-height:300px;
-}
-.list-content .list-group .title{
-  background:#5bc0de;
-  border:2px solid #DDDDDD;
-  font-weight:bold;
-  color:#FFFFFF;
-}
-.list-group-item img {
-    height:80px; 
-    width:80px;
-}
-
-.jumbotron .btn {
-    padding: 5px 5px !important;
-    font-size: 12px !important;
-}
-.prj-name {
-    color:#5bc0de;    
-}
-.break{
-    width:100%;
-    margin:20px;
-}
-.name {
-    color:#5bc0de;    
-}
-.padding {
-  padding-top: 80px;
-}
-</style>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -142,3 +108,38 @@
 </script>
 </body>
 </html> 
+
+
+<style type="text/css">
+.list-content{
+ min-height:300px;
+}
+.list-content .list-group .title{
+  background:#5bc0de;
+  border:2px solid #DDDDDD;
+  font-weight:bold;
+  color:#FFFFFF;
+}
+.list-group-item img {
+    height:80px; 
+    width:80px;
+}
+
+.jumbotron .btn {
+    padding: 5px 5px !important;
+    font-size: 12px !important;
+}
+.prj-name {
+    color:#5bc0de;    
+}
+.break{
+    width:100%;
+    margin:20px;
+}
+.name {
+    color:#5bc0de;    
+}
+.padding {
+  padding-top: 80px;
+}
+</style>

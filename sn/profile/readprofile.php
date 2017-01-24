@@ -23,6 +23,17 @@
 		Database::disconnect();
 	}
 
+	function getFriends($email) {
+	    $pdo = Database::connect();
+	    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	    $sql = 'SELECT DISTINCT email, firstName, lastName, profileImage FROM users JOIN friendships ON users.email = friendships.emailFrom OR users.email=friendships.emailTo WHERE (friendships.emailFrom=? OR friendships.emailTo=?) AND users.email!=? AND status=\'accepted\';';
+      	$q = $pdo->prepare($sql);
+		$q->execute(array($email,$email,$email));
+		$data = $q->fetch(PDO::FETCH_ASSOC);
+		//echo $data;
+		return $data;
+  }
+
 
 ?>
 
@@ -143,402 +154,36 @@
 
 				<div id="friends" class="tab-pane">
 					<div class="profile-users clearfix">
-						<div class="itemdiv memberdiv">
-							<div class="inline pos-rel">
-								<div class="user">
-									<a href="#">
-										<img src="http://bootdey.com/img/Content/avatar/avatar6.png" alt="Bob Doe's avatar">
-									</a>
-								</div>
 
-								<div class="body">
-									<div class="name">
-										<a href="#">
-											<span class="user-status status-online"></span>
-											Bob Doe
-										</a>
-									</div>
-								</div>
+						<?php 
+						    $pdo = Database::connect();
+     						// !!! HARDCODED STUFF -  TO BE CHANGED AFTER LOGIN IS IMPLEMENTED
+      						$sql = 'SELECT DISTINCT email, firstName, lastName, profileImage FROM users JOIN friendships ON users.email = friendships.emailFrom OR users.email=friendships.emailTo WHERE (friendships.emailFrom= ? OR friendships.emailTo= ?) AND users.email!= ? AND status=\'accepted\';';
+ 							$q1 = $pdo->prepare($sql);
+    						$q1->execute(array($email,$email,$email));
+ 							foreach ($q1->fetchAll() as $row) {
+ 								echo '<div class="itemdiv memberdiv">
+										<div class="inline pos-rel">
+											<div class="user">
+												<a href="readprofile.php?email='.$row['email'].'">
+													<img href="readprofile.php?email='.$row['email'].'" height="65" src=" ' . $row['profileImage'] . ' " alt="Bob Does avatar">
+												</a>
+											</div>
 
-								<div class="popover">
-									<div class="arrow"></div>
-
-									<div class="popover-content">
-										<div class="bolder">Content Editor</div>
-
-										<div class="time">
-											<i class="ace-icon fa fa-clock-o middle bigger-120 orange"></i>
-											<span class="green"> 20 mins ago </span>
+											<div class="body">
+												<div class="name">
+													<a href="readprofile.php?email='.$row['email'].'">
+														<span class="user-status status-online"></span>
+															' . $row['firstName']. ' ' . $row['lastName']. '
+													</a>
+												</div>
+											</div>
 										</div>
+									</div>';
+ 							}
+ 						?>
 
-										<div class="hr dotted hr-8"></div>
-
-										<div class="tools action-buttons">
-											<a href="#">
-												<i class="ace-icon fa fa-facebook-square blue bigger-150"></i>
-											</a>
-
-											<a href="#">
-												<i class="ace-icon fa fa-twitter-square light-blue bigger-150"></i>
-											</a>
-
-											<a href="#">
-												<i class="ace-icon fa fa-google-plus-square red bigger-150"></i>
-											</a>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-
-						<div class="itemdiv memberdiv">
-							<div class="inline pos-rel">
-								<div class="user">
-									<a href="#">
-										<img src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="Rose Doe's avatar">
-									</a>
-								</div>
-
-								<div class="body">
-									<div class="name">
-										<a href="#">
-											<span class="user-status status-offline"></span>
-											Rose Doe
-										</a>
-									</div>
-								</div>
-
-								<div class="popover">
-									<div class="arrow"></div>
-
-									<div class="popover-content">
-										<div class="bolder">Graphic Designer</div>
-
-										<div class="time">
-											<i class="ace-icon fa fa-clock-o middle bigger-120 grey"></i>
-											<span class="grey"> 30 min ago </span>
-										</div>
-
-										<div class="hr dotted hr-8"></div>
-
-										<div class="tools action-buttons">
-											<a href="#">
-												<i class="ace-icon fa fa-facebook-square blue bigger-150"></i>
-											</a>
-
-											<a href="#">
-												<i class="ace-icon fa fa-twitter-square light-blue bigger-150"></i>
-											</a>
-
-											<a href="#">
-												<i class="ace-icon fa fa-google-plus-square red bigger-150"></i>
-											</a>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-
-						<div class="itemdiv memberdiv">
-							<div class="inline pos-rel">
-								<div class="user">
-									<a href="#">
-										<img src="http://bootdey.com/img/Content/avatar/avatar2.png" alt="Jim Doe's avatar">
-									</a>
-								</div>
-
-								<div class="body">
-									<div class="name">
-										<a href="#">
-											<span class="user-status status-busy"></span>
-											Jim Doe
-										</a>
-									</div>
-								</div>
-
-								<div class="popover">
-									<div class="arrow"></div>
-
-									<div class="popover-content">
-										<div class="bolder">SEO &amp; Advertising</div>
-
-										<div class="time">
-											<i class="ace-icon fa fa-clock-o middle bigger-120 red"></i>
-											<span class="grey"> 1 hour ago </span>
-										</div>
-
-										<div class="hr dotted hr-8"></div>
-
-										<div class="tools action-buttons">
-											<a href="#">
-												<i class="ace-icon fa fa-facebook-square blue bigger-150"></i>
-											</a>
-
-											<a href="#">
-												<i class="ace-icon fa fa-twitter-square light-blue bigger-150"></i>
-											</a>
-
-											<a href="#">
-												<i class="ace-icon fa fa-google-plus-square red bigger-150"></i>
-											</a>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-
-						<div class="itemdiv memberdiv">
-							<div class="inline pos-rel">
-								<div class="user">
-									<a href="#">
-										<img src="http://bootdey.com/img/Content/avatar/avatar3.png" alt="Alex Doe's avatar">
-									</a>
-								</div>
-
-								<div class="body">
-									<div class="name">
-										<a href="#">
-											<span class="user-status status-idle"></span>
-											Alex Doe
-										</a>
-									</div>
-								</div>
-
-								<div class="popover">
-									<div class="arrow"></div>
-
-									<div class="popover-content">
-										<div class="bolder">Marketing</div>
-
-										<div class="time">
-											<i class="ace-icon fa fa-clock-o middle bigger-120 orange"></i>
-											<span class=""> 40 minutes idle </span>
-										</div>
-
-										<div class="hr dotted hr-8"></div>
-
-										<div class="tools action-buttons">
-											<a href="#">
-												<i class="ace-icon fa fa-facebook-square blue bigger-150"></i>
-											</a>
-
-											<a href="#">
-												<i class="ace-icon fa fa-twitter-square light-blue bigger-150"></i>
-											</a>
-
-											<a href="#">
-												<i class="ace-icon fa fa-google-plus-square red bigger-150"></i>
-											</a>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-
-						<div class="itemdiv memberdiv">
-							<div class="inline pos-rel">
-								<div class="user">
-									<a href="#">
-										<img src="http://bootdey.com/img/Content/avatar/avatar4.png" alt="Phil Doe's avatar">
-									</a>
-								</div>
-
-								<div class="body">
-									<div class="name">
-										<a href="#">
-											<span class="user-status status-online"></span>
-											Phil Doe
-										</a>
-									</div>
-								</div>
-
-								<div class="popover">
-									<div class="arrow"></div>
-
-									<div class="popover-content">
-										<div class="bolder">Public Relations</div>
-
-										<div class="time">
-											<i class="ace-icon fa fa-clock-o middle bigger-120 orange"></i>
-											<span class="green"> 2 hours ago </span>
-										</div>
-
-										<div class="hr dotted hr-8"></div>
-
-										<div class="tools action-buttons">
-											<a href="#">
-												<i class="ace-icon fa fa-facebook-square blue bigger-150"></i>
-											</a>
-
-											<a href="#">
-												<i class="ace-icon fa fa-twitter-square light-blue bigger-150"></i>
-											</a>
-
-											<a href="#">
-												<i class="ace-icon fa fa-google-plus-square red bigger-150"></i>
-											</a>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-
-						<div class="itemdiv memberdiv">
-							<div class="inline pos-rel">
-								<div class="user">
-									<a href="#">
-										<img src="http://bootdey.com/img/Content/avatar/avatar6.png" alt="Susan Doe's avatar">
-									</a>
-								</div>
-
-								<div class="body">
-									<div class="name">
-										<a href="#">
-											<span class="user-status status-online"></span>
-											Susan Doe
-										</a>
-									</div>
-								</div>
-
-								<div class="popover">
-									<div class="arrow"></div>
-
-									<div class="popover-content">
-										<div class="bolder">HR Management</div>
-
-										<div class="time">
-											<i class="ace-icon fa fa-clock-o middle bigger-120 orange"></i>
-											<span class="green"> 20 mins ago </span>
-										</div>
-
-										<div class="hr dotted hr-8"></div>
-
-										<div class="tools action-buttons">
-											<a href="#">
-												<i class="ace-icon fa fa-facebook-square blue bigger-150"></i>
-											</a>
-
-											<a href="#">
-												<i class="ace-icon fa fa-twitter-square light-blue bigger-150"></i>
-											</a>
-
-											<a href="#">
-												<i class="ace-icon fa fa-google-plus-square red bigger-150"></i>
-											</a>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-
-						<div class="itemdiv memberdiv">
-							<div class="inline pos-rel">
-								<div class="user">
-									<a href="#">
-										<img src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="Jennifer Doe's avatar">
-									</a>
-								</div>
-
-								<div class="body">
-									<div class="name">
-										<a href="#">
-											<span class="user-status status-offline"></span>
-											Jennifer Doe
-										</a>
-									</div>
-								</div>
-
-								<div class="popover">
-									<div class="arrow"></div>
-
-									<div class="popover-content">
-										<div class="bolder">Graphic Designer</div>
-
-										<div class="time">
-											<i class="ace-icon fa fa-clock-o middle bigger-120 grey"></i>
-											<span class="grey"> 2 hours ago </span>
-										</div>
-
-										<div class="hr dotted hr-8"></div>
-
-										<div class="tools action-buttons">
-											<a href="#">
-												<i class="ace-icon fa fa-facebook-square blue bigger-150"></i>
-											</a>
-
-											<a href="#">
-												<i class="ace-icon fa fa-twitter-square light-blue bigger-150"></i>
-											</a>
-
-											<a href="#">
-												<i class="ace-icon fa fa-google-plus-square red bigger-150"></i>
-											</a>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-
-						<div class="itemdiv memberdiv">
-							<div class="inline pos-rel">
-								<div class="user">
-									<a href="#">
-										<img src="http://bootdey.com/img/Content/avatar/avatar2.png" alt="Alexa Doe's avatar">
-									</a>
-								</div>
-
-								<div class="body">
-									<div class="name">
-										<a href="#">
-											<span class="user-status status-offline"></span>
-											Alexa Doe
-										</a>
-									</div>
-								</div>
-
-								<div class="popover">
-									<div class="arrow"></div>
-
-									<div class="popover-content">
-										<div class="bolder">Accounting</div>
-
-										<div class="time">
-											<i class="ace-icon fa fa-clock-o middle bigger-120 grey"></i>
-											<span class="grey"> 4 hours ago </span>
-										</div>
-
-										<div class="hr dotted hr-8"></div>
-
-										<div class="tools action-buttons">
-											<a href="#">
-												<i class="ace-icon fa fa-facebook-square blue bigger-150"></i>
-											</a>
-
-											<a href="#">
-												<i class="ace-icon fa fa-twitter-square light-blue bigger-150"></i>
-											</a>
-
-											<a href="#">
-												<i class="ace-icon fa fa-google-plus-square red bigger-150"></i>
-											</a>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
 					</div>
-
-					<div class="hr hr10 hr-double"></div>
-
-					<ul class="pager pull-right">
-						<li class="previous disabled">
-							<a href="#">← Prev</a>
-						</li>
-
-						<li class="next">
-							<a href="#">Next →</a>
-						</li>
-					</ul>
 				</div><!-- /#friends -->
 
 				<div id="pictures" class="tab-pane">
@@ -708,33 +353,6 @@
 						<li>
 							<a href="#" data-rel="colorbox">
 								<img alt="150x150" src="http://lorempixel.com/200/200/nature/7/">
-								<div class="text">
-									<div class="inner">Sample Caption on Hover</div>
-								</div>
-							</a>
-
-							<div class="tools tools-bottom">
-								<a href="#">
-									<i class="ace-icon fa fa-link"></i>
-								</a>
-
-								<a href="#">
-									<i class="ace-icon fa fa-paperclip"></i>
-								</a>
-
-								<a href="#">
-									<i class="ace-icon fa fa-pencil"></i>
-								</a>
-
-								<a href="#">
-									<i class="ace-icon fa fa-times red"></i>
-								</a>
-							</div>
-						</li>
-
-						<li>
-							<a href="#" data-rel="colorbox">
-								<img alt="150x150" src="http://lorempixel.com/200/200/nature/1/">
 								<div class="text">
 									<div class="inner">Sample Caption on Hover</div>
 								</div>

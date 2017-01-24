@@ -1,8 +1,27 @@
 <!--  Maintain a blog and read and search the blogs of friends.  -->
 <?php
-$title = "Blog";
-$description = "";
-include("../inc/header.php");
+  require "../database.php";
+  $title = "Blog";
+  $description = "";
+  include("../inc/header.php");
+
+  // CHANGED THIS TO BE AUTHENTICATED LATER
+  $loggedInUser = "larry@ucl.ac.uk";
+  $pdo = Database::connect();
+  $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+  $personalPostsQuery = "SELECT * FROM blogs WHERE email='" . $loggedInUser . "'";
+  #echo $personalPostsQuery;
+  $y = $pdo->prepare($personalPostsQuery);
+  $y->execute();
+  $personalPostsResults = $y->fetch(PDO::FETCH_ASSOC);
+
+  $friendPostsQuery = "SELECT * FROM blogs WHERE email='" . $loggedInUser . "'";
+  #echo $personalPostsQuery;
+  $y = $pdo->prepare($friendPostsQuery );
+  $y->execute();
+  $friendPostsResults = $y->fetch(PDO::FETCH_ASSOC);
+
 ?>
 <body>
   <?php include '../inc/nav-trn.php'; ?>
@@ -22,9 +41,10 @@ include("../inc/header.php");
           Posts you've written:
         </p>
         <div class="blog-section">
-          <div class="blog-section personal-post-container">
-            Post Title
-          </div>
+
+          <a href="viewBlog.php?blogId=<?php echo $personalPostsResults["blogId"] ?>" class="blog-section personal-post-container">
+            <?php echo $personalPostsResults["blogTitle"]; ?>
+          </a>
 
         </div>
 
@@ -34,7 +54,7 @@ include("../inc/header.php");
 
         <div class="blog-section">
           <div class="blog-section friend-post-container">
-            Post Title 
+            Post Title
           </dvi>
         </div>
       </div>
@@ -53,3 +73,4 @@ include("../inc/header.php");
   </div>
 
 </body>
+<?php Database::disconnect(); ?>

@@ -24,14 +24,10 @@
   $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 
-  $sql = "UPDATE MyDB.annotations SET
-  email=" . removeSpaces(wrapArgument($_POST['email'])) .  ","
-  . "coordinateX=" . $_POST['coordinateX'] .  ","
-  . "coordinateY=" . $_POST['coordinateY'].  ","
+  $sql = "UPDATE MyDB.annotations SET "
   . "annotationText=" . wrapArgument($_POST['annotationText'])
   . " WHERE annotationsId=" . $_POST['argument1'];
 
-  // echo $sql;
 
     $q = $pdo->prepare($sql);
     $q->execute();

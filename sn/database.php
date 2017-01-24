@@ -4,7 +4,7 @@ class Database
   private static $dbName = 'mydb' ;
   private static $dbHost = 'localhost';
   private static $dbUsername = 'root';
-  private static $dbUserPassword = 'root';
+  private static $dbUserPassword = 'admin';
   private static $cont  = null;
   public function __construct() {
     exit('Init function is not allowed');

@@ -28,7 +28,7 @@
         <font size="3"></font>
       </div>
       <div class="blog-edit-options">
-        <a class='btn btn-success' href="editPost.php?blogId=<?php echo  $postQueryResult["blogId"]; ?>"> <i class="fa fa-pencil" aria-hidden='true'> Edit</i>  </a>
+        <a class='btn btn-success' href="editPostView.php?blogId=<?php echo  $postQueryResult["blogId"]; ?>"> <i class="fa fa-pencil" aria-hidden='true'> Edit</i>  </a>
         <a class='btn btn-danger' href="deleteBlog.php?blogId=<?php echo  $postQueryResult["blogId"]; ?>"> <i class="fa fa-trash" aria-hidden='true'> Delete</i>  </a>
 
       </div>

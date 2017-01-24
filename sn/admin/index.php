@@ -37,9 +37,11 @@
 
     echo "</table>";
 
+
     $annotationsInfo = "SELECT * FROM annotations";
     echo "<table class='table table-stripped table-bordered'>
        <tr>
+        <th> Photo </th>
         <th> Annotator </th>
         <th> CoordinateX </th>
         <th> CoordinateY </th>
@@ -47,8 +49,24 @@
         <th> Action </th> ";
 
     foreach ($pdo->query($annotationsInfo) as $row)  {
+
+            $photoQuery = "SELECT * FROM photos where photoId=". $row["photoId"];
+
+            $q = $pdo->prepare($photoQuery);
+            $q->execute();
+            $photoResult = $q->fetch(PDO::FETCH_ASSOC);
+
+            //$user = "SELECT * IN useres where emailId='". $row["email"] . "'";
+
+            $userQuery = "SELECT * FROM users where email='". $row["email"] . "'";
+
+            $y = $pdo->prepare($userQuery);
+            $y->execute();
+            $userQueryResult = $y->fetch(PDO::FETCH_ASSOC);
+
             echo "<tr>";
-            echo "<td>" . $row["email"] . "</td><td> " . $row["coordinateX"] . "</td><td>" . $row["coordinateY"]  . "</td><td>" . $row['annotationText'] . "</td>";
+            echo "<td> <img style='height:100px;width=100px;' src='" . $photoResult["imageReference"] . "'</td>";
+            echo "<td>" . $userQueryResult["firstName"] . " " . $userQueryResult["lastName"]  . "</td><td> " . $row["coordinateX"] . "</td><td>" . $row["coordinateY"]  . "</td><td>" . $row['annotationText'] . "</td>";
             echo "<td> <a class='btn btn-success' href='annotations/editAnnotationView.php?annotationsId=".$row["annotationsId"]."'<i class='fa fa-pencil' aria-hidden='true'></i> Edit <br>";
             echo "<a class='btn btn-danger' href='annotations/deleteAnnotation.php?annotationsId=".$row["annotationsId"]."' <i class='fa fa-trash' aria-hidden='true'></i> Delete </td> </a>";
             echo "</tr>";

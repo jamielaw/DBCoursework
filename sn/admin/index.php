@@ -43,8 +43,6 @@
        <tr>
         <th> Photo </th>
         <th> Annotator </th>
-        <th> CoordinateX </th>
-        <th> CoordinateY </th>
         <th> Text </th>
         <th> Action </th> ";
 
@@ -66,7 +64,7 @@
 
             echo "<tr>";
             echo "<td> <img style='height:100px;width=100px;' src='" . $photoResult["imageReference"] . "'</td>";
-            echo "<td>" . $userQueryResult["firstName"] . " " . $userQueryResult["lastName"]  . "</td><td> " . $row["coordinateX"] . "</td><td>" . $row["coordinateY"]  . "</td><td>" . $row['annotationText'] . "</td>";
+            echo "<td>" . $userQueryResult["firstName"] . " " . $userQueryResult["lastName"]  . "</td><td> "  . $row['annotationText'] . "</td>";
             echo "<td> <a class='btn btn-success' href='annotations/editAnnotationView.php?annotationsId=".$row["annotationsId"]."'<i class='fa fa-pencil' aria-hidden='true'></i> Edit <br>";
             echo "<a class='btn btn-danger' href='annotations/deleteAnnotation.php?annotationsId=".$row["annotationsId"]."' <i class='fa fa-trash' aria-hidden='true'></i> Delete </td> </a>";
             echo "</tr>";

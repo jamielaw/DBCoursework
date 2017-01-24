@@ -1,6 +1,6 @@
 <?php
   // Import DB Auth Script
-  require '../database.php';
+  require '../../database.php';
 
   //function to redirect - to be moved into a utils.php file later?
   function redirect($url) {
@@ -11,17 +11,20 @@
   }
 
   // Get PK of Table
-  $circlename = $_GET['circlename'];
+  $argument1 = $_GET['annotationsId'];
+
   // sql to delete a record
-  $sql = "INSERT INTO MyDB.circleOfFriends (circleOfFriendsName) VALUES (\"" . $circlename . "\")";
+  $sql = "DELETE FROM annotations WHERE annotationsId=".  $argument1;
   $pdo = Database::connect();
+
   $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
   $pdo->exec($sql);
+
   Database::disconnect();
 
-  //Redirect to /sn/circle/createcircleview page to create "refresh "
+  //Redirect to /sn/admin page to create "refresh "
   // URL TO BE MADE RELATIVE LATER
-  redirect('http://localhost:8888/sn/circles/index.php');
+  redirect('http://localhost:8888/sn/admin/');
 
 
 ?>

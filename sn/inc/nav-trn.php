@@ -19,7 +19,7 @@
           <span class="caret"></span></a>
           <ul class="dropdown-menu">
             <li><a href="../profile/index.php">My Blog</a></li>
-            <li><a href="../profile/index.php#2">My Friends</a></li>
+            <li><a href="../profile/myfriends.php">My Friends</a></li>
             <li><a href="../profile/index.php#3">Messages</a></li>
             <li><a href="../profile/index.php#4">My Photo Collections</a></li>
           </ul>

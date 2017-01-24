@@ -42,7 +42,7 @@
         </p>
         <div class="blog-section">
 
-          <a href="viewBlog.php?blogId=<?php echo $personalPostsResults["blogId"] ?>" class="blog-section personal-post-container">
+          <a href="viewPost.php?blogId=<?php echo $personalPostsResults["blogId"] ?>" class="blog-section personal-post-container">
             <?php echo $personalPostsResults["blogTitle"]; ?>
           </a>
 

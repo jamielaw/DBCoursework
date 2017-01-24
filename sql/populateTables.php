@@ -95,7 +95,7 @@ $insertPhotosTable = "INSERT INTO MyDB.photos (photoCollectionId,imageReference)
 (2, \"/images/photoCollection/25.jpg\")";
 
 
-$insertCircleOfFriendsTable = "INSERT INTO MyDB.circleOfFriends (circleOfFriendsName) VALUES 
+$insertCircleOfFriendsTable = "INSERT INTO MyDB.circleOfFriends (circleOfFriendsName) VALUES
 (\"lmao\"),
 (\"lol\")";
 
@@ -115,7 +115,7 @@ VALUES
 ('2', '2', 'charles@ucl.ac.uk', '20', '30', 'Annotations!'),
 ('3', '3', 'charles@ucl.ac.uk', '40', '40', 'Annotations!'),
 ('4', '4', 'charles@ucl.ac.uk', '20', '10', 'Annotations!'),
-('5', '5', 'charles@ucl.ac.uk', '11', '1', 'Annotations!');"
+('5', '5', 'charles@ucl.ac.uk', '11', '1', 'Annotations!')";
 
 $populatingTables = [
     $insertRolesTable,
@@ -130,6 +130,7 @@ $populatingTables = [
     $insertCommentsTable,
     $insertAnnotationsTable
 ];
+
 foreach ($populatingTables as $sqlquery){
   echo nl2br("\n"); //Line break in HTML conversion
   echo "<b>Executing SQL statement: </b>";

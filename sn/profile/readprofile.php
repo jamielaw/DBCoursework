@@ -32,7 +32,18 @@
 		$data = $q->fetch(PDO::FETCH_ASSOC);
 		//echo $data;
 		return $data;
-  }
+  	}
+
+  	function getPhoto($photoId) {
+  		$pdo = Database::connect();
+	    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	    $sql = 'SELECT imageReference FROM photos WHERE photoCollectionId = ? LIMIT 1;';
+      	$q = $pdo->prepare($sql);
+		$q->execute(array($photoId));
+		$data = $q->fetch(PDO::FETCH_ASSOC);
+		//echo $data;
+		return $data;
+  	}
 
 
 ?>
@@ -194,11 +205,14 @@
  							$q1 = $pdo->prepare($sql);
     						$q1->execute(array($email));
  							foreach ($q1->fetchAll() as $row) {
+
+ 								$imageReference = getPhoto($row['photoCollectionId'])['imageReference'];
+
  								echo ' 
  								<ul class="ace-thumbnails">
 									<li>
 		 								<a href="#" data-rel="colorbox">
-											<img alt="150x150" src="http://lorempixel.com/200/200/nature/1/">
+											<img height="300" src=" ' . $imageReference . ' ">
 											<div class="text">
 												<div class="inner"> ' . $row['title'] . ' </div>
 											</div>

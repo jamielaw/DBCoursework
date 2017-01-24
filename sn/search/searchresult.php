@@ -33,6 +33,7 @@
                 echo "<td>" . $row["email"] . "</td><td> " . $row["firstName"] . "</td><td>" . $row["lastName"]  . "</td><td> <img style='height:100px;width=100px;' src='" . $row["profileImage"] . "'</td>";
                 echo "</tr>"; 
             } 
+            echo "</table>";
           } 
           else{ 
             echo  "<p>Please enter a search query</p>" .$_GET['submit']; 

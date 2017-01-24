@@ -33,7 +33,7 @@
 
       <!--search bar-->
       <form class="navbar-form navbar-left" action="../search/searchresult.php?go" method="get" id="searchform">
-          <input type="text" class="form-control" placeholder="Search for friends" name="submit">
+          <input type="text" class="form-control" placeholder="Search for friends" name="submit" id="input">
         <button type="submit" id="submit" class="btn btn-default"><i class="glyphicon glyphicon-search"></i></button>
       </form>
 
@@ -42,6 +42,12 @@
 </nav>
 </html>
 
+<script>
+// jQuery('#input').on('input', function(){ //backup plan
+//   $searchQuery = $("#input").val();
+//   window.alert($searchQuery);
+// });
+</script>
 <style type="text/css">
   body { padding-top: 50px; }
 </style>

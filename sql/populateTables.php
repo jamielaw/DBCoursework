@@ -95,7 +95,7 @@ $insertPhotosTable = "INSERT INTO MyDB.photos (photoCollectionId,imageReference)
 (2, \"/images/photoCollection/25.jpg\")";
 
 
-$insertCircleOfFriendsTable = "INSERT INTO MyDB.circleOfFriends (circleOfFriendsName) VALUES 
+$insertCircleOfFriendsTable = "INSERT INTO MyDB.circleOfFriends (circleOfFriendsName) VALUES
 (\"lmao\"),
 (\"lol\")";
 
@@ -130,6 +130,7 @@ $populatingTables = [
     $insertCommentsTable,
     $insertAnnotationsTable
 ];
+
 foreach ($populatingTables as $sqlquery){
   echo nl2br("\n"); //Line break in HTML conversion
   echo "<b>Executing SQL statement: </b>";

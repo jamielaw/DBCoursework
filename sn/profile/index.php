@@ -57,7 +57,7 @@
 		              	</thead>
 		              	<tbody>
 		              		<?php 
-					   			include '..\database.php';
+					   			//include '..\database.php';
 					   			$pdo = Database::connect();
 					   			// !!! HARDCODED STUFF -  TO BE CHANGED AFTER LOGIN IS IMPLEMENTED
 					   			$sql = 'SELECT DISTINCT email, firstName, lastName FROM users JOIN friendships ON users.email = friendships.emailFrom OR users.email=friendships.emailTo WHERE (friendships.emailFrom=\'charles@ucl.ac.uk\' OR friendships.emailTo=\'charles@ucl.ac.uk\') AND users.email!=\'charles@ucl.ac.uk\' AND status=\'accepted\';';

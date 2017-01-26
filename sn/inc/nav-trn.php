@@ -6,6 +6,7 @@
   <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script type="text/javascript" src="//netsh.pp.ua/upwork-demo/1/js/typeahead.js"></script>
+  <script src="https://use.fontawesome.com/48a6746b39.js"></script>
   <script type ="text/javascript">
     jQuery(document).ready(function($) {
       $('input.submit').typeahead({
@@ -50,20 +51,32 @@
 <nav class="navbar navbar-inverse navbar-fixed-top">
   <div class="container-fluid">
     <div class="navbar-header">
-      <a class="navbar-brand" href="#">BookFace</a>
+      <a class="navbar-brand">BookFace</a>
     </div>
     <div>
       <ul class="nav navbar-nav">
         <li class="dropdown">
-          <a class="dropdown-toggle" data-toggle="dropdown" href="#">Profile
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+          <?php 
+          require("../database.php");
+          $pdo = Database::connect();
+          $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+          $sql="SELECT firstName, lastName, profileImage FROM MyDB.users WHERE firstName LIKE 'Vicky'"; //change this to be for logged-in user
+          foreach($pdo->query($sql) as $row){
+            echo "<img style='height:20px;width:20px;border-radius:2px;' src='" . $row["profileImage"] . "'> ";
+            echo $row["firstName"] . " " . $row["lastName"];
+          }
+          Database::disconnect();
+          ?>
           <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="../profile/index.php">My Blog</a></li>
-            <li><a href="../profile/myfriends.php">My Friends</a></li>
-            <li><a href="../profile/index.php#3">Messages</a></li>
-            <li><a href="../profile/index.php#4">My Photo Collections</a></li>
+            <li><a href="../settings/index.php">Settings</a></li>
+            <li><a href="../logout.php">Logout</a></li>
           </ul>
         </li>
+        <li><a href="../profile/myfriends.php"><i class="fa fa-users"></i></a></li>
+        <li><a href="../profile/index.php#3"><i class="fa fa-comments"></i></a></li>
+        <li><a href="../profile/index.php#4"><i class="fa fa-picture-o"></i></a></li>
         <li><a href="../photos/index.php">Photos</a></li>
         <li><a href="../circles/index.php">Circles</a></li>
         <li><a href="../blog/index.php">Blog</a></li>

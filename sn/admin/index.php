@@ -1,6 +1,6 @@
 <?php
 
-  require("../database.php");
+  //require("../database.php");  //I've commented this out because nav-trn already requires database.php to obtain loggedinuser info - Jamie
 
   $title = "Bookface Social Network";
   $description = "A far superior social network";

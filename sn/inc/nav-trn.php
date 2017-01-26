@@ -61,7 +61,9 @@
           require("../database.php");
           $pdo = Database::connect();
           $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-          $sql="SELECT firstName, lastName, profileImage FROM MyDB.users WHERE firstName LIKE 'Vicky'"; //change this to be for logged-in user
+          //update this later when we have info on who logged in user is
+          $loggedInUser = "vicky@ucl.ac.uk";
+          $sql="SELECT firstName, lastName, profileImage FROM MyDB.users WHERE email='" . $loggedInUser . "'"; //change this to be for logged-in user
           foreach($pdo->query($sql) as $row){
             echo "<img style='height:20px;width:20px;border-radius:2px;' src='" . $row["profileImage"] . "'> ";
             echo $row["firstName"] . " " . $row["lastName"];

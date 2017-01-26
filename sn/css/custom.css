@@ -18,7 +18,7 @@
   border-style: solid;
   border-color: rgba(221,221,221,0.41);
   max-width: 100%;
-  display:block;
+  display: -webkit-box;
   margin-top: 10px;
   padding: 10px;
 }
@@ -34,7 +34,8 @@
   border-color: #b40000;
   display:block;
   padding: 10px;
-  width: 100px;
+  width: 160px;
+  margin: 10px;
 }
 
 .blog-section .friend-post-container{
@@ -44,5 +45,22 @@
   border-color: #0093b4;
   display:block;
   padding: 10px;
-  width: 100px;
+  width: 160px;
+  margin: 10px;
+}
+
+.author-box{
+
+}
+.author-picture{
+  width: 50px;
+  height: 50px;
+  border-radius: 50px;
+}
+
+.blog-title{
+  font-size: large;
+  font-style: italic;
+  color: #002b7a;
+  margin-top: 5px;
 }

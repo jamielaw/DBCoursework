@@ -65,10 +65,16 @@
 
         <div class="blog-section">
           <?php foreach($pdo->query($friendPostsQuery) as $friendPostsResults){ ?>
-          <a href="viewPost.php?blogId=<?php echo $friendPostsResults["blogId"]; ?>" class="blog-section friend-post-container">
-            <?php echo $friendPostsResults['blogTitle']; ?>
-          </a>
+            <a href="viewPost.php?blogId=<?php echo $friendPostsResults["blogId"]; ?>" class="col-md-6 col-sm-12 col-lg-3 blog-section friend-post-container">
+              <div class="author-box">
+                <img class="author-picture" src="<?php echo $friendPostsResults['profileImage']; ?>"> <?php echo $friendPostsResults['firstName'];  ?> wrote
+              </div>
+              <div class="blog-title">
+                <?php echo $friendPostsResults['blogTitle']; ?>
+              </div>
+            </a>
           <?php } ?>
+
         </div>
 
       </div>

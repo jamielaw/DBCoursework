@@ -4,7 +4,7 @@
     $description = "A far superior social network";
     include("../inc/nav-trn.php"); 
     include("../inc/header.php"); 
-	  require '../database.php';
+	  //require '../database.php';
 
 	$email="charles@ucl.ac.uk";
 	$photoId = null;

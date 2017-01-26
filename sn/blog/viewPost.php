@@ -1,6 +1,6 @@
 <!--  Maintain a blog and read and search the blogs of friends.  -->
 <?php
-  require "../database.php";
+  //require "../database.php";
   $title = "Blog";
   $description = "";
   include("../inc/header.php");

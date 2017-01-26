@@ -12,7 +12,7 @@
 
       <!--php for search-->
       <?php 
-      require("../database.php");
+      //require("../database.php");
       echo "<h1>Search results for first/last name matching with: ". $_GET['submit'] ."</h1>";
        if(isset($_GET['submit'])){ 
           if(preg_match("/^[  a-zA-Z]+/", $_GET['submit'])){ //check search string isn't empty

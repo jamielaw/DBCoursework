@@ -6,7 +6,7 @@
   include("../inc/header.php");
 
   // CHANGED THIS TO BE AUTHENTICATED LATER
-  $loggedInUser = "larry@ucl.ac.uk";
+  $loggedInUser = "charles@ucl.ac.uk";
   $pdo = Database::connect();
   $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
@@ -16,8 +16,17 @@
   // $y->execute();
   // $personalPostsResults = $y->fetch(PDO::FETCH_ASSOC);
 
-  $friendPostsQuery = "SELECT * FROM blogs WHERE email='" . $loggedInUser . "'";
-  #echo $personalPostsQuery;
+  $friendPostsQuery = "SELECT *
+  FROM (SELECT * FROM users JOIN friendships ON
+  users.email = friendships.emailFrom OR
+  users.email=friendships.emailTo WHERE
+  (friendships.emailFrom='". $loggedInUser.
+  "' OR friendships.emailTo='". $loggedInUser .
+   "' ) AND users.email!= '". $loggedInUser.
+   "' AND status='accepted') AS T1
+  JOIN (SELECT * from blogs) AS T2
+  ON T1.email = T2.email";
+  #echo $friendPostsQuery;
   $y = $pdo->prepare($friendPostsQuery );
   $y->execute();
   $friendPostsResults = $y->fetch(PDO::FETCH_ASSOC);
@@ -41,23 +50,27 @@
           Posts you've written:
         </p>
 
-        <?php foreach($pdo->query($personalPostsQuery) as $personalPostsResults){ ?>
         <div class="blog-section">
-          <a href="viewPost.php?blogId=<?php echo $personalPostsResults["blogId"] ?>" class="blog-section personal-post-container">
+          <?php foreach($pdo->query($personalPostsQuery) as $personalPostsResults){ ?>
+          <a href="viewPost.php?blogId=<?php echo $personalPostsResults["blogId"]; ?>" class="blog-section personal-post-container">
             <?php echo $personalPostsResults["blogTitle"]; ?>
           </a>
+          <?php } ?>
         </div>
-        <?php } ?>
+
 
         <p>
           Posts your friends have written:
         </p>
 
         <div class="blog-section">
-          <div class="blog-section friend-post-container">
-            Post Title
-          </dvi>
+          <?php foreach($pdo->query($friendPostsQuery) as $friendPostsResults){ ?>
+          <a href="viewPost.php?blogId=<?php echo $friendPostsResults["blogId"]; ?>" class="blog-section friend-post-container">
+            <?php echo $friendPostsResults['blogTitle']; ?>
+          </a>
+          <?php } ?>
         </div>
+
       </div>
 
 

@@ -32,7 +32,6 @@
   $pdo->exec($sql);
 
   // Need to handle error catching etc
-
   Database::disconnect();
 
   // Direct back to sn/admin

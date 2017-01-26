@@ -87,9 +87,9 @@
       </ul>
 
       <!--search bar-->
-      <form class="navbar-form navbar-left" action="../search/searchresult.php?go" method="get" id="searchform">
+      <form class="navbar-form navbar-left" action="../search/searchresult.php?go" method="get" id="searchform" style="padding-top:2px;">
           <input type="text" class="submit" placeholder="Search for friends" name="submit" id="submit" autocomplete="off" style="vertical-align:none;">
-        <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-search"></i></button>
+        <button type="submit" class="btn btn-default" style="padding:3px 5px; vertical-align:top;"><i class="glyphicon glyphicon-search"></i></button>
       </form>
 
     </div>

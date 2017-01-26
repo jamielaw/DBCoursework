@@ -23,10 +23,10 @@
   $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 
-  $sql = "UPDATE blogs SET "
-  . "blogTitle=" . wrapArgument($_POST['blogTitle']) .  ","
-  . "blogDescription=" . wrapArgument($_POST['blogDescription'])
-  . " WHERE blogId=" . $_POST['argument1'];
+  $sql = "INSERT INTO blogs (blogTitle, blogDescription, email) VALUES ("
+  . wrapArgument($_POST['blogTitle']) .  ","
+  . wrapArgument($_POST['blogDescription']) . ","
+  . "'ada@ucl.ac.uk')";
 
   #echo $sql;
   $pdo->exec($sql);

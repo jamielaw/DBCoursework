@@ -29,8 +29,8 @@
         .submit {
             border: 2px solid #CCCCCC;
             border-radius: 8px 8px 8px 8px;
-            font-size: 24px;
-            height: 45px;
+            /*font-size: 24px; */
+            height: 30px;
             line-height: 30px;
             outline: medium none;
             padding: 8px 12px;
@@ -79,7 +79,7 @@
 
       <!--search bar-->
       <form class="navbar-form navbar-left" action="../search/searchresult.php?go" method="get" id="searchform">
-          <input type="text" class="submit" placeholder="Search for friends" name="submit" id="submit" autocomplete="off">
+          <input type="text" class="submit" placeholder="Search for friends" name="submit" id="submit" autocomplete="off" style="vertical-align:none;">
         <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-search"></i></button>
       </form>
 

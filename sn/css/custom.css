@@ -49,6 +49,11 @@
   margin: 10px;
 }
 
+.blog-section .create-blog{
+  width: 300px;
+  background-color: red;
+}
+
 .author-box{
 
 }

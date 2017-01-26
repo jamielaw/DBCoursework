@@ -42,8 +42,9 @@
       </div>
 
       <div class="row">
-        <div class="blog-section">
-          <input class="blog-search-bar" type="text" name="search" placeholder="Search posts">
+
+        <div class="blog-section create-blog">
+          <a href="createBlog.php"> <i class="glyphicon glyphicon-plus"></i> Create a new blog </a>
         </div>
 
         <p>
@@ -74,7 +75,6 @@
               </div>
             </a>
           <?php } ?>
-
         </div>
 
       </div>

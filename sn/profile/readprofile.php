@@ -211,7 +211,7 @@
  								echo ' 
  								<ul class="ace-thumbnails">
 									<li>
-		 								<a href="#" data-rel="colorbox">
+		 								<a href="readphotocollection.php?createdBy='.$email.'&photoCollectionId='.$row['photoCollectionId'].'" data-rel="colorbox">
 											<img height="300" src=" ' . $imageReference . ' ">
 											<div class="text">
 												<div class="inner"> ' . $row['title'] . ' </div>

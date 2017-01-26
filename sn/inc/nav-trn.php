@@ -20,13 +20,6 @@
     // });
   </script>
   <style>
-
-        .content {
-            width: 80%;
-            margin: 0 auto;
-            margin-top: 50px;
-        }
-
         .tt-hint,
         .submit {
             border: 2px solid #CCCCCC;

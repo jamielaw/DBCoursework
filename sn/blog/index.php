@@ -1,8 +1,7 @@
 <!--  Maintain a blog and read and search the blogs of friends.  -->
-
-<body>
-  <?php include("../inc/header.php");
+<?php include("../inc/header.php");
   include ("../inc/nav-trn.php"); ?>
+<body>
   <?php
   //require "../database.php"; //I've commented this out because nav-trn already requires database.php to obtain loggedinuser info - Jamie
   $title = "Blog";

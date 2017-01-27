@@ -1,5 +1,8 @@
 <!-- Similar to messenger.com, left navigation displays list of users in a circle, rest of page dedicated to chat -->
-
+<?php 
+include("../inc/header.php");
+include("../inc/nav-trn.php");
+?>
 <!DOCTYPE html>
 <html>
   <head>
@@ -7,6 +10,7 @@
     <title></title>
   </head>
   <body>
+  <div class="container">
     <div class="row">
 
       <!--  List of friends in circle-->
@@ -39,6 +43,7 @@
           <button type="button" name="button">Send</button>
         </form>
       </div>
+    </div>
     </div>
   </body>
 </html>

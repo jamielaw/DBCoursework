@@ -100,6 +100,11 @@ $insertCircleOfFriendsTable = "INSERT INTO MyDB.circleOfFriends (circleOfFriends
 (\"lmao\"),
 (\"lol\")";
 
+$insertUserCircleRelationshipsTable = "INSERT INTO MyDB.userCircleRelationships (email, circleFriendsId) VALUES
+(\"charles@ucl.ac.uk\",1),
+(\"vicky@ucl.ac.uk\",1),
+(\"charles@ucl.ac.uk\",2)";
+
 
 
 $insertCommentsTable = "INSERT INTO MyDB.comments (photoId,email,commentText) VALUES
@@ -128,6 +133,7 @@ $populatingTables = [
     $insertPhotoCollectionTable,
     $insertPhotosTable,
     $insertCircleOfFriendsTable,
+    $insertUserCircleRelationshipsTable,
     $insertCommentsTable,
     $insertAnnotationsTable
 ];

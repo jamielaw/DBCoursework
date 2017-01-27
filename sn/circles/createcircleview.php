@@ -3,7 +3,8 @@
   <head>
     <meta charset="utf-8">
     <title>Create Friendship Circle</title>
-    <?php include("../inc/header.php");
+    <?php 
+    include("../inc/header.php");
     include("../inc/nav-trn.php"); 
     ?>
   </head>

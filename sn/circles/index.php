@@ -3,7 +3,6 @@ also has link to creating friend circles -->
 
 <!--
 TODO: 
-Fix other circles table to NOT show circles which the user is also in
 Convert UI similar to blog style
 Implement message link
 Implement leaving and joining a circle (if leaving the circle and you are the last member, delete the circle?)
@@ -74,7 +73,8 @@ include("../inc/header.php");
 
             /*lets run through the above query as it's quite complex to understand:
             firstly, we join the circle of friends, and user circle relationships together by their ID in order to get the list of all members of each circle
-            we then filter it by making sure the email of the member is a FRIEND of the logged in user (this could be a friend request that the logged in user sent to the user, or vice versa)
+            we then filter it by making sure the email of the member is a FRIEND of the logged in user (this could be a friend request that the logged in user sent to the user, OR vice versa)
+            we then filter it again by making sure that the id of these circles are not part of the circles that the logged in user is part of
             finally, we group it by ID to avoid duplicate entries of circles if there are multiple friends in one circle 
             */
 

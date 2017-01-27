@@ -72,8 +72,9 @@
           ?>
           <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="../settings/index.php">Settings</a></li>
-            <li><a href="../logout.php">Logout</a></li>
+            <li><a href="../profile/index.php"><i class="fa fa-user"></i> My Profile</a></li>
+            <li><a href="../profile/settings.php"><i class="fa fa-cog"></i> Settings</a></li>
+            <li><a href="../logout.php"><i class="fa fa-sign-out"></i> Logout</a></li>
           </ul>
         </li>
         <li><a href="../profile/myfriends.php"><i class="fa fa-users"></i></a></li>

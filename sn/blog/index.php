@@ -1,5 +1,7 @@
 <!--  Maintain a blog and read and search the blogs of friends.  -->
-<?php include("../inc/header.php");
+<?php 
+  $title = "Blogs";
+  include("../inc/header.php");
   include ("../inc/nav-trn.php"); ?>
 <body>
   <?php

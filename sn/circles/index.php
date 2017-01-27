@@ -61,19 +61,19 @@ include("../inc/header.php");
         </div>
 
         <p>
-          Other circles that your friends are in:
+          Other circles that your friends are in (and you are not a part of):
         </p>
         <div class="blog-section">
           <?php 
             $pdo=Database::connect();
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-            $impersonalCirclesQuery= "SELECT * FROM MyDB.circleOfFriends INNER JOIN MyDB.userCircleRelationships ON MyDB.circleOfFriends.circleFriendsId=MyDB.userCircleRelationships.circleFriendsId WHERE(email IN (SELECT emailTo FROM MyDB.friendships WHERE (emailFrom='" . $loggedInUser . "' AND status='accepted')) OR email IN (SELECT emailFrom FROM MyDB.friendships WHERE ( emailTo='". $loggedInUser . "' AND status='accepted'))) GROUP BY MyDB.circleOfFriends.circleFriendsId";
+            $impersonalCirclesQuery= "SELECT * FROM MyDB.circleOfFriends INNER JOIN MyDB.userCircleRelationships ON MyDB.circleOfFriends.circleFriendsId=MyDB.userCircleRelationships.circleFriendsId WHERE((email IN (SELECT emailTo FROM MyDB.friendships WHERE (emailFrom='" . $loggedInUser . "' AND status='accepted')) OR email IN (SELECT emailFrom FROM MyDB.friendships WHERE ( emailTo='". $loggedInUser . "' AND status='accepted'))) AND MyDB.circleOfFriends.circleFriendsId NOT IN (SELECT circleOfFriends.circleFriendsId FROM MyDB.circleOfFriends INNER JOIN MyDB.userCircleRelationships ON MyDB.circleOfFriends.circleFriendsId=MyDB.userCircleRelationships.circleFriendsID WHERE email='" . $loggedInUser . "')) GROUP BY MyDB.circleOfFriends.circleFriendsId";
 
             //echo $impersonalCirclesQuery;
 
             /*lets run through the above query as it's quite complex to understand:
-            firstly, we join the circle of friends, and user circle relationships together by their ID in order to get the list of all members of a circle
+            firstly, we join the circle of friends, and user circle relationships together by their ID in order to get the list of all members of each circle
             we then filter it by making sure the email of the member is a FRIEND of the logged in user (this could be a friend request that the logged in user sent to the user, or vice versa)
             finally, we group it by ID to avoid duplicate entries of circles if there are multiple friends in one circle 
             */

@@ -30,7 +30,7 @@
             foreach($pdo->query($sql) as $row){
                 //-display the result of the array 
                 echo "<tr>"; 
-                echo "<td>" . $row["email"] . "</td><td> " . $row["firstName"] . "</td><td>" . $row["lastName"]  . "</td><td> <img style='height:100px;width=100px;' src='" . $row["profileImage"] . "'</td>" . "<td><a href=\"../profile/readprofile.php?email='" . $row["email"] . "'\">View profile</a></td>";
+                echo "<td>" . $row["email"] . "</td><td> " . $row["firstName"] . "</td><td>" . $row["lastName"]  . "</td><td> <img style='height:100px;width=100px;' src='" . $row["profileImage"] . "'</td>" . "<td><a href=\"../profile/readprofile.php?email=" . $row["email"] . "\">View profile</a></td>";
                 echo "</tr>"; 
                 }
 

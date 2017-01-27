@@ -3,8 +3,6 @@ also has link to creating friend circles -->
 <?php
 $title = "Friendship Circles";
 $description = "";
-//CHANGE THIS TO BE AUTHENTICATED LATER
-$loggedInUser="charles@ucl.ac.uk";
 include("../inc/header.php");
  ?>
   <body>
@@ -32,6 +30,8 @@ include("../inc/header.php");
 
         <div class="blog-section">
         <?php 
+        //CHANGE THIS TO BE AUTHENTICATED LATER
+        $loggedInUser="charles@ucl.ac.uk";
         $pdo=Database::connect();
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
@@ -49,14 +49,20 @@ include("../inc/header.php");
         ?>
         </div>
         <p>
-          Other Circles:
+          Circles that your friends are in:
         </p>
         <div class="blog-section">
           <?php 
             $pdo=Database::connect();
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-            $impersonalCirclesQuery= "SELECT * FROM MyDB.circleOfFriends INNER JOIN MyDB.userCircleRelationships ON MyDB.circleOfFriends.circleFriendsId=MyDB.userCircleRelationships.circleFriendsId WHERE(email!='". $loggedInUser . "')";
+            $impersonalCirclesQuery= "SELECT * FROM MyDB.circleOfFriends INNER JOIN MyDB.userCircleRelationships ON MyDB.circleOfFriends.circleFriendsId=MyDB.userCircleRelationships.circleFriendsId WHERE(email IN (SELECT emailTo FROM MyDB.friendships WHERE (emailFrom='" . $loggedInUser . "' AND status='accepted')) OR email IN (SELECT emailFrom FROM MyDB.friendships WHERE ( emailTo='". $loggedInUser . "' AND status='accepted'))) GROUP BY MyDB.circleOfFriends.circleFriendsId";
+
+            /*lets run through the above query as it's quite complex to understand:
+            firstly, we join the circle of friends, and user circle relationships together by their ID in order to get the list of all members of a circle
+            we then filter it by making sure the email of the member is a FRIEND of the logged in user (this could be a friend request that the logged in user sent to the user, or vice versa)
+            finally, we group it by ID to avoid duplicate entries of circles if there are multiple friends in one circle 
+            */
 
             echo "<table style='width:100%'> <tr> <th><center> Circle of Friends ID </center></th> <th><center> Circle of Friends Name </center></th> <th><center> Date created </center></th> <th><center> Action </center></th> ";
             foreach ($pdo->query($impersonalCirclesQuery) as $row)  {

@@ -16,7 +16,7 @@ include("../inc/header.php");
     <div class="blog-container">
       <div class="row">
         <font size="10"> Circles </font> <br>
-        <font size="3"> You can view your circles and other circles here. </font>
+        <font size="3"> You can view your circles and your friends' circles here. </font>
       </div>
 
       <div class="row">
@@ -38,14 +38,14 @@ include("../inc/header.php");
 
         $personalCirclesQuery="SELECT * FROM MyDB.circleOfFriends INNER JOIN MyDB.userCircleRelationships ON MyDB.circleOfFriends.circleFriendsId=MyDB.userCircleRelationships.circleFriendsId WHERE(email='". $loggedInUser . "')";
 
-        echo "<table style='width:100%; text-align:center;'> <tr><th><center> Circle of Friends ID </center></th> <th><center> Circle of Friends Name </center></th> <th><center> Members </center></th> <th><center> Date created </center></th> <th><center> Action </center></th></tr> ";
+        echo "<table style='width:100%; text-align:center;'> <tr><th><center> Circle of Friends Name </center></th> <th><center> Members </center></th> <th><center> Date created </center></th> <th><center> Action </center></th></tr> ";
         foreach ($pdo->query($personalCirclesQuery) as $row)  {
             $countMembers = "SELECT COUNT(email) FROM MyDB.circleOfFriends INNER JOIN MyDB.userCircleRelationships ON MyDB.circleOfFriends.circleFriendsId=MyDB.userCircleRelationships.circleFriendsId WHERE MyDB.circleOfFriends.circleFriendsId=" . $row["circleFriendsId"];
             //echo $countMembers;
             $y = $pdo->query($countMembers);
             $countResults = $y->fetch(PDO::FETCH_ASSOC);
             echo "<tr>";
-            echo "<td>" . $row["circleFriendsId"] . "</td><td> " . $row["circleOfFriendsName"] . "</td><td>" . $countResults["COUNT(email)"] . "</td><td>". $row["dateCreated"]  . "</td><td> <i class=\"fa fa-user-plus\"></i> Invite / <i class=\"fa fa-sign-out\"></i> Leave </td>";
+            echo "<td>" . $row["circleOfFriendsName"] . "</td><td>" . $countResults["COUNT(email)"] . "</td><td>". $row["dateCreated"]  . "</td><td> <i class=\"fa fa-comments\"></i> Message / <i class=\"fa fa-user-plus\"></i> Invite / <i class=\"fa fa-sign-out\"></i> Leave </td>";
             echo "</tr>";
         }
 
@@ -72,14 +72,14 @@ include("../inc/header.php");
             finally, we group it by ID to avoid duplicate entries of circles if there are multiple friends in one circle 
             */
 
-            echo "<table style='width:100%'> <tr> <th><center> Circle of Friends ID </center></th> <th><center> Circle of Friends Name </center></th> <th><center> Members </center></th> <th><center> Date created </center></th> <th><center> Action </center></th> ";
+            echo "<table style='width:100%'> <tr> <th><center> Circle of Friends Name </center></th> <th><center> Members </center></th> <th><center> Date created </center></th> <th><center> Action </center></th> ";
             foreach ($pdo->query($impersonalCirclesQuery) as $row)  {
                 $countMembers = "SELECT COUNT(email) FROM MyDB.circleOfFriends INNER JOIN MyDB.userCircleRelationships ON MyDB.circleOfFriends.circleFriendsId=MyDB.userCircleRelationships.circleFriendsId WHERE MyDB.circleOfFriends.circleFriendsId=" . $row["circleFriendsId"];
                 //echo $countMembers;
                 $y = $pdo->query($countMembers);
                 $countResults = $y->fetch(PDO::FETCH_ASSOC);
                 echo "<tr>";
-                echo "<td>" . $row["circleFriendsId"] . "</td><td> " . $row["circleOfFriendsName"] . "</td><td>" . $countResults["COUNT(email)"] . "</td><td>". $row["dateCreated"]  . "</td><td> <i class=\"fa fa-sign-in\"></i> Join </td>";
+                echo "<td>" . $row["circleOfFriendsName"] . "</td><td>" . $countResults["COUNT(email)"] . "</td><td>". $row["dateCreated"]  . "</td><td> <i class=\"fa fa-sign-in\"></i> Join </td>";
                 echo "</tr>";
             }
 

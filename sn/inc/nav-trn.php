@@ -77,7 +77,7 @@
           </ul>
         </li>
         <li><a href="../profile/myfriends.php"><i class="fa fa-users"></i></a></li>
-        <li><a href="../profile/index.php#3"><i class="fa fa-comments"></i></a></li>
+        <li><a href="../profile/messages.php"><i class="fa fa-comments"></i></a></li>
         <li><a href="../profile/index.php#4"><i class="fa fa-picture-o"></i></a></li>
         <li><a href="../photos/index.php">Photos</a></li>
         <li><a href="../circles/index.php">Circles</a></li>

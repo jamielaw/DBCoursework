@@ -1,5 +1,6 @@
 <!-- Displays friend circles, each friend circle is linked to a chat page,
 also has link to creating friend circles -->
+
 <?php
 $title = "Friendship Circles";
 $description = "";
@@ -37,10 +38,14 @@ include("../inc/header.php");
 
         $personalCirclesQuery="SELECT * FROM MyDB.circleOfFriends INNER JOIN MyDB.userCircleRelationships ON MyDB.circleOfFriends.circleFriendsId=MyDB.userCircleRelationships.circleFriendsId WHERE(email='". $loggedInUser . "')";
 
-        echo "<table style='width:100%; text-align:center;'> <tr><th><center> Circle of Friends ID </center></th> <th><center> Circle of Friends Name </center></th> <th><center> Date created </center></th> <th><center> Action </center></th></tr> ";
+        echo "<table style='width:100%; text-align:center;'> <tr><th><center> Circle of Friends ID </center></th> <th><center> Circle of Friends Name </center></th> <th><center> Members </center></th> <th><center> Date created </center></th> <th><center> Action </center></th></tr> ";
         foreach ($pdo->query($personalCirclesQuery) as $row)  {
+            $countMembers = "SELECT COUNT(email) FROM MyDB.circleOfFriends INNER JOIN MyDB.userCircleRelationships ON MyDB.circleOfFriends.circleFriendsId=MyDB.userCircleRelationships.circleFriendsId WHERE MyDB.circleOfFriends.circleFriendsId=" . $row["circleFriendsId"];
+            //echo $countMembers;
+            $y = $pdo->query($countMembers);
+            $countResults = $y->fetch(PDO::FETCH_ASSOC);
             echo "<tr>";
-            echo "<td>" . $row["circleFriendsId"] . "</td><td> " . $row["circleOfFriendsName"] . "</td><td>" . $row["dateCreated"]  . "</td><td> Leave </td>";
+            echo "<td>" . $row["circleFriendsId"] . "</td><td> " . $row["circleOfFriendsName"] . "</td><td>" . $countResults["COUNT(email)"] . "</td><td>". $row["dateCreated"]  . "</td><td> <i class=\"fa fa-user-plus\"></i> Invite / <i class=\"fa fa-sign-out\"></i> Leave </td>";
             echo "</tr>";
         }
 
@@ -48,8 +53,9 @@ include("../inc/header.php");
         Database::disconnect();
         ?>
         </div>
+
         <p>
-          Circles that your friends are in:
+          Other circles that your friends are in:
         </p>
         <div class="blog-section">
           <?php 
@@ -58,16 +64,22 @@ include("../inc/header.php");
 
             $impersonalCirclesQuery= "SELECT * FROM MyDB.circleOfFriends INNER JOIN MyDB.userCircleRelationships ON MyDB.circleOfFriends.circleFriendsId=MyDB.userCircleRelationships.circleFriendsId WHERE(email IN (SELECT emailTo FROM MyDB.friendships WHERE (emailFrom='" . $loggedInUser . "' AND status='accepted')) OR email IN (SELECT emailFrom FROM MyDB.friendships WHERE ( emailTo='". $loggedInUser . "' AND status='accepted'))) GROUP BY MyDB.circleOfFriends.circleFriendsId";
 
+            //echo $impersonalCirclesQuery;
+
             /*lets run through the above query as it's quite complex to understand:
             firstly, we join the circle of friends, and user circle relationships together by their ID in order to get the list of all members of a circle
             we then filter it by making sure the email of the member is a FRIEND of the logged in user (this could be a friend request that the logged in user sent to the user, or vice versa)
             finally, we group it by ID to avoid duplicate entries of circles if there are multiple friends in one circle 
             */
 
-            echo "<table style='width:100%'> <tr> <th><center> Circle of Friends ID </center></th> <th><center> Circle of Friends Name </center></th> <th><center> Date created </center></th> <th><center> Action </center></th> ";
+            echo "<table style='width:100%'> <tr> <th><center> Circle of Friends ID </center></th> <th><center> Circle of Friends Name </center></th> <th><center> Members </center></th> <th><center> Date created </center></th> <th><center> Action </center></th> ";
             foreach ($pdo->query($impersonalCirclesQuery) as $row)  {
+                $countMembers = "SELECT COUNT(email) FROM MyDB.circleOfFriends INNER JOIN MyDB.userCircleRelationships ON MyDB.circleOfFriends.circleFriendsId=MyDB.userCircleRelationships.circleFriendsId WHERE MyDB.circleOfFriends.circleFriendsId=" . $row["circleFriendsId"];
+                //echo $countMembers;
+                $y = $pdo->query($countMembers);
+                $countResults = $y->fetch(PDO::FETCH_ASSOC);
                 echo "<tr>";
-                echo "<td>" . $row["circleFriendsId"] . "</td><td> " . $row["circleOfFriendsName"] . "</td><td>" . $row["dateCreated"]  . "</td><td> join </td>";
+                echo "<td>" . $row["circleFriendsId"] . "</td><td> " . $row["circleOfFriendsName"] . "</td><td>" . $countResults["COUNT(email)"] . "</td><td>". $row["dateCreated"]  . "</td><td> <i class=\"fa fa-sign-in\"></i> Join </td>";
                 echo "</tr>";
             }
 

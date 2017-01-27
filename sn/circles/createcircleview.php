@@ -9,6 +9,8 @@
     ?>
   </head>
   <body>
+  <div class="container">
+  <row><font size="5">Create new circle</font></row>
     <form class="" action="createcircle.php" method="get" id="createform">
     <!-- Name of circle -->
     <br>
@@ -18,9 +20,10 @@
      </div>
 
       <!--  Requires multi select friends, use http://davidstutz.github.io/bootstrap-multiselect/#further-examples-->
-
+      <br>
       <button type="submit" onclick="return empty()">Create Circle</button>
     </form>
+    </div>
   </body>
 </html>
 <script>

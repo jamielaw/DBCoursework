@@ -1,9 +1,10 @@
 <?php 
 	$title = "Bookface Social Network";
 	$description = "A far superior social network";
-	include("../inc/nav-trn.php"); 
 	include("../inc/header.php"); 
-	require '../database.php';
+	include("../inc/nav-trn.php"); 
+	//require '../database.php';
+	
 	$createdBy = null;
 	$photoCollectionId = null;
 	if ( !empty($_GET['createdBy'])) {

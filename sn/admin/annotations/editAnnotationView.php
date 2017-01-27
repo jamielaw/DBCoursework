@@ -1,8 +1,10 @@
 <?php
-  require '../../database.php';
+  //require '../../database.php';
   $title = "Bookface Social Network";
   $description = "A far superior social network";
   include("../../inc/header.php");
+  //<!--  Navigation-->
+  include ('../../inc/nav-trn.php'0;
 
 
   $pdo = Database::connect();
@@ -19,8 +21,6 @@
 ?>
 
 <body>
-  <!--  Navigation-->
-  <?php include '../../inc/nav-trn.php'; ?>
   <div class="container">
     <div class="span10 offset1">
       <div class="row">
@@ -29,24 +29,6 @@
 
       <form class="form-horizontal" method="POST" action="editAnnotations.php">
         <input type="hidden" name="argument1" value="<?php echo $argument1;?>">
-        <div class="control-group">
-          <label class="control-label">Annotator:</label>
-          <div class="controls">
-            <input type="text" name="email" value="<?php echo $row['email'];?>"> <br>
-          </div>
-        </div>
-        <div class="control-group">
-          <label class="control-label">CoordinateX:</label>
-          <div class="controls">
-            <input type="text" name="coordinateX" value="<?php echo $row['coordinateX'];?>"> <br>
-          </div>
-        </div>
-        <div class="control-group">
-          <label class="control-label">CoordinateY</label>
-          <div class="controls">
-            <input type="text" name="coordinateY" value="<?php echo $row['coordinateY'];?>"> <br>
-          </div>
-        </div>
         <div class="control-group">
           <label class="control-label">Text</label>
           <div class="controls">

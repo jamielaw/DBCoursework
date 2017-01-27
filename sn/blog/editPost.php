@@ -1,10 +1,9 @@
 <?php
   // DB Auth Script
-  require '../../database.php';
+  require '../database.php';
 
   // Given "string", returns "'string'" - useful for SQL queries
   function wrapArgument($arg){
-
     return "'" . $arg . "'";
   }
   // Removes spaces
@@ -24,31 +23,19 @@
   $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 
-  $sql = "UPDATE MyDB.annotations SET "
-  . "annotationText=" . wrapArgument($_POST['annotationText'])
-  . " WHERE annotationsId=" . $_POST['argument1'];
+  $sql = "UPDATE blogs SET "
+  . "blogTitle=" . wrapArgument($_POST['blogTitle']) .  ","
+  . "blogDescription=" . wrapArgument($_POST['blogDescription'])
+  . " WHERE blogId=" . $_POST['argument1'];
 
-
-    $q = $pdo->prepare($sql);
-    $q->execute();
-
-
-  //   echo $q->rowCount() . " records UPDATED successfully";
-  // }
-  // catch(PDOException $e)
-  // {
-  //   echo $sql . "<br>" . $e->getMessage();
-  // }
-
-
-
+  #echo $sql;
+  $pdo->exec($sql);
 
   // Need to handle error catching etc
-
   Database::disconnect();
 
   // Direct back to sn/admin
-  redirect('http://localhost:8888/sn/admin/');
+  redirect('http://localhost:8888/sn/blog/');
 
 
 

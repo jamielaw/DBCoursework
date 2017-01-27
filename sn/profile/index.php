@@ -1,20 +1,15 @@
-<?php 
+<?php
 
     $title = "Bookface Social Network";
     $description = "A far superior social network";
-    include("../inc/nav-trn.php"); 
-    include("../inc/header.php"); 
+    include("../inc/header.php");
+    include("../inc/nav-trn.php");
 ?>
 
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 
 <style type="text/css">
@@ -61,8 +56,8 @@
 		                	</tr>
 		              	</thead>
 		              	<tbody>
-		              		<?php 
-					   			include '..\database.php';
+		             <?php
+					   			//include '..\database.php';
 					   			$pdo = Database::connect();
 					   			// !!! HARDCODED STUFF -  TO BE CHANGED AFTER LOGIN IS IMPLEMENTED
 					   			$sql = 'SELECT DISTINCT email, firstName, lastName FROM users JOIN friendships ON users.email = friendships.emailFrom OR users.email=friendships.emailTo WHERE (friendships.emailFrom=\'charles@ucl.ac.uk\' OR friendships.emailTo=\'charles@ucl.ac.uk\') AND users.email!=\'charles@ucl.ac.uk\' AND status=\'accepted\';';
@@ -96,9 +91,9 @@
 		                </tr>
 		            </thead>
 			        <tbody>
-			          	<?php 
+			          	<?php
 			          		// !!! HARDCODED STUFF - TO BE CHANGED AFTER LOGIN IS IMPLEMENTED
-						   	$sql = 'SELECT * FROM photocollection WHERE createdBy = "charles@ucl.ac.uk" ORDER BY dateCreated'; 
+						   	$sql = 'SELECT * FROM photocollection WHERE createdBy = "charles@ucl.ac.uk" ORDER BY dateCreated';
 		 				   	foreach ($pdo->query($sql) as $row) {
 								echo '<td>'. $row['title'] . '</td>';
 								echo '<td width=350>';
@@ -114,9 +109,9 @@
 						?>
 					</tbody>
 				   </table>
-				
+
 				    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#collection_dialog">Create Collection</button>
-					
+
 
 					<!-- modal to create new collection -->
 					<!-- the div that represents the modal dialog -->
@@ -216,7 +211,7 @@ $(document).ready(function () {
         });
         e.preventDefault();
     });
-     
+
     $("#submitForm").on('click', function() {
         $("#collection_form").submit();
     });
@@ -255,7 +250,7 @@ $(document).on("click", ".open-update_dialog", function () {
         });
         e.preventDefault();
     });
-     
+
     $("#submitForm2").on('click', function() {
         $("#update_form").submit();
     });
@@ -289,7 +284,7 @@ $(document).on("click", ".open-delete_dialog", function () {
         });
         e.preventDefault();
     });
-     
+
     $("#submitForm3").on('click', function() {
         $("#delete_form").submit();
     });

@@ -25,7 +25,8 @@ $insertUsersTable = "INSERT INTO MyDB.users (email,roleID,password,firstName,las
 (\"dennis@ucl.ac.uk\",2,\"test\",\"Dennis\",\"Ritchie\",\"/images/profile/dennis@ucl.ac.uk.jpg\"),
 (\"ken@ucl.ac.uk\",2,\"test\",\"Ken\",\"Thompson\",\"/images/profile/ken@ucl.ac.uk.jpg\"),
 (\"larry@ucl.ac.uk\",2,\"test\",\"Larry\",\"Page\",\"/images/profile/larry@ucl.ac.uk.jpg\"),
-(\"charles@ucl.ac.uk\",2,\"test\",\"Charles\",\"Babbage\",\"/images/profile/charles@ucl.ac.uk.jpg\")";
+(\"charles@ucl.ac.uk\",2,\"test\",\"Charles\",\"Babbage\",\"/images/profile/charles@ucl.ac.uk.jpg\"),
+(\"vicky@ucl.ac.uk\",2,\"test\",\"Vicky\",\"LovesPHP\",\"/images/profile/vicky@ucl.ac.uk.jpg\")";
 $insertFriendshipTable = "INSERT INTO MyDB.friendships (emailFrom,emailTo,status) VALUES
 (\"charles@ucl.ac.uk\",\"larry@ucl.ac.uk\",\"accepted\"),
 (\"charles@ucl.ac.uk\",\"ken@ucl.ac.uk\",\"accepted\"),
@@ -95,10 +96,10 @@ $insertPhotosTable = "INSERT INTO MyDB.photos (photoCollectionId,imageReference)
 (2, \"/images/photoCollection/25.jpg\")";
 
 
-
-$insertCircleOfFriendsTable = "INSERT INTO MyDB.circleOfFriends (circleOfFriendsName) VALUES 
+$insertCircleOfFriendsTable = "INSERT INTO MyDB.circleOfFriends (circleOfFriendsName) VALUES
 (\"lmao\"),
 (\"lol\")";
+
 
 
 $insertCommentsTable = "INSERT INTO MyDB.comments (photoId,email,commentText) VALUES
@@ -115,7 +116,7 @@ VALUES
 ('2', '2', 'charles@ucl.ac.uk', '20', '30', 'Annotations!'),
 ('3', '3', 'charles@ucl.ac.uk', '40', '40', 'Annotations!'),
 ('4', '4', 'charles@ucl.ac.uk', '20', '10', 'Annotations!'),
-('5', '5', 'charles@ucl.ac.uk', '11', '1', 'Annotations!');"
+('5', '5', 'charles@ucl.ac.uk', '11', '1', 'Annotations!')";
 
 $populatingTables = [
     $insertRolesTable,
@@ -130,6 +131,7 @@ $populatingTables = [
     $insertCommentsTable,
     $insertAnnotationsTable
 ];
+
 foreach ($populatingTables as $sqlquery){
   echo nl2br("\n"); //Line break in HTML conversion
   echo "<b>Executing SQL statement: </b>";

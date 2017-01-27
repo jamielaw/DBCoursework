@@ -19,7 +19,17 @@
 
       <!--  Requires multi select friends, use http://davidstutz.github.io/bootstrap-multiselect/#further-examples-->
 
-      <button type="submit">Create Circle</button>
+      <button type="submit" onclick="return empty()">Create Circle</button>
     </form>
   </body>
 </html>
+<script>
+function empty() {
+    var x;
+    x = document.getElementById("circlename").value;
+    if (x == "") {
+        alert("Enter a circle name");
+        return false;
+    };
+}
+</script>

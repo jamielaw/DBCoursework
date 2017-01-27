@@ -33,6 +33,7 @@ $insertFriendshipTable = "INSERT INTO MyDB.friendships (emailFrom,emailTo,status
 (\"charles@ucl.ac.uk\",\"ada@ucl.ac.uk\",\"accepted\"),
 (\"charles@ucl.ac.uk\",\"alan@ucl.ac.uk\",\"pending\"),
 (\"charles@ucl.ac.uk\",\"john@ucl.ac.uk\",\"denied\"),
+(\"vicky@ucl.ac.uk\",\"charles@ucl.ac.uk\",\"accepted\"),
 (\"grace@ucl.ac.uk\",\"ada@ucl.ac.uk\",\"accepted\"),
 (\"grace@ucl.ac.uk\",\"alan@ucl.ac.uk\",\"accepted\"),
 (\"grace@ucl.ac.uk\",\"john@ucl.ac.uk\",\"accepted\"),
@@ -98,7 +99,15 @@ $insertPhotosTable = "INSERT INTO MyDB.photos (photoCollectionId,imageReference)
 
 $insertCircleOfFriendsTable = "INSERT INTO MyDB.circleOfFriends (circleOfFriendsName) VALUES
 (\"lmao\"),
-(\"lol\")";
+(\"lol\"),
+(\"rofl\")";
+
+$insertUserCircleRelationshipsTable = "INSERT INTO MyDB.userCircleRelationships (email, circleFriendsId) VALUES
+(\"charles@ucl.ac.uk\",1),
+(\"vicky@ucl.ac.uk\",1),
+(\"vicky@ucl.ac.uk\",3),
+(\"larry@ucl.ac.uk\",1),
+(\"charles@ucl.ac.uk\",2)";
 
 
 
@@ -128,6 +137,7 @@ $populatingTables = [
     $insertPhotoCollectionTable,
     $insertPhotosTable,
     $insertCircleOfFriendsTable,
+    $insertUserCircleRelationshipsTable,
     $insertCommentsTable,
     $insertAnnotationsTable
 ];

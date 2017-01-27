@@ -3,11 +3,14 @@
   <head>
     <meta charset="utf-8">
     <title>Create Friendship Circle</title>
-    <?php include("../inc/header.php");
+    <?php 
+    include("../inc/header.php");
     include("../inc/nav-trn.php"); 
     ?>
   </head>
   <body>
+  <div class="container">
+  <row><font size="5">Create new circle</font></row>
     <form class="" action="createcircle.php" method="get" id="createform">
     <!-- Name of circle -->
     <br>
@@ -17,8 +20,19 @@
      </div>
 
       <!--  Requires multi select friends, use http://davidstutz.github.io/bootstrap-multiselect/#further-examples-->
-
-      <button type="submit">Create Circle</button>
+      <br>
+      <button type="submit" onclick="return empty()">Create Circle</button>
     </form>
+    </div>
   </body>
 </html>
+<script>
+function empty() {
+    var x;
+    x = document.getElementById("circlename").value;
+    if (x == "") {
+        alert("Enter a circle name");
+        return false;
+    };
+}
+</script>

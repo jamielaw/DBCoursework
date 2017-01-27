@@ -1,9 +1,9 @@
 <?php
-  require '../database.php';
+  //require '../database.php';
   $title = "Bookface Social Network";
   $description = "A far superior social network";
   include("../inc/header.php");
-
+  include("../inc/nav-trn.php");
 
 
   $pdo = Database::connect();
@@ -13,7 +13,6 @@
 
 <body>
   <!--  Navigation-->
-  <?php include '../inc/nav-trn.php'; ?>
   <div class="container">
     <div class="span10 offset1">
       <div class="row">

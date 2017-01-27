@@ -2,8 +2,8 @@
 
     $title = "Bookface Social Network";
     $description = "A far superior social network";
-    include("../inc/nav-trn.php"); 
-    include("../inc/header.php"); 
+    include("../inc/header.php");
+    include("../inc/nav-trn.php");  
 
     function nrOfFriends($email) {
     $pdo = Database::connect();
@@ -39,11 +39,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
-</head>
 
 <body>
 <link href="http://getbootstrap.com/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
@@ -64,7 +59,7 @@
         Your friend zone
       </li>
       <?php 
-      include '..\database.php';
+      //include '..\database.php';
       $pdo = Database::connect();
       // !!! HARDCODED STUFF -  TO BE CHANGED AFTER LOGIN IS IMPLEMENTED
       $sql = 'SELECT DISTINCT email, firstName, lastName, profileImage FROM users JOIN friendships ON users.email = friendships.emailFrom OR users.email=friendships.emailTo WHERE (friendships.emailFrom=\'charles@ucl.ac.uk\' OR friendships.emailTo=\'charles@ucl.ac.uk\') AND users.email!=\'charles@ucl.ac.uk\' AND status=\'accepted\';';
@@ -102,10 +97,6 @@
   </div>
 </div>                                                                                
 
-<script src="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-<script type="text/javascript">
-  
-</script>
 </body>
 </html> 
 

@@ -5,7 +5,7 @@
     include("../inc/nav-trn.php"); 
     include("../inc/header.php"); 
 	
-	require '../database.php';
+	//require '../database.php';
 	$email = null;
 	if ( !empty($_GET['email'])) {
 		$email = $_REQUEST['email'];

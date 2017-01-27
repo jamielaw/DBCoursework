@@ -1,9 +1,11 @@
 <!--  Maintain a blog and read and search the blogs of friends.  -->
-<?php
-  require "../database.php";
+<?php include("../inc/header.php");
+  include ("../inc/nav-trn.php"); ?>
+<body>
+  <?php
+  //require "../database.php"; //I've commented this out because nav-trn already requires database.php to obtain loggedinuser info - Jamie
   $title = "Blog";
   $description = "";
-  include("../inc/header.php");
 
   // CHANGED THIS TO BE AUTHENTICATED LATER
   $loggedInUser = "charles@ucl.ac.uk";
@@ -32,8 +34,6 @@
   $friendPostsResults = $y->fetch(PDO::FETCH_ASSOC);
 
 ?>
-<body>
-  <?php include '../inc/nav-trn.php'; ?>
   <div class="container">
     <div class="blog-container">
       <div class="row">

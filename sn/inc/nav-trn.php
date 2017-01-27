@@ -61,7 +61,9 @@
           require("../database.php");
           $pdo = Database::connect();
           $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-          $sql="SELECT firstName, lastName, profileImage FROM MyDB.users WHERE firstName LIKE 'Vicky'"; //change this to be for logged-in user
+          //update this later when we have info on who logged in user is
+          $loggedInUser = "vicky@ucl.ac.uk";
+          $sql="SELECT firstName, lastName, profileImage FROM MyDB.users WHERE email='" . $loggedInUser . "'"; //change this to be for logged-in user
           foreach($pdo->query($sql) as $row){
             echo "<img style='height:20px;width:20px;border-radius:2px;' src='" . $row["profileImage"] . "'> ";
             echo $row["firstName"] . " " . $row["lastName"];
@@ -75,7 +77,7 @@
           </ul>
         </li>
         <li><a href="../profile/myfriends.php"><i class="fa fa-users"></i></a></li>
-        <li><a href="../profile/index.php#3"><i class="fa fa-comments"></i></a></li>
+        <li><a href="../profile/messages.php"><i class="fa fa-comments"></i></a></li>
         <li><a href="../profile/index.php#4"><i class="fa fa-picture-o"></i></a></li>
         <li><a href="../photos/index.php">Photos</a></li>
         <li><a href="../circles/index.php">Circles</a></li>
@@ -85,9 +87,9 @@
       </ul>
 
       <!--search bar-->
-      <form class="navbar-form navbar-left" action="../search/searchresult.php?go" method="get" id="searchform">
+      <form class="navbar-form navbar-left" action="../search/searchresult.php?go" method="get" id="searchform" style="padding-top:2px;">
           <input type="text" class="submit" placeholder="Search for friends" name="submit" id="submit" autocomplete="off" style="vertical-align:none;">
-        <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-search"></i></button>
+        <button type="submit" class="btn btn-default" style="padding:3px 5px; vertical-align:top;"><i class="glyphicon glyphicon-search"></i></button>
       </form>
 
     </div>

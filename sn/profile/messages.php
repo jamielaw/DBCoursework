@@ -2,8 +2,8 @@
 
     $title = "Bookface Social Network";
     $description = "A far superior social network";
-    include("../inc/nav-trn.php");
     include("../inc/header.php");
+    include("../inc/nav-trn.php");
 
     $email = 'charles@ucl.ac.uk';
 ?>

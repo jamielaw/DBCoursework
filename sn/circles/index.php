@@ -1,15 +1,21 @@
 <!-- Displays friend circles, each friend circle is linked to a chat page,
 also has link to creating friend circles -->
 
+<!--
+TODO: 
+Fix other circles table to NOT show circles which the user is also in
+Convert UI similar to blog style
+Implement message link
+Implement leaving and joining a circle (if leaving the circle and you are the last member, delete the circle?)
+Implement inviting friends to circle
+-->
+
 <?php
 $title = "Friendship Circles";
 $description = "";
 include("../inc/header.php");
  ?>
   <body>
-    <!-- to do: split circles that currently logged in user is in, and others (as well as join/leave options). 
-    implement messaging
-    add friends to circle in create circle -->
     <!--  Navigation-->
     <?php include '../inc/nav-trn.php'; ?>
     <div class="container">

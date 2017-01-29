@@ -38,11 +38,11 @@
                     <ul class="chat">
                       <?php
                       $pdo = Database::connect();
-                      $sql = 'SELECT DISTINCT emailTo AS email FROM messages WHERE emailFrom = ? UNION SELECT DISTINCT emailFrom AS email FROM messages WHERE emailTo = ?;';
+                      $sql = 'SELECT DISTINCT emailTo AS email FROM messages WHERE emailFrom = ? AND emailTo NOT REGEXP \'^[0-9]+$\' UNION SELECT DISTINCT emailFrom AS email FROM messages WHERE emailTo = ? AND emailFrom NOT REGEXP \'^[0-9]+$\';';
                       $q1 = $pdo->prepare($sql);
                       $q1->execute(array($email,$email));
                       foreach ($q1->fetchAll() as $row) {
-                         echo '<li class="left clearfix"><span class="chat-img pull-left">
+                          echo '<li class="left clearfix"><span class="chat-img pull-left">
                          <img src="http://placehold.it/50/55C1E7/fff&text=U" alt="User Avatar" class="img-circle" />
                          </span>
                             <div class="chat-body clearfix">
@@ -52,8 +52,23 @@
                                 </div>
                             </div>
                         </li>';
-     					  			}
-     					  		?>
+                      }
+                      $sql = 'SELECT circleOfFriendsName FROM circleoffriends WHERE circleFriendsId IN (SELECT DISTINCT emailTo AS email FROM messages WHERE emailFrom = ? AND emailTo REGEXP \'^[0-9]+$\' UNION SELECT DISTINCT emailFrom AS email FROM messages WHERE emailTo = ? AND emailFrom REGEXP \'^[0-9]+$\');';
+                      $q1 = $pdo->prepare($sql);
+                      $q1->execute(array($email,$email));
+                      foreach ($q1->fetchAll() as $row) {
+                          echo '<li class="left clearfix"><span class="chat-img pull-left">
+                         <img src="http://placehold.it/50/55C1E7/fff&text=U" alt="User Avatar" class="img-circle" />
+                         </span>
+                            <div class="chat-body clearfix">
+                                <div class="header">
+                                    <strong class="primary-font">'.$row['circleOfFriendsName'].'</strong> <small class="pull-right text-muted">
+                                        <span class="glyphicon glyphicon-time"></span>12 mins ago</small>
+                                </div>
+                            </div>
+                        </li>';
+                      }
+                                 ?>
                     </ul>
                 </div>
                 <div class="panel-footer">

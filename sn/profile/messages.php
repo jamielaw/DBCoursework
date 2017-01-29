@@ -6,6 +6,86 @@
     include("../inc/nav-trn.php");
 
     $email = 'charles@ucl.ac.uk';
+
+    function getProfilePicture($email)
+    {
+        $pdo = Database::connect();
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $sql = 'SELECT profileImage from users WHERE email = ? ;';
+        $q1 = $pdo->prepare($sql);
+        $q1->execute(array($email));
+        $value = $q1->fetch(PDO::FETCH_ASSOC);
+        return $value;
+    }
+
+    function getMessageDate($email)
+    {
+        $pdo = Database::connect();
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $sql = 'SELECT dateCreated FROM messages WHERE emailTo = ? OR emailFrom = ? ORDER BY dateCreated DESC LIMIT 1;';
+        $q1 = $pdo->prepare($sql);
+        $q1->execute(array($email,$email));
+        $value = $q1->fetch(PDO::FETCH_ASSOC);
+        return $value;
+    }
+
+    function date_difference($date_1, $date_2)
+    {
+        $val_1 = new DateTime($date_1);
+        $val_2 = new DateTime($date_2);
+        $interval = $val_1->diff($val_2);
+        $year     = $interval->y;
+        $month    = $interval->m;
+        $day      = $interval->d;
+        $hour      = $interval->h;
+        $minute   = $interval->i;
+        $second   = $interval->s;
+        $output   = '';
+        $ok = 0;
+        if ($year > 0) {
+            if ($year > 1) {
+                $output .= $year." years ";
+            } else {
+                $output .= $year." year ";
+            }
+            $ok=1;
+        }
+        if ($month > 0) {
+            if ($month > 1) {
+                $output .= $month." months ";
+            } else {
+                $output .= $month." month ";
+            }
+        }
+        if ($day > 0) {
+            if ($day > 1) {
+                $output .= $day." days ";
+            } else {
+                $output .= $day." day ";
+            }
+            $ok=1;
+        }
+        if ($hour > 0) {
+            if ($hour > 1) {
+                $output .= $hour." hours ";
+            } else {
+                $output .= $hour." hour ";
+            }
+            $ok=1;
+        }
+        if ($minute > 0) {
+            if ($minute > 1) {
+                $output .= $minute." minutes ";
+            } else {
+                $output .= $minute." minute ";
+            }
+            $ok=1;
+        }
+        if ($ok==0) {
+            $output .= $second." seconds ";
+        }
+        return $output;
+    }
 ?>
 
 <div class="paddingTop container">
@@ -42,28 +122,35 @@
                       $q1 = $pdo->prepare($sql);
                       $q1->execute(array($email,$email));
                       foreach ($q1->fetchAll() as $row) {
+                          $profileImage = getProfilePicture($row['email'])['profileImage'];
+                          date_default_timezone_set('Europe/London');
+                          $date1 = date('m/d/Y h:i:s a', time());
+                          $date2 = getMessageDate($row['email'])['dateCreated'];
                           echo '<li class="left clearfix"><span class="chat-img pull-left">
-                         <img src="http://placehold.it/50/55C1E7/fff&text=U" alt="User Avatar" class="img-circle" />
+                         <img width=50 src=' . $profileImage . ' alt="User Avatar" class="img-circle" />
                          </span>
                             <div class="chat-body clearfix">
                                 <div class="header">
                                     <strong class="primary-font">'.$row['email'].'</strong> <small class="pull-right text-muted">
-                                        <span class="glyphicon glyphicon-time"></span>12 mins ago</small>
+                                        <span class="glyphicon glyphicon-time"></span>'.date_difference($date1, $date2).'</small>
                                 </div>
                             </div>
                         </li>';
                       }
-                      $sql = 'SELECT circleOfFriendsName FROM circleoffriends WHERE circleFriendsId IN (SELECT DISTINCT emailTo AS email FROM messages WHERE emailFrom = ? AND emailTo REGEXP \'^[0-9]+$\' UNION SELECT DISTINCT emailFrom AS email FROM messages WHERE emailTo = ? AND emailFrom REGEXP \'^[0-9]+$\');';
+                      $sql = 'SELECT circleOfFriendsName, circleFriendsId  FROM circleoffriends WHERE circleFriendsId IN (SELECT DISTINCT emailTo AS email FROM messages WHERE emailFrom = ? AND emailTo REGEXP \'^[0-9]+$\' UNION SELECT DISTINCT emailFrom AS email FROM messages WHERE emailTo = ? AND emailFrom REGEXP \'^[0-9]+$\');';
                       $q1 = $pdo->prepare($sql);
                       $q1->execute(array($email,$email));
                       foreach ($q1->fetchAll() as $row) {
+                          date_default_timezone_set('Europe/London');
+                          $date1 = date('m/d/Y h:i:s a', time());
+                          $date2 = getMessageDate($row['circleFriendsId'])['dateCreated'];
                           echo '<li class="left clearfix"><span class="chat-img pull-left">
                          <img src="http://placehold.it/50/55C1E7/fff&text=U" alt="User Avatar" class="img-circle" />
                          </span>
                             <div class="chat-body clearfix">
                                 <div class="header">
                                     <strong class="primary-font">'.$row['circleOfFriendsName'].'</strong> <small class="pull-right text-muted">
-                                        <span class="glyphicon glyphicon-time"></span>12 mins ago</small>
+                                        <span class="glyphicon glyphicon-time"></span>'.date_difference($date1, $date2).'</small>
                                 </div>
                             </div>
                         </li>';

@@ -14,7 +14,7 @@
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     $postQuery = "SELECT * FROM blogs WHERE blogId=" . $_GET["blogId"];
-    echo $postQuery;
+
     $y = $pdo->prepare($postQuery);
     $y->execute();
     $postQueryResult = $y->fetch(PDO::FETCH_ASSOC);

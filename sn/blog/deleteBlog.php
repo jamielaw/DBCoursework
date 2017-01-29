@@ -14,9 +14,13 @@
   $argument1 = $_GET['blogId'];
   // sql to delete a record
   $sql = "DELETE FROM blogs WHERE blogId=". $argument1 ;
+  #echo $sql;
   $pdo = Database::connect();
   $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-  $pdo->exec($sql);
+
+  $y = $pdo->prepare($sql);
+  $y->execute();
+
   Database::disconnect();
 
   //Redirect to /sn/admin page to create "refresh "

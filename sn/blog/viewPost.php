@@ -1,26 +1,27 @@
 <!--  Maintain a blog and read and search the blogs of friends.  -->
-<?php
-  //require "../database.php";
-  $title = "Blog";
-  $description = "";
-  include("../inc/header.php");
 
-  // CHANGED THIS TO BE AUTHENTICATED LATER
-  $loggedInUser = "larry@ucl.ac.uk";
-  $pdo = Database::connect();
-  $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-  $postQuery = "SELECT * FROM blogs WHERE blogId=" . $_GET["blogId"];
-
-  $y = $pdo->prepare($postQuery);
-  $y->execute();
-  $postQueryResult = $y->fetch(PDO::FETCH_ASSOC);
-
-
-
-?>
 <body>
   <?php include '../inc/nav-trn.php'; ?>
+  <?php
+    //require "../database.php";
+    $title = "Blog";
+    $description = "";
+    include("../inc/header.php");
+
+    // CHANGED THIS TO BE AUTHENTICATED LATER
+    $loggedInUser = "larry@ucl.ac.uk";
+    $pdo = Database::connect();
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    $postQuery = "SELECT * FROM blogs WHERE blogId=" . $_GET["blogId"];
+    echo $postQuery;
+    $y = $pdo->prepare($postQuery);
+    $y->execute();
+    $postQueryResult = $y->fetch(PDO::FETCH_ASSOC);
+
+
+
+  ?>
   <div class="container">
     <div class="blog-container">
       <div class="row">

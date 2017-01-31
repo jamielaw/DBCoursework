@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 
+
 <nav class="navbar navbar-inverse navbar-fixed-top">
   <div class="container-fluid">
     <div class="navbar-header">
@@ -10,7 +11,7 @@
         <li class="dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">
           <?php
-          require("../database.php");
+          require ("$root/sn/database.php");
           $pdo = Database::connect();
           $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
           //update this later when we have info on who logged in user is

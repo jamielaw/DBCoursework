@@ -1,11 +1,23 @@
 <!DOCTYPE html>
 <head>
+  <?php $root = realpath($_SERVER["DOCUMENT_ROOT"]); ?>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <script type="text/javascript" src="http://code.jquery.com/jquery-3.0.0.min.js"></script>
+  <!--
   <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+-->
+  <script type="text/javascript" src="http://code.jquery.com/jquery-3.0.0.min.js"></script>
   <script type="text/javascript" src="//netsh.pp.ua/upwork-demo/1/js/typeahead.js"></script>
   <script src="https://use.fontawesome.com/48a6746b39.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+  <!--  Boostrap Framework  -->
+  <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <link href="/sn/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome - Icons  -->
+  <link href="/sn/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+  <!--  Custom stylesheet -->
+  <link href="/sn/css/custom.css" rel="stylesheet">
+
   <script type ="text/javascript">
     jQuery(document).ready(function($) {
       $('input.submit').typeahead({
@@ -13,10 +25,7 @@
         remote: {url: '/sn/inc/nav-trnsearch.php?query=%QUERY'} //absolute ref as we don't know which page is calling this
       });
     });
-    // jQuery('#input').on('input', function(){ //backup plan
-    //   $searchQuery = $("#input").val();
-    //   window.alert($searchQuery);
-    // });
+
   </script>
   <style>
         .tt-hint,

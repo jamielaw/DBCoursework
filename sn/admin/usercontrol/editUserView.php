@@ -2,11 +2,11 @@
   //require '../database.php';
   $title = "Bookface Social Network";
   $description = "A far superior social network";
-  include("../inc/header.php");
-  include("../inc/nav-trn.php");
+  include("../../inc/header.php");
+  include("../../inc/nav-trn.php");
 
 
-
+  echo "imporst work";
   $pdo = Database::connect();
   $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 

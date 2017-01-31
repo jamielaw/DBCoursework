@@ -12,9 +12,6 @@
 
   <!--  Boostrap Framework  -->
   <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <link href="/sn/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Font Awesome - Icons  -->
-  <link href="/sn/font-awesome/css/font-awesome.min.css" rel="stylesheet">
   <!--  Custom stylesheet -->
   <link href="/sn/css/custom.css" rel="stylesheet">
 

@@ -3,27 +3,21 @@
   $title = "Bookface Social Network";
   $description = "A far superior social network";
   include("../../inc/header.php");
-  include("../../inc/nav-trn.php");
-
-
-  echo "imporst work";
-  $pdo = Database::connect();
-  $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-  $argument1 = $_GET['email'];
-
-
-
-  $sql = "SELECT * FROM users WHERE email=" . "'" . $argument1 . "'";
-
-  $q= $pdo->prepare($sql);
-  $q->execute();
-  $row = $q->fetch(PDO::FETCH_ASSOC);
-
-
 ?>
 
 <body>
+  <?php
+    include("../../inc/nav-trn.php");
+    $pdo = Database::connect();
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    $argument1 = $_GET['email'];
+    $sql = "SELECT * FROM users WHERE email=" . "'" . $argument1 . "'";
+
+    $q= $pdo->prepare($sql);
+    $q->execute();
+    $row = $q->fetch(PDO::FETCH_ASSOC);
+  ?>
   <div class="container">
     <div class="span10 offset1">
       <div class="row">

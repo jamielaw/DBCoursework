@@ -1,6 +1,6 @@
 <?php
   // Import DB Auth Script
-  require '../database.php';
+  require '../../database.php';
 
   //function to redirect - to be moved into a utils.php file later?
   function redirect($url) {

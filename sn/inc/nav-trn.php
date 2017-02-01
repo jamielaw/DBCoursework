@@ -25,23 +25,23 @@
           ?>
           <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="../profile/index.php"><i class="fa fa-user"></i> My Profile</a></li>
-            <li><a href="../profile/settings.php"><i class="fa fa-cog"></i> Settings</a></li>
-            <li><a href="../logout.php"><i class="fa fa-sign-out"></i> Logout</a></li>
+            <li><a href="/sn/profile/index.php"><i class="fa fa-user"></i> My Profile</a></li>
+            <li><a href="/sn/profile/settings.php"><i class="fa fa-cog"></i> Settings</a></li>
+            <li><a href="/sn/logout.php"><i class="fa fa-sign-out"></i> Logout</a></li>
           </ul>
         </li>
-        <li><a href="../profile/myfriends.php"><i class="fa fa-users"></i></a></li>
-        <li><a href="../profile/messages.php"><i class="fa fa-comments"></i></a></li>
-        <li><a href="../profile/index.php#4"><i class="fa fa-picture-o"></i></a></li>
-        <li><a href="../photos/index.php">Photos</a></li>
-        <li><a href="../circles/index.php">Circles</a></li>
-        <li><a href="../blog/index.php">Blog</a></li>
-        <li><a href="../explore/index.php">Explore</a></li>
-        <li><a href="../admin/index.php">Admin</a></li>
+        <li><a href="/sn/profile/myfriends.php"><i class="fa fa-users"></i></a></li>
+        <li><a href="/sn/profile/messages.php"><i class="fa fa-comments"></i></a></li>
+        <li><a href="/sn/profile/index.php#4"><i class="fa fa-picture-o"></i></a></li>
+        <li><a href="/sn/photos/index.php">Photos</a></li>
+        <li><a href="/sn/circles/index.php">Circles</a></li>
+        <li><a href="/sn/blog/index.php">Blog</a></li>
+        <li><a href="/sn/explore/index.php">Explore</a></li>
+        <li><a href="/sn/admin/index.php">Admin</a></li>
       </ul>
 
       <!--search bar-->
-      <form class="navbar-form navbar-left" action="../search/searchresult.php?go" method="get" id="searchform" style="padding-top:2px;">
+      <form class="navbar-form navbar-left" action="/sn/search/searchresult.php?go" method="get" id="searchform" style="padding-top:2px;">
           <input type="text" class="submit" placeholder="Search for friends" name="submit" id="submit" autocomplete="off" style="vertical-align:none;">
         <button type="submit" class="btn btn-default" style="padding:3px 5px; vertical-align:top;"><i class="glyphicon glyphicon-search"></i></button>
       </form>

@@ -144,7 +144,7 @@
                           date_default_timezone_set('Europe/London');
                           $date1 = date('m/d/Y h:i:s a', time());
                           $date2 = getMessageDate($row['circleFriendsId'])['dateCreated'];
-                          echo '<li onclick="getMessagesUser('.$row['circleFriendsId'].')" class="left clearfix"><span class="chat-img pull-left">
+                          echo '<li onclick="getMessagesCircle('.$row['circleFriendsId'].')" class="left clearfix"><span class="chat-img pull-left">
                          <img src="http://placehold.it/50/55C1E7/fff&text=U" alt="User Avatar" class="img-circle" />
                          </span>
                             <div class="chat-body clearfix">
@@ -218,13 +218,22 @@ function getMessagesUser(id, email){
   console.log("id: ", id);
   var postData =  $(this).serializeArray();
   var loggedInUser = email;
-  postData.push({name: "action", value: "onClickUser"});
-  postData.push({name: "id", value: id});
 
   $.post( "readcomments.php", "user=" + id + "&loggedInUser=" + loggedInUser,  function( data ) {
     $('#messageList li').html(data.lists);
   }, "json");
 }
+
+function getMessagesCircle(id, email){
+  console.log("id: ", id);
+  var postData =  $(this).serializeArray();
+  var loggedInUser = email;
+
+  $.post( "readcirclecomments.php", "id=" + id + "&loggedInUser=" + loggedInUser,  function( data ) {
+    $('#messageList li').html(data.lists);
+  }, "json");
+}
+
 function getMessages(id) {
   console.log("id: ", id);
 }

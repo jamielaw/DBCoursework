@@ -1,12 +1,12 @@
 <!--  Maintain a blog and read and search the blogs of friends.  -->
-
+<?php include("../inc/header.php"); ?>
 <body>
   <?php include '../inc/nav-trn.php'; ?>
   <?php
     //require "../database.php";
     $title = "Blog";
     $description = "";
-    include("../inc/header.php");
+
 
     // CHANGED THIS TO BE AUTHENTICATED LATER
     $loggedInUser = "larry@ucl.ac.uk";

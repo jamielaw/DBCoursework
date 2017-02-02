@@ -4,11 +4,11 @@ require '../database.php';
 // fetch all tags
 $pdo = Database::connect();
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-$user = $_POST['user'];
+$id = $_POST['id'];
 $loggedInUser = $_POST['loggedInUser'];
-$sql = "SELECT * FROM messages WHERE (emailTo = ? AND emailFrom = ?) or (emailFrom = ? AND emailTo = ?) ORDER BY dateCreated";
+$sql = "SELECT * FROM messages WHERE emailTo = ? OR emailFrom = ? ORDER BY dateCreated";
 $q = $pdo->prepare($sql);
-$q->execute(array($user,$loggedInUser,$user,$loggedInUser));
+$q->execute(array($id,$id));
 $data['lists'] = '';
 
 function date_difference($date_1, $date_2)

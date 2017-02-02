@@ -43,18 +43,36 @@ include("../inc/header.php");
 
         $personalCirclesQuery="SELECT * FROM MyDB.circleOfFriends INNER JOIN MyDB.userCircleRelationships ON MyDB.circleOfFriends.circleFriendsId=MyDB.userCircleRelationships.circleFriendsId WHERE(email='". $loggedInUser . "')";
 
-        echo "<table style='width:100%; text-align:center;'> <tr><th><center> Circle of Friends Name </center></th> <th><center> Members </center></th> <th><center> Date created </center></th> <th><center> Action </center></th></tr> ";
-        foreach ($pdo->query($personalCirclesQuery) as $row)  {
+        //echo "<table style='width:100%; text-align:center;'> <tr><th><center> Circle of Friends Name </center></th> <th><center> Members </center></th> <th><center> Date created </center></th> <th><center> Action </center></th></tr> ";
+        $numberOfCircles=0;
+        foreach ($pdo->query($personalCirclesQuery) as $row) { 
+            $numberOfCircles+=1;
             $countMembers = "SELECT COUNT(email) FROM MyDB.circleOfFriends INNER JOIN MyDB.userCircleRelationships ON MyDB.circleOfFriends.circleFriendsId=MyDB.userCircleRelationships.circleFriendsId WHERE MyDB.circleOfFriends.circleFriendsId=" . $row["circleFriendsId"];
             //echo $countMembers;
             $y = $pdo->query($countMembers);
             $countResults = $y->fetch(PDO::FETCH_ASSOC);
-            echo "<tr>";
-            echo "<td>" . $row["circleOfFriendsName"] . "</td><td>" . $countResults["COUNT(email)"] . "</td><td>". $row["dateCreated"]  . "</td><td> <i class=\"fa fa-comments\"></i> Message / <i class=\"fa fa-user-plus\"></i> Invite / <i class=\"fa fa-sign-out\"></i> Leave </td>";
-            echo "</tr>";
+            $id = $row["circleFriendsId"];
+            //echo "<tr>";
+            echo "<div class=\"col-md-6 col-sm-12 col-lg-3 blog-section friend-post-container\">";
+                echo "<div class=\"blog-title\" style=\"font-style:normal;\">";
+                    echo "<b>" . $row["circleOfFriendsName"] . "</b>";
+                    echo "<font size=1>";
+                    echo "<br>";
+                    echo "Members: " . $countResults["COUNT(email)"];
+                    echo "<br>";
+                    echo "</font>";
+                    //<a title=\"Add friends\" href=\"/sn/circles/invite.php?circleFriendsId=" . $id . "\"<i class=\"fa fa-user-plus\"></i></a> &nbsp; removed this option as it wasn't in the specs
+                    echo "<a title=\"Circle chat\" href=\"/sn/circles/circlechat.php?circleFriendsId=" . $id . "\"<i class=\"fa fa-comments\"></i></a>  &nbsp; <a onClick=\"javascript: return confirm('Are you sure you want to leave this circle? If you are the last person in this circle, the circle will also be deleted.');\" title=\"Leave circle\" href=\"/sn/circles/leavecircle.php?circleFriendsId=" . $id . "\"<i class=\"fa fa-sign-out\"></i></a>";
+                echo "</div>";
+            echo "</div>";        
+            //echo "<td>" . $row["circleOfFriendsName"] . "</td><td>" . $countResults["COUNT(email)"] . "</td><td>". $row["dateCreated"]  . "</td><td> <i class=\"fa fa-comments\"></i> Message / <i class=\"fa fa-user-plus\"></i> Invite / <i class=\"fa fa-sign-out\"></i> Leave </td>";
+            //echo "</tr>";
+        }
+        if($numberOfCircles==0){
+            echo "You're not part of any circles";
         }
 
-        echo "</table>";
+        //echo "</table>";
         Database::disconnect();
         ?>
         </div>
@@ -66,7 +84,7 @@ include("../inc/header.php");
           <?php 
             $pdo=Database::connect();
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
+            $numberOfCircles=0;
             $impersonalCirclesQuery= "SELECT * FROM MyDB.circleOfFriends INNER JOIN MyDB.userCircleRelationships ON MyDB.circleOfFriends.circleFriendsId=MyDB.userCircleRelationships.circleFriendsId WHERE((email IN (SELECT emailTo FROM MyDB.friendships WHERE (emailFrom='" . $loggedInUser . "' AND status='accepted')) OR email IN (SELECT emailFrom FROM MyDB.friendships WHERE ( emailTo='". $loggedInUser . "' AND status='accepted'))) AND MyDB.circleOfFriends.circleFriendsId NOT IN (SELECT circleOfFriends.circleFriendsId FROM MyDB.circleOfFriends INNER JOIN MyDB.userCircleRelationships ON MyDB.circleOfFriends.circleFriendsId=MyDB.userCircleRelationships.circleFriendsID WHERE email='" . $loggedInUser . "')) GROUP BY MyDB.circleOfFriends.circleFriendsId";
 
             //echo $impersonalCirclesQuery;
@@ -78,18 +96,34 @@ include("../inc/header.php");
             finally, we group it by ID to avoid duplicate entries of circles if there are multiple friends in one circle 
             */
 
-            echo "<table style='width:100%'> <tr> <th><center> Circle of Friends Name </center></th> <th><center> Members </center></th> <th><center> Date created </center></th> <th><center> Action </center></th> ";
+            //echo "<table style='width:100%'> <tr> <th><center> Circle of Friends Name </center></th> <th><center> Members </center></th> <th><center> Date created </center></th> <th><center> Action </center></th> ";
             foreach ($pdo->query($impersonalCirclesQuery) as $row)  {
+                $numberOfCircles+=1;
                 $countMembers = "SELECT COUNT(email) FROM MyDB.circleOfFriends INNER JOIN MyDB.userCircleRelationships ON MyDB.circleOfFriends.circleFriendsId=MyDB.userCircleRelationships.circleFriendsId WHERE MyDB.circleOfFriends.circleFriendsId=" . $row["circleFriendsId"];
                 //echo $countMembers;
                 $y = $pdo->query($countMembers);
                 $countResults = $y->fetch(PDO::FETCH_ASSOC);
-                echo "<tr>";
-                echo "<td>" . $row["circleOfFriendsName"] . "</td><td>" . $countResults["COUNT(email)"] . "</td><td>". $row["dateCreated"]  . "</td><td> <i class=\"fa fa-sign-in\"></i> Join </td>";
-                echo "</tr>";
+                $id = $row["circleFriendsId"];
+                //echo "<tr>";
+                echo "<div class=\"col-md-6 col-sm-12 col-lg-3 blog-section friend-post-container\">";
+                    echo "<div class=\"blog-title\" style=\"font-style:normal;\">";
+                        echo "<b>" . $row["circleOfFriendsName"] . "</b>";
+                        echo "<font size=1>";
+                        echo "<br>";
+                        echo "Members: " . $countResults["COUNT(email)"];
+                        echo "<br>";
+                        echo "</font>";
+                        echo "<a title=\"Join circle\" href=\"/sn/circles/joincircle.php?circleFriendsId=" . $id . "\"<i class=\"fa fa-sign-in\"></i></a>";
+                    echo "</div>";
+                echo "</div>";                 
+                //echo "<td>" . $row["circleOfFriendsName"] . "</td><td>" . $countResults["COUNT(email)"] . "</td><td>". $row["dateCreated"]  . "</td><td> <i class=\"fa fa-sign-in\"></i> Join </td>";
+                //echo "</tr>";
+            }
+            if($numberOfCircles==0){
+                echo "None of your friends are part of a circle that you aren't in";
             }
 
-            echo "</table>";
+            //echo "</table>";
             Database::disconnect();
           ?>
         </div>

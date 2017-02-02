@@ -3,6 +3,26 @@
 include("../inc/header.php");
 include("../inc/nav-trn.php");
 ?>
+<?php 
+//no need for require database.php as we've already included header.php
+  $circleId = $_GET['circleFriendsId']; //get ID for the circle chat that we need
+  $getCircleMembers = "SELECT firstName, lastName, MyDB.users.email FROM MyDB.circleOfFriends INNER JOIN MyDB.userCircleRelationships ON MyDB.circleOfFriends.circleFriendsId=MyDB.userCircleRelationships.circleFriendsId INNER JOIN MyDB.users ON MyDB.userCircleRelationships.email=MyDB.users.email WHERE(circleOfFriends.circleFriendsId=" . $circleId . ")";
+  //above query gets the first, last name and email for each member in the given circle by joining circle id between UserCircleRelationships with CircleOfFriends and also joining emails between userCircleRelationships with Users
+  
+  //echo $getCircleMembers;
+
+  $pdo=Database::connect();
+  $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+  foreach($pdo->query($getCircleMembers) as $row){ //for each member
+    $firstName = $row["firstName"];
+    $lastName = $row["lastName"];
+    $email = $row["email"];
+    //debug for showing each member
+    echo $firstName . " " . $lastName . ", " . $email;
+    echo "<br>";
+  }
+?>
 <!DOCTYPE html>
 <html>
   <head>

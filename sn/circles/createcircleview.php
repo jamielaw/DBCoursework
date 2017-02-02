@@ -23,6 +23,8 @@
       <br>
       <button type="submit" onclick="return empty()">Create Circle</button>
     </form>
+    <br>
+    <button onclick="window.location='/sn/circles/index.php'">Go back</button>
     </div>
   </body>
 </html>

@@ -44,7 +44,9 @@ include("../inc/header.php");
         $personalCirclesQuery="SELECT * FROM MyDB.circleOfFriends INNER JOIN MyDB.userCircleRelationships ON MyDB.circleOfFriends.circleFriendsId=MyDB.userCircleRelationships.circleFriendsId WHERE(email='". $loggedInUser . "')";
 
         //echo "<table style='width:100%; text-align:center;'> <tr><th><center> Circle of Friends Name </center></th> <th><center> Members </center></th> <th><center> Date created </center></th> <th><center> Action </center></th></tr> ";
+        $numberOfCircles=0;
         foreach ($pdo->query($personalCirclesQuery) as $row) { 
+            $numberOfCircles+=1;
             $countMembers = "SELECT COUNT(email) FROM MyDB.circleOfFriends INNER JOIN MyDB.userCircleRelationships ON MyDB.circleOfFriends.circleFriendsId=MyDB.userCircleRelationships.circleFriendsId WHERE MyDB.circleOfFriends.circleFriendsId=" . $row["circleFriendsId"];
             //echo $countMembers;
             $y = $pdo->query($countMembers);
@@ -65,6 +67,9 @@ include("../inc/header.php");
             //echo "<td>" . $row["circleOfFriendsName"] . "</td><td>" . $countResults["COUNT(email)"] . "</td><td>". $row["dateCreated"]  . "</td><td> <i class=\"fa fa-comments\"></i> Message / <i class=\"fa fa-user-plus\"></i> Invite / <i class=\"fa fa-sign-out\"></i> Leave </td>";
             //echo "</tr>";
         }
+        if($numberOfCircles==0){
+            echo "You're not part of any circles";
+        }
 
         //echo "</table>";
         Database::disconnect();
@@ -78,7 +83,7 @@ include("../inc/header.php");
           <?php 
             $pdo=Database::connect();
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
+            $numberOfCircles=0;
             $impersonalCirclesQuery= "SELECT * FROM MyDB.circleOfFriends INNER JOIN MyDB.userCircleRelationships ON MyDB.circleOfFriends.circleFriendsId=MyDB.userCircleRelationships.circleFriendsId WHERE((email IN (SELECT emailTo FROM MyDB.friendships WHERE (emailFrom='" . $loggedInUser . "' AND status='accepted')) OR email IN (SELECT emailFrom FROM MyDB.friendships WHERE ( emailTo='". $loggedInUser . "' AND status='accepted'))) AND MyDB.circleOfFriends.circleFriendsId NOT IN (SELECT circleOfFriends.circleFriendsId FROM MyDB.circleOfFriends INNER JOIN MyDB.userCircleRelationships ON MyDB.circleOfFriends.circleFriendsId=MyDB.userCircleRelationships.circleFriendsID WHERE email='" . $loggedInUser . "')) GROUP BY MyDB.circleOfFriends.circleFriendsId";
 
             //echo $impersonalCirclesQuery;
@@ -92,6 +97,7 @@ include("../inc/header.php");
 
             //echo "<table style='width:100%'> <tr> <th><center> Circle of Friends Name </center></th> <th><center> Members </center></th> <th><center> Date created </center></th> <th><center> Action </center></th> ";
             foreach ($pdo->query($impersonalCirclesQuery) as $row)  {
+                $numberOfCircles+=1;
                 $countMembers = "SELECT COUNT(email) FROM MyDB.circleOfFriends INNER JOIN MyDB.userCircleRelationships ON MyDB.circleOfFriends.circleFriendsId=MyDB.userCircleRelationships.circleFriendsId WHERE MyDB.circleOfFriends.circleFriendsId=" . $row["circleFriendsId"];
                 //echo $countMembers;
                 $y = $pdo->query($countMembers);
@@ -111,6 +117,9 @@ include("../inc/header.php");
                 echo "</div>";                 
                 //echo "<td>" . $row["circleOfFriendsName"] . "</td><td>" . $countResults["COUNT(email)"] . "</td><td>". $row["dateCreated"]  . "</td><td> <i class=\"fa fa-sign-in\"></i> Join </td>";
                 //echo "</tr>";
+            }
+            if($numberOfCircles==0){
+                echo "None of your friends are part of a circle that you aren't in";
             }
 
             //echo "</table>";

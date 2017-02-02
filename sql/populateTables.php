@@ -2,7 +2,7 @@
 //require '../sn/database.php'; //uncomment this if you need to call this individual script
 $pdo = Database::connect();
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-$insertRolesTable = "INSERT INTO MyDB.roles (roleID,roleTitle) VALUES (1,\"administartor\"), (2,\"user\")";
+$insertRolesTable = "INSERT INTO MyDB.roles (roleID,roleTitle) VALUES (1,\"administrator\"), (2,\"user\")";
 $insertRightsTable = "INSERT INTO MyDB.rights (roleID,rightTitle,rightDescription) VALUES
 (1, \"Delete User\", \"The user has the right to delete other user\"),
 (1, \"Delete User's Photos\", \"The user has the right to delete other user's photos\"),
@@ -25,8 +25,8 @@ $insertUsersTable = "INSERT INTO MyDB.users (email,roleID,password,firstName,las
 (\"dennis@ucl.ac.uk\",2,\"test\",\"Dennis\",\"Ritchie\",\"/images/profile/dennis@ucl.ac.uk.jpg\"),
 (\"ken@ucl.ac.uk\",2,\"test\",\"Ken\",\"Thompson\",\"/images/profile/ken@ucl.ac.uk.jpg\"),
 (\"larry@ucl.ac.uk\",2,\"test\",\"Larry\",\"Page\",\"/images/profile/larry@ucl.ac.uk.jpg\"),
-(\"charles@ucl.ac.uk\",2,\"test\",\"Charles\",\"Babbage\",\"/images/profile/charles@ucl.ac.uk.jpg\"),
-(\"vicky@ucl.ac.uk\",2,\"test\",\"Vicky\",\"LovesPHP\",\"/images/profile/vicky@ucl.ac.uk.jpg\")";
+(\"charles@ucl.ac.uk\",1,\"test\",\"Charles\",\"Babbage\",\"/images/profile/charles@ucl.ac.uk.jpg\"),
+(\"vicky@ucl.ac.uk\",1,\"test\",\"Vicky\",\"LovesPHP\",\"/images/profile/vicky@ucl.ac.uk.jpg\")";
 $insertFriendshipTable = "INSERT INTO MyDB.friendships (emailFrom,emailTo,status) VALUES
 (\"charles@ucl.ac.uk\",\"larry@ucl.ac.uk\",\"accepted\"),
 (\"charles@ucl.ac.uk\",\"ken@ucl.ac.uk\",\"accepted\"),

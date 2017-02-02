@@ -30,8 +30,8 @@
     foreach ($pdo->query($userInfo) as $row)  {
         echo "<tr>";
         echo "<td>" . $row["email"] . "</td><td> " . $row["firstName"] . "</td><td>" . $row["lastName"]  . "</td><td> <img style='height:100px;width=100px;' src='" . $row["profileImage"] . "'</td>";
-        echo "<td> <a class='btn btn-success' href='editUserView.php?email=".$row["email"]."'<i class='fa fa-pencil' aria-hidden='true'></i> Edit <br>";
-        echo "<a class='btn btn-danger' href='deleteUser.php?email=".$row["email"]."' <i class='fa fa-trash' aria-hidden='true'></i> Delete </td> </a>";
+        echo "<td> <a class='table-btn btn btn-success' href='usercontrol/editUserView.php?email=".$row["email"]."'><i class='fa fa-pencil' aria-hidden='true'></i> Edit </a>";
+        echo "<br> <a class='table-btn btn btn-danger' href='usercontrol/deleteUser.php?email=".$row["email"]."'> <i class='fa fa-trash' aria-hidden='true'></i> Delete </td> </a>";
         echo "</tr>";
     }
 
@@ -65,8 +65,8 @@
             echo "<tr>";
             echo "<td> <img style='height:100px;width=100px;' src='" . $photoResult["imageReference"] . "'</td>";
             echo "<td>" . $userQueryResult["firstName"] . " " . $userQueryResult["lastName"]  . "</td><td> "  . $row['annotationText'] . "</td>";
-            echo "<td> <a class='btn btn-success' href='annotations/editAnnotationView.php?annotationsId=".$row["annotationsId"]."'<i class='fa fa-pencil' aria-hidden='true'></i> Edit <br>";
-            echo "<a class='btn btn-danger' href='annotations/deleteAnnotation.php?annotationsId=".$row["annotationsId"]."' <i class='fa fa-trash' aria-hidden='true'></i> Delete </td> </a>";
+            echo "<td> <a class='table-btn btn btn-success' href='annotations/editAnnotationView.php?annotationsId=".$row["annotationsId"]."'><i class='fa fa-pencil' aria-hidden='true'></i> Edit </a><br>";
+            echo "<a class='table-btn btn btn-danger' href='annotations/deleteAnnotation.php?annotationsId=".$row["annotationsId"]."'> <i class='fa fa-trash' aria-hidden='true'></i> Delete </td> </a>";
             echo "</tr>";
     }
 

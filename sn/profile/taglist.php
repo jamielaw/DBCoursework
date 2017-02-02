@@ -13,15 +13,12 @@ $data['boxes'] = '';
 $data['lists'] = '';
 
 foreach ($q as $row) {
-	
     $data['boxes'] .= '<div class="tagview" style="left:' . $row['coordinateX'] . 'px;top:' . $row['coordinateY'] . 'px;" id="view_'.$row['annotationsId'].'">';
-	$data['boxes'] .= '<div class="square"></div>';
-	$data['boxes'] .= '<div class="person" style="left:' . $row['coordinateX'] . 'px;top:' . $row['coordinateY']  . 'px;">' . $row[ 'annotationText' ] . '</div>';
-	$data['boxes'] .= '</div>';
-	
-	$data['lists'] .= '<li id="'.$row['annotationsId'].'"><a>' . $row['annotationText'] . '</a> (<a class="remove">Remove</a>)</li>';
-	
+    $data['boxes'] .= '<div class="square"></div>';
+    $data['boxes'] .= '<div class="person" style="left:' . $row['coordinateX'] . 'px;top:' . $row['coordinateY']  . 'px;">' . $row[ 'annotationText' ] . '</div>';
+    $data['boxes'] .= '</div>';
+
+    $data['lists'] .= '<li id="'.$row['annotationsId'].'"><a>' . $row['annotationText'] . '</a> (<a class="remove">Remove</a>)</li>';
 }
 
-echo json_encode( $data );
-?>
+echo json_encode($data);

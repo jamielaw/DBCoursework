@@ -1,5 +1,7 @@
 <!--  Maintain a blog and read and search the blogs of friends.  -->
-<?php include("../inc/header.php");
+<?php
+  $title = "Blogs";
+  include("../inc/header.php");
   include ("../inc/nav-trn.php"); ?>
 <body>
   <?php
@@ -8,7 +10,7 @@
   $description = "";
 
   // CHANGED THIS TO BE AUTHENTICATED LATER
-  $loggedInUser = "charles@ucl.ac.uk";
+  $loggedInUser = "ada@ucl.ac.uk";
   $pdo = Database::connect();
   $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
@@ -53,7 +55,7 @@
 
         <div class="blog-section">
           <?php foreach($pdo->query($personalPostsQuery) as $personalPostsResults){ ?>
-          <a href="viewPost.php?blogId=<?php echo $personalPostsResults["blogId"]; ?>" class="blog-section personal-post-container">
+          <a href="viewPost.php?blogId=<?php echo $personalPostsResults["blogId"]; ?>" class="col-md-6 col-sm-12 col-lg-3 blog-section personal-post-container">
             <?php echo $personalPostsResults["blogTitle"]; ?>
           </a>
           <?php } ?>

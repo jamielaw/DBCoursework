@@ -1,6 +1,6 @@
 <?php
   // DB Auth Script
-  require '../database.php';
+  require '../../database.php';
 
   // Given "string", returns "'string'" - useful for SQL queries
   function wrapArgument($arg){

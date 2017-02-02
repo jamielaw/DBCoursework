@@ -18,7 +18,8 @@
   border-style: solid;
   border-color: rgba(221,221,221,0.41);
   max-width: 100%;
-  display: -webkit-box;
+  width: 100%;
+  display: inline-block;
   margin-top: 10px;
   padding: 10px;
 }
@@ -32,7 +33,7 @@
   border-radius: 5px;
   border-style: solid;
   border-color: #b40000;
-  display:block;
+  display: inline-block;
   padding: 10px;
   width: 160px;
   margin: 10px;
@@ -43,7 +44,6 @@
   border-radius: 5px;
   border-style: solid;
   border-color: #0093b4;
-  display:block;
   padding: 10px;
   width: 160px;
   margin: 10px;
@@ -68,4 +68,8 @@
   font-style: italic;
   color: #002b7a;
   margin-top: 5px;
+}
+
+.table-btn{
+  margin: 15px;
 }

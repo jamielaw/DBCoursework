@@ -1,26 +1,23 @@
 <?php
-  //require '../../database.php';
   $title = "Bookface Social Network";
   $description = "A far superior social network";
   include("../../inc/header.php");
-  //<!--  Navigation-->
-  include ('../../inc/nav-trn.php'0;
-
-
-  $pdo = Database::connect();
-  $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-  $argument1 = $_GET['annotationsId'];
-  $sql = "SELECT * FROM annotations WHERE annotationsId=" . $argument1;
-
-  $q= $pdo->prepare($sql);
-  $q->execute();
-  $row = $q->fetch(PDO::FETCH_ASSOC);
-
-
 ?>
 
 <body>
+  <?php
+    include ('../../inc/nav-trn.php');
+    $pdo = Database::connect();
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    $argument1 = $_GET['annotationsId'];
+    $sql = "SELECT * FROM annotations WHERE annotationsId=" . $argument1;
+
+    $q= $pdo->prepare($sql);
+    $q->execute();
+    $row = $q->fetch(PDO::FETCH_ASSOC);
+  ?>
+
   <div class="container">
     <div class="span10 offset1">
       <div class="row">

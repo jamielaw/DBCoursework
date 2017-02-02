@@ -1,49 +1,51 @@
-<?php 
+<?php
 
     $title = "Bookface Social Network";
     $description = "A far superior social network";
-    include("../inc/header.php"); 
-    include("../inc/nav-trn.php"); 
-	
-	//require '../database.php';
-	$email = null;
-	if ( !empty($_GET['email'])) {
-		$email = $_REQUEST['email'];
-	}
-	
-	if ( null==$email ) {
-		header("Location: index.php");
-	} else {
-		$pdo = Database::connect();
-		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-		$sql = "SELECT * FROM users WHERE email = ?";
-		$q = $pdo->prepare($sql);
-		$q->execute(array($email));
-		$data = $q->fetch(PDO::FETCH_ASSOC);
-		Database::disconnect();
-	}
+    include("../inc/header.php");
+    include("../inc/nav-trn.php");
 
-	function getFriends($email) {
-	    $pdo = Database::connect();
-	    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-	    $sql = 'SELECT DISTINCT email, firstName, lastName, profileImage FROM users JOIN friendships ON users.email = friendships.emailFrom OR users.email=friendships.emailTo WHERE (friendships.emailFrom=? OR friendships.emailTo=?) AND users.email!=? AND status=\'accepted\';';
-      	$q = $pdo->prepare($sql);
-		$q->execute(array($email,$email,$email));
-		$data = $q->fetch(PDO::FETCH_ASSOC);
-		//echo $data;
-		return $data;
-  	}
+    //require '../database.php';
+    $email = null;
+    if (!empty($_GET['email'])) {
+        $email = $_REQUEST['email'];
+    }
 
-  	function getPhoto($photoId) {
-  		$pdo = Database::connect();
-	    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-	    $sql = 'SELECT imageReference FROM photos WHERE photoCollectionId = ? LIMIT 1;';
-      	$q = $pdo->prepare($sql);
-		$q->execute(array($photoId));
-		$data = $q->fetch(PDO::FETCH_ASSOC);
-		//echo $data;
-		return $data;
-  	}
+    if (null==$email) {
+        header("Location: index.php");
+    } else {
+        $pdo = Database::connect();
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $sql = "SELECT * FROM users WHERE email = ?";
+        $q = $pdo->prepare($sql);
+        $q->execute(array($email));
+        $data = $q->fetch(PDO::FETCH_ASSOC);
+        Database::disconnect();
+    }
+
+    function getFriends($email)
+    {
+        $pdo = Database::connect();
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $sql = 'SELECT DISTINCT email, firstName, lastName, profileImage FROM users JOIN friendships ON users.email = friendships.emailFrom OR users.email=friendships.emailTo WHERE (friendships.emailFrom=? OR friendships.emailTo=?) AND users.email!=? AND status=\'accepted\';';
+        $q = $pdo->prepare($sql);
+        $q->execute(array($email,$email,$email));
+        $data = $q->fetch(PDO::FETCH_ASSOC);
+          //echo $data;
+          return $data;
+    }
+
+    function getPhoto($photoId)
+    {
+        $pdo = Database::connect();
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $sql = 'SELECT imageReference FROM photos WHERE photoCollectionId = ? LIMIT 1;';
+        $q = $pdo->prepare($sql);
+        $q->execute(array($photoId));
+        $data = $q->fetch(PDO::FETCH_ASSOC);
+          //echo $data;
+          return $data;
+    }
 
 
 ?>
@@ -55,18 +57,16 @@
     <meta charset="utf-8">
     <!--  This file has been downloaded from bootdey.com    @bootdey on twitter -->
     <!--  All snippets are MIT license http://bootdey.com/license -->
-    <!-- 
+    <!--
     	The codes are free, but we require linking to our web site.
     	Why to Link?
-    	A true story: one girl didn't set a link and had no decent date for two years, and another guy set a link and got a top ranking in Google! 
+    	A true story: one girl didn't set a link and had no decent date for two years, and another guy set a link and got a top ranking in Google!
     	Where to Put the Link?
     	home, about, credits... or in a good page that you want
     	THANK YOU MY FRIEND!
     -->
     <title>User Profile with tabs - Bootdey.com</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
 
 </head>
 <body>
@@ -160,19 +160,19 @@
 
 					<div class="space-20"></div>
 
-					
+
 				</div><!-- /#home -->
 
 				<div id="friends" class="tab-pane">
 					<div class="profile-users clearfix">
 
-						<?php 
-						    $pdo = Database::connect();
-      						$sql = 'SELECT DISTINCT email, firstName, lastName, profileImage FROM users JOIN friendships ON users.email = friendships.emailFrom OR users.email=friendships.emailTo WHERE (friendships.emailFrom= ? OR friendships.emailTo= ?) AND users.email!= ? AND status=\'accepted\';';
- 							$q1 = $pdo->prepare($sql);
-    						$q1->execute(array($email,$email,$email));
- 							foreach ($q1->fetchAll() as $row) {
- 								echo '<div class="itemdiv memberdiv">
+						<?php
+                            $pdo = Database::connect();
+                              $sql = 'SELECT DISTINCT email, firstName, lastName, profileImage FROM users JOIN friendships ON users.email = friendships.emailFrom OR users.email=friendships.emailTo WHERE (friendships.emailFrom= ? OR friendships.emailTo= ?) AND users.email!= ? AND status=\'accepted\';';
+                            $q1 = $pdo->prepare($sql);
+                            $q1->execute(array($email,$email,$email));
+                            foreach ($q1->fetchAll() as $row) {
+                                echo '<div class="itemdiv memberdiv">
 										<div class="inline pos-rel">
 											<div class="user">
 												<a href="readprofile.php?email='.$row['email'].'">
@@ -190,8 +190,8 @@
 											</div>
 										</div>
 									</div>';
- 							}
- 						?>
+                            }
+                        ?>
 
 					</div>
 				</div><!-- /#friends -->
@@ -199,16 +199,15 @@
 
 				<div id="pictures" class="tab-pane">
 
-					<?php 
-						    //$pdo = Database::connect();
-						    $sql = 'SELECT photoCollectionId, dateCreated, title, description FROM photocollection WHERE createdBy = ?;';
- 							$q1 = $pdo->prepare($sql);
-    						$q1->execute(array($email));
- 							foreach ($q1->fetchAll() as $row) {
+					<?php
+                            //$pdo = Database::connect();
+                            $sql = 'SELECT photoCollectionId, dateCreated, title, description FROM photocollection WHERE createdBy = ?;';
+                            $q1 = $pdo->prepare($sql);
+                            $q1->execute(array($email));
+                            foreach ($q1->fetchAll() as $row) {
+                                $imageReference = getPhoto($row['photoCollectionId'])['imageReference'];
 
- 								$imageReference = getPhoto($row['photoCollectionId'])['imageReference'];
-
- 								echo ' 
+                                echo '
  								<ul class="ace-thumbnails">
 									<li>
 		 								<a href="readphotocollection.php?createdBy='.$email.'&photoCollectionId='.$row['photoCollectionId'].'" data-rel="colorbox">
@@ -234,11 +233,11 @@
 											<a href="#">
 												<i class="ace-icon fa fa-times red"></i>
 											</a>
-										</div> 
-									</li>		
+										</div>
+									</li>
 								</ul>';
- 							}
- 						?>
+                            }
+                        ?>
 				</div><!-- /#pictures -->
 			</div>
 		</div>
@@ -246,7 +245,7 @@
 
 <script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 <script type="text/javascript">
-	
+
 </script>
 </body>
 </html>
@@ -254,7 +253,7 @@
 
 
 <style type="text/css">
-body{margin-top:20px;}
+/*body{margin-top:20px;}*/
 
 .align-center, .center {
     text-align: center!important;

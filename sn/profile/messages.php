@@ -6,6 +6,86 @@
     include("../inc/nav-trn.php");
 
     $email = 'charles@ucl.ac.uk';
+
+    function getProfilePicture($email)
+    {
+        $pdo = Database::connect();
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $sql = 'SELECT profileImage from users WHERE email = ? ;';
+        $q1 = $pdo->prepare($sql);
+        $q1->execute(array($email));
+        $value = $q1->fetch(PDO::FETCH_ASSOC);
+        return $value;
+    }
+
+    function getMessageDate($email)
+    {
+        $pdo = Database::connect();
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $sql = 'SELECT dateCreated FROM messages WHERE emailTo = ? OR emailFrom = ? ORDER BY dateCreated DESC LIMIT 1;';
+        $q1 = $pdo->prepare($sql);
+        $q1->execute(array($email,$email));
+        $value = $q1->fetch(PDO::FETCH_ASSOC);
+        return $value;
+    }
+
+    function date_difference($date_1, $date_2)
+    {
+        $val_1 = new DateTime($date_1);
+        $val_2 = new DateTime($date_2);
+        $interval = $val_1->diff($val_2);
+        $year     = $interval->y;
+        $month    = $interval->m;
+        $day      = $interval->d;
+        $hour      = $interval->h;
+        $minute   = $interval->i;
+        $second   = $interval->s;
+        $output   = '';
+        $ok = 0;
+        if ($year > 0) {
+            if ($year > 1) {
+                $output .= $year." years ";
+            } else {
+                $output .= $year." year ";
+            }
+            $ok=1;
+        }
+        if ($month > 0) {
+            if ($month > 1) {
+                $output .= $month." months ";
+            } else {
+                $output .= $month." month ";
+            }
+        }
+        if ($day > 0) {
+            if ($day > 1) {
+                $output .= $day." days ";
+            } else {
+                $output .= $day." day ";
+            }
+            $ok=1;
+        }
+        if ($hour > 0) {
+            if ($hour > 1) {
+                $output .= $hour." hours ";
+            } else {
+                $output .= $hour." hour ";
+            }
+            $ok=1;
+        }
+        if ($minute > 0) {
+            if ($minute > 1) {
+                $output .= $minute." minutes ";
+            } else {
+                $output .= $minute." minute ";
+            }
+            $ok=1;
+        }
+        if ($ok==0) {
+            $output .= $second." seconds ";
+        }
+        return $output;
+    }
 ?>
 
 <div class="paddingTop container">
@@ -35,25 +115,47 @@
                     </div>
                 </div>
                 <div class="panel-body">
-                    <ul class="chat">
+                    <ul id="left-panel" class="chat">
                       <?php
                       $pdo = Database::connect();
-                      $sql = 'SELECT DISTINCT emailTo AS email FROM messages WHERE emailFrom = ? UNION SELECT DISTINCT emailFrom AS email FROM messages WHERE emailTo = ?;';
+                      $sql = 'SELECT DISTINCT emailTo AS email FROM messages WHERE emailFrom = ? AND emailTo NOT REGEXP \'^[0-9]+$\' UNION SELECT DISTINCT emailFrom AS email FROM messages WHERE emailTo = ? AND emailFrom NOT REGEXP \'^[0-9]+$\';';
                       $q1 = $pdo->prepare($sql);
                       $q1->execute(array($email,$email));
                       foreach ($q1->fetchAll() as $row) {
-                         echo '<li class="left clearfix"><span class="chat-img pull-left">
-                         <img src="http://placehold.it/50/55C1E7/fff&text=U" alt="User Avatar" class="img-circle" />
+                          $profileImage = getProfilePicture($row['email'])['profileImage'];
+                          date_default_timezone_set('Europe/London');
+                          $date1 = date('m/d/Y h:i:s a', time());
+                          $date2 = getMessageDate($row['email'])['dateCreated'];
+                          echo '<li onclick="getMessagesUser(\''.$row['email'].'\')" class="left clearfix"><span class="chat-img pull-left">
+                         <img width=50 src=' . $profileImage . ' alt="User Avatar" class="img-circle" />
                          </span>
                             <div class="chat-body clearfix">
                                 <div class="header">
                                     <strong class="primary-font">'.$row['email'].'</strong> <small class="pull-right text-muted">
-                                        <span class="glyphicon glyphicon-time"></span>12 mins ago</small>
+                                        <span class="glyphicon glyphicon-time"></span>'.date_difference($date1, $date2).'</small>
                                 </div>
                             </div>
                         </li>';
-     					  			}
-     					  		?>
+                      }
+                      $sql = 'SELECT circleOfFriendsName, circleFriendsId  FROM circleoffriends WHERE circleFriendsId IN (SELECT DISTINCT emailTo AS email FROM messages WHERE emailFrom = ? AND emailTo REGEXP \'^[0-9]+$\' UNION SELECT DISTINCT emailFrom AS email FROM messages WHERE emailTo = ? AND emailFrom REGEXP \'^[0-9]+$\');';
+                      $q1 = $pdo->prepare($sql);
+                      $q1->execute(array($email,$email));
+                      foreach ($q1->fetchAll() as $row) {
+                          date_default_timezone_set('Europe/London');
+                          $date1 = date('m/d/Y h:i:s a', time());
+                          $date2 = getMessageDate($row['circleFriendsId'])['dateCreated'];
+                          echo '<li onclick="getMessagesUser('.$row['circleFriendsId'].')" class="left clearfix"><span class="chat-img pull-left">
+                         <img src="http://placehold.it/50/55C1E7/fff&text=U" alt="User Avatar" class="img-circle" />
+                         </span>
+                            <div class="chat-body clearfix">
+                                <div class="header">
+                                    <strong class="primary-font">'.$row['circleOfFriendsName'].'</strong> <small class="pull-right text-muted">
+                                        <span class="glyphicon glyphicon-time"></span>'.date_difference($date1, $date2).'</small>
+                                </div>
+                            </div>
+                        </li>';
+                      }
+                                 ?>
                     </ul>
                 </div>
                 <div class="panel-footer">
@@ -94,62 +196,7 @@
                 </div>
                 <div class="panel-body">
                     <ul class="chat">
-                        <li class="left clearfix"><span class="chat-img pull-left">
-                            <img src="http://placehold.it/50/55C1E7/fff&text=U" alt="User Avatar" class="img-circle" />
-                        </span>
-                            <div class="chat-body clearfix">
-                                <div class="header">
-                                    <strong class="primary-font">Jack Sparrow</strong> <small class="pull-right text-muted">
-                                        <span class="glyphicon glyphicon-time"></span>12 mins ago</small>
-                                </div>
-                                <p>
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare
-                                    dolor, quis ullamcorper ligula sodales.
-                                </p>
-                            </div>
-                        </li>
-                        <li class="right clearfix"><span class="chat-img pull-right">
-                            <img src="http://placehold.it/50/FA6F57/fff&text=ME" alt="User Avatar" class="img-circle" />
-                        </span>
-                            <div class="chat-body clearfix">
-                                <div class="header">
-                                    <small class=" text-muted"><span class="glyphicon glyphicon-time"></span>13 mins ago</small>
-                                    <strong class="pull-right primary-font">Bhaumik Patel</strong>
-                                </div>
-                                <p>
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare
-                                    dolor, quis ullamcorper ligula sodales.
-                                </p>
-                            </div>
-                        </li>
-                        <li class="left clearfix"><span class="chat-img pull-left">
-                            <img src="http://placehold.it/50/55C1E7/fff&text=U" alt="User Avatar" class="img-circle" />
-                        </span>
-                            <div class="chat-body clearfix">
-                                <div class="header">
-                                    <strong class="primary-font">Jack Sparrow</strong> <small class="pull-right text-muted">
-                                        <span class="glyphicon glyphicon-time"></span>14 mins ago</small>
-                                </div>
-                                <p>
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare
-                                    dolor, quis ullamcorper ligula sodales.
-                                </p>
-                            </div>
-                        </li>
-                        <li class="right clearfix"><span class="chat-img pull-right">
-                            <img src="http://placehold.it/50/FA6F57/fff&text=ME" alt="User Avatar" class="img-circle" />
-                        </span>
-                            <div class="chat-body clearfix">
-                                <div class="header">
-                                    <small class=" text-muted"><span class="glyphicon glyphicon-time"></span>15 mins ago</small>
-                                    <strong class="pull-right primary-font">Bhaumik Patel</strong>
-                                </div>
-                                <p>
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare
-                                    dolor, quis ullamcorper ligula sodales.
-                                </p>
-                            </div>
-                        </li>
+                      	<div id="messageList"> <ol></ol> </div>
                     </ul>
                 </div>
                 <div class="panel-footer">
@@ -165,6 +212,22 @@
         </div>
     </div>
 </div>
+
+<script>
+function getMessagesUser(id){
+  console.log("id: ", id);
+  var postData =  $(this).serializeArray();
+  postData.push({name: "action", value: "onClickUser"});
+  postData.push({name: "id", value: id});
+
+  $.post( "readcomments.php", "user=" + id, function( data ) {
+    $('#messageList ol').html(data.lists);
+  }, "json");
+}
+function getMessages(id) {
+  console.log("id: ", id);
+}
+</script>
 
 <style type="text/css">
 .paddingTop

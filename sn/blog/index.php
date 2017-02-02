@@ -1,5 +1,5 @@
 <!--  Maintain a blog and read and search the blogs of friends.  -->
-<?php 
+<?php
   $title = "Blogs";
   include("../inc/header.php");
   include ("../inc/nav-trn.php"); ?>
@@ -10,7 +10,7 @@
   $description = "";
 
   // CHANGED THIS TO BE AUTHENTICATED LATER
-  $loggedInUser = "charles@ucl.ac.uk";
+  $loggedInUser = "ada@ucl.ac.uk";
   $pdo = Database::connect();
   $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 

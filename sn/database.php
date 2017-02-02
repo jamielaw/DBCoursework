@@ -1,4 +1,5 @@
 <?php
+
 class Database
 {
   private static $dbName = 'mydb' ;
@@ -9,7 +10,7 @@ class Database
   public function __construct() {
     exit('Init function is not allowed');
   }
-  
+
   public static function connect()
   {
      // One connection through whole application
@@ -26,7 +27,7 @@ class Database
        }
        return self::$cont;
   }
-  
+
   public static function connect_fordrop()
   {
      // One connection through whole application
@@ -43,7 +44,7 @@ class Database
        }
        return self::$cont;
   }
-  
+
   public static function disconnect()
   {
     self::$cont = null;

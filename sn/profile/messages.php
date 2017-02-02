@@ -126,7 +126,7 @@
                           date_default_timezone_set('Europe/London');
                           $date1 = date('m/d/Y h:i:s a', time());
                           $date2 = getMessageDate($row['email'])['dateCreated'];
-                          echo '<li onclick="getMessagesUser(\''.$row['email'].'\')" class="left clearfix"><span class="chat-img pull-left">
+                          echo '<li onclick="getMessagesUser(\''.$row['email'].'\',\''.$email.'\')" class="left clearfix"><span class="chat-img pull-left">
                          <img width=50 src=' . $profileImage . ' alt="User Avatar" class="img-circle" />
                          </span>
                             <div class="chat-body clearfix">
@@ -196,7 +196,7 @@
                 </div>
                 <div class="panel-body">
                     <ul class="chat">
-                      	<div id="messageList"> <ol></ol> </div>
+                      	<div id="messageList"> <li></li> </div>
                     </ul>
                 </div>
                 <div class="panel-footer">
@@ -214,14 +214,15 @@
 </div>
 
 <script>
-function getMessagesUser(id){
+function getMessagesUser(id, email){
   console.log("id: ", id);
   var postData =  $(this).serializeArray();
+  var loggedInUser = email;
   postData.push({name: "action", value: "onClickUser"});
   postData.push({name: "id", value: id});
 
-  $.post( "readcomments.php", "user=" + id, function( data ) {
-    $('#messageList ol').html(data.lists);
+  $.post( "readcomments.php", "user=" + id + "&loggedInUser=" + loggedInUser,  function( data ) {
+    $('#messageList li').html(data.lists);
   }, "json");
 }
 function getMessages(id) {

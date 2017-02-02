@@ -10,7 +10,7 @@ $insertRightsTable = "INSERT INTO MyDB.rights (roleID,rightTitle,rightDescriptio
 (1, \"Delete User's Annotations\", \"The user has the right to delete other user's annotations\"),
 (1, \"Delete User's Blog Posts\", \"The user has the right to delete other user's blog posts\"),
 (1, \"Delete User's Blog\", \"The user has the right to delete other user's blog\"),
-(1, \"Edit User's Profile Details\", \"The user has the right toedit other user's profile details\"),
+(1, \"Edit User's Profile Details\", \"The user has the right to edit other user's profile details\"),
 (1, \"Edit User's Photo\", \"The user has the right to edit other user's photo\"),
 (1, \"Edit User's Photo Collection\", \"The user has the right to edit other user's photo collection\"),
 (1, \"Edit User's Annotations\", \"The user has the right to edit other user's annotations\"),

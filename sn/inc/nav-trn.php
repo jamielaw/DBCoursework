@@ -1,12 +1,54 @@
 <!DOCTYPE html>
-
-
-<nav class="navbar navbar-inverse navbar-fixed-top">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+@media (max-width: 1245px) {
+  .navbar-header {
+      float: none;
+  }
+  .navbar-left,.navbar-right {
+      float: none !important;
+  }
+  .navbar-toggle {
+      display: block;
+  }
+  .navbar-collapse {
+      border-top: 1px solid transparent;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
+  }
+  .navbar-fixed-top {
+      top: 0;
+      border-width: 0 0 1px;
+  }
+  .navbar-collapse.collapse {
+      display: none!important;
+  }
+  .navbar-nav {
+      float: none!important;
+      margin-top: 7.5px;
+  }
+  .navbar-nav>li {
+      float: none;
+  }
+  .navbar-nav>li>a {
+      padding-top: 10px;
+      padding-bottom: 10px;
+  }
+  .collapse.in{
+      display:block !important;
+  }
+}
+</style>
+<nav class="navbar navbar-inverse">
   <div class="container-fluid">
     <div class="navbar-header">
+      <button class="navbar-toggle" aria-controls="navbar" aria-expanded="true" data-target=".navbar-collapse" data-toggle="collapse" type="button">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span> 
+      </button>
       <a class="navbar-brand">BookFace</a>
     </div>
-    <div>
+    <div class="collapse navbar-collapse">
       <ul class="nav navbar-nav">
         <li class="dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">
@@ -45,12 +87,7 @@
           <input type="text" class="submit" placeholder="Search for friends" name="submit" id="submit" autocomplete="off" style="vertical-align:none;">
         <button type="submit" class="btn btn-default" style="padding:3px 5px; vertical-align:top;"><i class="glyphicon glyphicon-search"></i></button>
       </form>
-
+      </div>
     </div>
-  </div>
 </nav>
 
-
-<style type="text/css">
-  body { padding-top: 50px; }
-</style>

@@ -79,7 +79,19 @@
         <li><a href="/sn/circles/index.php">Circles</a></li>
         <li><a href="/sn/blog/index.php">Blog</a></li>
         <li><a href="/sn/explore/index.php">Explore</a></li>
-        <li><a href="/sn/admin/index.php">Admin</a></li>
+        <?php
+        //Check if logged in user is administrator
+        $pdo = Database::connect();
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $sql = "SELECT roleTitle FROM MyDB.roles INNER JOIN MyDB.users ON MyDB.users.roleID=MyDB.roles.roleID WHERE(users.email='" . $loggedInUser . "')";
+        //echo $sql;
+        $res=$pdo->query($sql);
+        $row = $res->fetch(PDO::FETCH_ASSOC);
+        if($row["roleTitle"]=="administrator"){
+          echo "<li><a href=\"/sn/admin/index.php\">Admin</a></li>";
+        }
+        Database::disconnect();
+        ?>
       </ul>
 
       <!--search bar-->

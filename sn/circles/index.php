@@ -52,14 +52,14 @@ include("../inc/header.php");
             $id = $row["circleFriendsId"];
             //echo "<tr>";
             echo "<div class=\"col-md-6 col-sm-12 col-lg-3 blog-section friend-post-container\">";
-                echo "<div class=\"blog-title\">";
+                echo "<div class=\"blog-title\" style=\"font-style:normal;\">";
                     echo "<b>" . $row["circleOfFriendsName"] . "</b>";
                     echo "<font size=1>";
                     echo "<br>";
                     echo "Members: " . $countResults["COUNT(email)"];
                     echo "<br>";
                     echo "</font>";
-                    echo "<a title=\"Circle chat\" href=\"/sn/circles/circlechat.php?circleFriendsId=" . $id . "\"<i class=\"fa fa-comments\"></i></a>  &nbsp; <a title=\"Add friends\" href=\"/sn/circles/invite.php?circleFriendsId=" . $id . "\"<i class=\"fa fa-user-plus\"></i></a> &nbsp; <a title=\"Leave circle\" href=\"/sn/circles/leavecircle.php?circleFriendsId=" . $id . "\"<i class=\"fa fa-sign-out\"></i></a>";
+                    echo "<a title=\"Circle chat\" href=\"/sn/circles/circlechat.php?circleFriendsId=" . $id . "\"<i class=\"fa fa-comments\"></i></a>  &nbsp; <a title=\"Add friends\" href=\"/sn/circles/invite.php?circleFriendsId=" . $id . "\"<i class=\"fa fa-user-plus\"></i></a> &nbsp; <a onClick=\"javascript: return confirm('Are you sure you want to leave this circle?');\" title=\"Leave circle\" href=\"/sn/circles/leavecircle.php?circleFriendsId=" . $id . "\"<i class=\"fa fa-sign-out\"></i></a>";
                 echo "</div>";
             echo "</div>";        
             //echo "<td>" . $row["circleOfFriendsName"] . "</td><td>" . $countResults["COUNT(email)"] . "</td><td>". $row["dateCreated"]  . "</td><td> <i class=\"fa fa-comments\"></i> Message / <i class=\"fa fa-user-plus\"></i> Invite / <i class=\"fa fa-sign-out\"></i> Leave </td>";
@@ -90,18 +90,30 @@ include("../inc/header.php");
             finally, we group it by ID to avoid duplicate entries of circles if there are multiple friends in one circle 
             */
 
-            echo "<table style='width:100%'> <tr> <th><center> Circle of Friends Name </center></th> <th><center> Members </center></th> <th><center> Date created </center></th> <th><center> Action </center></th> ";
+            //echo "<table style='width:100%'> <tr> <th><center> Circle of Friends Name </center></th> <th><center> Members </center></th> <th><center> Date created </center></th> <th><center> Action </center></th> ";
             foreach ($pdo->query($impersonalCirclesQuery) as $row)  {
                 $countMembers = "SELECT COUNT(email) FROM MyDB.circleOfFriends INNER JOIN MyDB.userCircleRelationships ON MyDB.circleOfFriends.circleFriendsId=MyDB.userCircleRelationships.circleFriendsId WHERE MyDB.circleOfFriends.circleFriendsId=" . $row["circleFriendsId"];
                 //echo $countMembers;
                 $y = $pdo->query($countMembers);
                 $countResults = $y->fetch(PDO::FETCH_ASSOC);
-                echo "<tr>";
-                echo "<td>" . $row["circleOfFriendsName"] . "</td><td>" . $countResults["COUNT(email)"] . "</td><td>". $row["dateCreated"]  . "</td><td> <i class=\"fa fa-sign-in\"></i> Join </td>";
-                echo "</tr>";
+                $id = $row["circleFriendsId"];
+                //echo "<tr>";
+                echo "<div class=\"col-md-6 col-sm-12 col-lg-3 blog-section friend-post-container\">";
+                    echo "<div class=\"blog-title\" style=\"font-style:normal;\">";
+                        echo "<b>" . $row["circleOfFriendsName"] . "</b>";
+                        echo "<font size=1>";
+                        echo "<br>";
+                        echo "Members: " . $countResults["COUNT(email)"];
+                        echo "<br>";
+                        echo "</font>";
+                        echo "<a title=\"Join circle\" href=\"/sn/circles/joincircle.php?circleFriendsId=" . $id . "\"<i class=\"fa fa-sign-in\"></i></a>";
+                    echo "</div>";
+                echo "</div>";                 
+                //echo "<td>" . $row["circleOfFriendsName"] . "</td><td>" . $countResults["COUNT(email)"] . "</td><td>". $row["dateCreated"]  . "</td><td> <i class=\"fa fa-sign-in\"></i> Join </td>";
+                //echo "</tr>";
             }
 
-            echo "</table>";
+            //echo "</table>";
             Database::disconnect();
           ?>
         </div>

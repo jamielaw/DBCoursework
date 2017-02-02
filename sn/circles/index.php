@@ -61,7 +61,7 @@ include("../inc/header.php");
                     echo "Members: " . $countResults["COUNT(email)"];
                     echo "<br>";
                     echo "</font>";
-                    echo "<a title=\"Circle chat\" href=\"/sn/circles/circlechat.php?circleFriendsId=" . $id . "\"<i class=\"fa fa-comments\"></i></a>  &nbsp; <a title=\"Add friends\" href=\"/sn/circles/invite.php?circleFriendsId=" . $id . "\"<i class=\"fa fa-user-plus\"></i></a> &nbsp; <a onClick=\"javascript: return confirm('Are you sure you want to leave this circle?');\" title=\"Leave circle\" href=\"/sn/circles/leavecircle.php?circleFriendsId=" . $id . "\"<i class=\"fa fa-sign-out\"></i></a>";
+                    echo "<a title=\"Circle chat\" href=\"/sn/circles/circlechat.php?circleFriendsId=" . $id . "\"<i class=\"fa fa-comments\"></i></a>  &nbsp; <a title=\"Add friends\" href=\"/sn/circles/invite.php?circleFriendsId=" . $id . "\"<i class=\"fa fa-user-plus\"></i></a> &nbsp; <a onClick=\"javascript: return confirm('Are you sure you want to leave this circle? If you are the last person in this circle, the circle will also be deleted.');\" title=\"Leave circle\" href=\"/sn/circles/leavecircle.php?circleFriendsId=" . $id . "\"<i class=\"fa fa-sign-out\"></i></a>";
                 echo "</div>";
             echo "</div>";        
             //echo "<td>" . $row["circleOfFriendsName"] . "</td><td>" . $countResults["COUNT(email)"] . "</td><td>". $row["dateCreated"]  . "</td><td> <i class=\"fa fa-comments\"></i> Message / <i class=\"fa fa-user-plus\"></i> Invite / <i class=\"fa fa-sign-out\"></i> Leave </td>";

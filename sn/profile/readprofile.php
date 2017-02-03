@@ -253,7 +253,7 @@
 
 
 <style type="text/css">
-body{margin-top:20px;}
+/*body{margin-top:20px;}*/
 
 .align-center, .center {
     text-align: center!important;

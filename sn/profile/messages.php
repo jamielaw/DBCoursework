@@ -201,10 +201,12 @@
                 </div>
                 <div class="panel-footer">
                     <div class="input-group">
-                        <input id="btn-input" type="text" class="form-control input-sm" placeholder="Type your message here..." />
+                        <input id="myMessage" type="text" class="form-control input-sm" placeholder="Type your message here..." />
                         <span class="input-group-btn">
-                            <button class="btn btn-warning btn-sm" id="btn-chat">
-                                Send</button>
+                          <?php
+                            echo '<button onclick="sendMessage(\''.$email.'\')" class="btn btn-warning btn-sm" id="btn-chat">
+                                Send</button>'
+                          ?>
                         </span>
                     </div>
                 </div>
@@ -214,28 +216,43 @@
 </div>
 
 <script>
+
+var clicked = null;
+var inWhich = null;
+function sendMessage($email) {
+    var loggedInUser = $email;
+    var messageText = document.getElementById('myMessage').value;
+    if (messageText == '' || clicked==null)
+     alert('Input message is empty or you have not selected any circle or friend.');
+    else {
+      $.post( "sendMessage.php", "emailTo=" + clicked + "&emailFrom=" + $email + "&messageText=" + messageText,  function( data ) {
+      });
+      if (inWhich == 0)
+        getMessagesUser(clicked,$email);
+      if (inWhich == 1)
+        getMessagesCircle(clicked,$email);
+    }
+}
+
 function getMessagesUser(id, email){
-  console.log("id: ", id);
+  inWhich = 0;
   var postData =  $(this).serializeArray();
   var loggedInUser = email;
-
+  clicked = id;
   $.post( "readcomments.php", "user=" + id + "&loggedInUser=" + loggedInUser,  function( data ) {
     $('#messageList li').html(data.lists);
   }, "json");
+
 }
 
 function getMessagesCircle(id, email){
-  console.log("id: ", id);
+  inWhich = 1;
   var postData =  $(this).serializeArray();
   var loggedInUser = email;
-
+  clicked = id;
   $.post( "readcirclecomments.php", "id=" + id + "&loggedInUser=" + loggedInUser,  function( data ) {
     $('#messageList li').html(data.lists);
   }, "json");
-}
-
-function getMessages(id) {
-  console.log("id: ", id);
 }
 </script>
 

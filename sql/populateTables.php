@@ -97,18 +97,26 @@ $insertPhotosTable = "INSERT INTO MyDB.photos (photoCollectionId,imageReference)
 (2, \"/images/photoCollection/25.jpg\")";
 
 
-$insertCircleOfFriendsTable = "INSERT INTO MyDB.circleOfFriends (circleOfFriendsName) VALUES
-(\"lmao\"),
-(\"lol\"),
-(\"rofl\")";
+$insertCircleOfFriendsTable = "INSERT INTO MyDB.circleOfFriends (circleFriendsId, circleOfFriendsName) VALUES
+(1,\"lmao\"),
+(2,\"lol\"),
+(3,\"The CS Friends\"),
+(4,\"The Science Club\")";
+
 
 $insertUserCircleRelationshipsTable = "INSERT INTO MyDB.userCircleRelationships (email, circleFriendsId) VALUES
+(\"ada@ucl.ac.uk\",1),
+(\"ada@ucl.ac.uk\",2),
+(\"ada@ucl.ac.uk\",3),
+(\"alan@ucl.ac.uk\",1),
 (\"charles@ucl.ac.uk\",1),
+(\"charles@ucl.ac.uk\",3),
+(\"charles@ucl.ac.uk\",4),
+(\"tim@ucl.ac.uk\",1),
 (\"vicky@ucl.ac.uk\",1),
 (\"vicky@ucl.ac.uk\",3),
 (\"larry@ucl.ac.uk\",1),
 (\"charles@ucl.ac.uk\",2)";
-
 
 
 $insertCommentsTable = "INSERT INTO MyDB.comments (photoId,email,commentText) VALUES
@@ -127,6 +135,14 @@ VALUES
 ('4', '4', 'charles@ucl.ac.uk', '20', '10', 'Annotations!'),
 ('5', '5', 'charles@ucl.ac.uk', '11', '1', 'Annotations!')";
 
+$insertMessages = "INSERT INTO MyDB.messages (emailTo, emailFrom, messageText) VALUES
+(\"ada@ucl.ac.uk\",\"charles@ucl.ac.uk\",\"Dear Ada, How are you? Haven't seen you in a while\"),
+(\"charles@ucl.ac.uk\",\"ada@ucl.ac.uk\",\"Hello, Charles. We haven't talked for quite a while. How have you been?\"),
+(\"ada@ucl.ac.uk\",\"charles@ucl.ac.uk\",\"I wanted to ask you if you have seen the last paper I published?\"),
+(\"charles@ucl.ac.uk\",\"ada@ucl.ac.uk\",\"I don't think so. What is it about and where did you publish it?\"),
+(\"3\",\"charles@ucl.ac.uk\",\"Hello World\"),
+(\"4\",\"ada@ucl.ac.uk\",\"Invitation\")";
+
 $populatingTables = [
     $insertRolesTable,
     $insertRightsTable,
@@ -139,20 +155,21 @@ $populatingTables = [
     $insertCircleOfFriendsTable,
     $insertUserCircleRelationshipsTable,
     $insertCommentsTable,
-    $insertAnnotationsTable
+    $insertAnnotationsTable,
+    $insertMessages
+
 ];
 
-foreach ($populatingTables as $sqlquery){
-  echo nl2br("\n"); //Line break in HTML conversion
+foreach ($populatingTables as $sqlquery) {
+    echo nl2br("\n"); //Line break in HTML conversion
   echo "<b>Executing SQL statement: </b>";
-  echo $sqlquery; //Dispay statement being executed
+    echo $sqlquery; //Dispay statement being executed
   echo nl2br("\n");
-  $q= $pdo->prepare($sqlquery);
-  if ($q->execute() === TRUE) {
-      echo "<b><font color='green'>SQL statement performed correctly</b></font>";
-  } else {
-      echo "<b><font color='red'>Error executing statement: </b></font>" . $pdo->error;
-  }
+    $q= $pdo->prepare($sqlquery);
+    if ($q->execute() === true) {
+        echo "<b><font color='green'>SQL statement performed correctly</b></font>";
+    } else {
+        echo "<b><font color='red'>Error executing statement: </b></font>" . $pdo->error;
+    }
 }
   Database::disconnect();
-?>

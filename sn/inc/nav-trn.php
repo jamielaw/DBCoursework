@@ -67,18 +67,18 @@
           ?>
           <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="../profile/index.php"><i class="fa fa-user"></i> My Profile</a></li>
-            <li><a href="../profile/settings.php"><i class="fa fa-cog"></i> Settings</a></li>
-            <li><a href="../logout.php"><i class="fa fa-sign-out"></i> Logout</a></li>
+            <li><a href="/sn/profile/index.php"><i class="fa fa-user"></i> My Profile</a></li>
+            <li><a href="/sn/profile/settings.php"><i class="fa fa-cog"></i> Settings</a></li>
+            <li><a href="/sn/logout.php"><i class="fa fa-sign-out"></i> Logout</a></li>
           </ul>
         </li>
-        <li><a href="../profile/myfriends.php"><i class="fa fa-users"></i></a></li>
-        <li><a href="../profile/messages.php"><i class="fa fa-comments"></i></a></li>
-        <li><a href="../profile/index.php#4"><i class="fa fa-picture-o"></i></a></li>
-        <li><a href="../photos/index.php">Photos</a></li>
-        <li><a href="../circles/index.php">Circles</a></li>
-        <li><a href="../blog/index.php">Blog</a></li>
-        <li><a href="../explore/index.php">Explore</a></li>
+        <li><a href="/sn/profile/myfriends.php"><i class="fa fa-users"></i></a></li>
+        <li><a href="/sn/profile/messages.php"><i class="fa fa-comments"></i></a></li>
+        <li><a href="/sn/profile/index.php#4"><i class="fa fa-picture-o"></i></a></li>
+        <li><a href="/sn/photos/index.php">Photos</a></li>
+        <li><a href="/sn/circles/index.php">Circles</a></li>
+        <li><a href="/sn/blog/index.php">Blog</a></li>
+        <li><a href="/sn/explore/index.php">Explore</a></li>
         <?php
         //Check if logged in user is administrator
         $pdo = Database::connect();

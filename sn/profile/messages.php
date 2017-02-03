@@ -137,9 +137,9 @@
                             </div>
                         </li>';
                       }
-                      $sql = 'SELECT circleOfFriendsName, circleFriendsId  FROM circleoffriends WHERE circleFriendsId IN (SELECT DISTINCT emailTo AS email FROM messages WHERE emailFrom = ? AND emailTo REGEXP \'^[0-9]+$\' UNION SELECT DISTINCT emailFrom AS email FROM messages WHERE emailTo = ? AND emailFrom REGEXP \'^[0-9]+$\');';
+                      $sql = 'SELECT c.circleOfFriendsName, c.circleFriendsId FROM circleoffriends c INNER JOIN usercirclerelationships u ON c.circleFriendsId = u.circleFriendsId WHERE u.email = ?;';
                       $q1 = $pdo->prepare($sql);
-                      $q1->execute(array($email,$email));
+                      $q1->execute(array($email));
                       foreach ($q1->fetchAll() as $row) {
                           date_default_timezone_set('Europe/London');
                           $date1 = date('m/d/Y h:i:s a', time());

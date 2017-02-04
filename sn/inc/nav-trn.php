@@ -72,7 +72,22 @@
             <li><a href="/sn/logout.php"><i class="fa fa-sign-out"></i> Logout</a></li>
           </ul>
         </li>
-        <li><a href="/sn/profile/myfriends.php"><i class="fa fa-users"></i></a></li>
+        <!--  Check for new friend requests! -->
+        <?php
+        $friendRequestCount = 'SELECT COUNT( DISTINCT email, firstName, lastName, profileImage )FROM users JOIN friendships ON users.email = friendships.emailFrom OR users.email=friendships.emailTo WHERE (friendships.emailTo=\'charles@ucl.ac.uk\') AND users.email!=\'charles@ucl.ac.uk\' AND status=\'pending\';';
+        $q = $pdo->prepare($friendRequestCount);
+        $q->execute();
+
+        $row = $q->fetchColumn();
+
+        if($row == 0 || $row == NULL){
+          echo '<li><a href="/sn/profile/myfriends.php"><i class="fa fa-users"></i></a></li>';
+        }else{
+          // you have a friend request!
+          echo '<li><a href="/sn/profile/myfriends.php"><i style="color: #ff304d;" class="fa fa-users"></i></a></li>';
+        }
+        ?>
+        <!--  -->
         <li><a href="/sn/profile/messages.php"><i class="fa fa-comments"></i></a></li>
         <li><a href="/sn/profile/index.php#4"><i class="fa fa-picture-o"></i></a></li>
         <li><a href="/sn/photos/index.php">Photos</a></li>

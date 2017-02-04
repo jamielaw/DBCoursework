@@ -82,8 +82,8 @@
             </div>
           </div>
           <label class="pull-right">
-            <a  class="btn btn-success btn-xs glyphicon glyphicon-ok" href="readprofile.php?email='.$row['email'].'" title="Accept"></a>
-            <a  class="btn btn-danger  btn-xs glyphicon glyphicon-remove" href="deleteprofile.php?email='.$row['email'].'" title="Reject"></a>
+            <a  class="btn btn-success btn-xs glyphicon glyphicon-ok" href="handleFriendRequest.php?email='.$row['email'].'&action=accepted" title="Accept"></a>
+            <a  class="btn btn-danger  btn-xs glyphicon glyphicon-remove" href="handleFriendRequest.php?email='.$row['email'].'&action=denied" title="Reject"></a>
             <a  class="btn btn-info  btn-xs glyphicon glyphicon glyphicon-comment" href="#" title="Send message"></a>
           </label>
           <div class="break"></div>

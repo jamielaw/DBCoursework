@@ -74,7 +74,7 @@
         </li>
         <!--  Check for new friend requests! -->
         <?php
-        $friendRequestCount = 'SELECT COUNT( DISTINCT email, firstName, lastName, profileImage )FROM users JOIN friendships ON users.email = friendships.emailFrom OR users.email=friendships.emailTo WHERE (friendships.emailFrom=\'charles@ucl.ac.uk\' OR friendships.emailTo=\'charles@ucl.ac.uk\') AND users.email!=\'charles@ucl.ac.uk\' AND status=\'pending\';';
+        $friendRequestCount = 'SELECT COUNT( DISTINCT email, firstName, lastName, profileImage )FROM users JOIN friendships ON users.email = friendships.emailFrom OR users.email=friendships.emailTo WHERE (friendships.emailTo=\'charles@ucl.ac.uk\') AND users.email!=\'charles@ucl.ac.uk\' AND status=\'pending\';';
         $q = $pdo->prepare($friendRequestCount);
         $q->execute();
 

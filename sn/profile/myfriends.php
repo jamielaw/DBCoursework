@@ -109,13 +109,25 @@
       </li>
       <?php
       //include '..\database.php';
-      $pdo = Database::connect();
       // !!! HARDCODED STUFF -  TO BE CHANGED AFTER LOGIN IS IMPLEMENTED
-      $sql = 'SELECT DISTINCT email, firstName, lastName, profileImage FROM users JOIN friendships ON users.email = friendships.emailFrom OR users.email=friendships.emailTo WHERE (friendships.emailTo=\'charles@ucl.ac.uk\') AND users.email!=\'charles@ucl.ac.uk\' AND status=\'pending\';';
+      $loggedinuser = 'vicky@ucl.ac.uk';
+      $sql = "SELECT DISTINCT * FROM users WHERE users.email !='$loggedinuser'
+       AND (users.email NOT IN
+         ( SELECT users.email
+           FROM users
+           JOIN friendships ON
+           users.email =
+           friendships.emailFrom
+           OR users.email=friendships.emailTo
+           WHERE(
+              (friendships.emailFrom= '$loggedinuser'
+              OR friendships.emailTo= '$loggedinuser' )
+              AND
+               users.email != '$loggedinuser' )));";
+
       foreach ($pdo->query($sql) as $row) {
-      $nrFriends = nrOfFriends($row['email'])['COUNT(*)'];
-      $nrPhotos = nrOfPhotos($row['email'])['COUNT(*)'];
-      $nrComments = nrOfComments($row['email'])['COUNT(*)'];
+
+
         echo '<li href="#" class="list-group-item text-left">
           <div class="panel-heading">
             <div class="media">
@@ -125,9 +137,6 @@
             <div class="media-body">
               <h4 class="media-heading margin-v-5"><a href="#">'.$row['firstName'].' '.$row['lastName'].'</a></h4>
               <div class="profile-icons">
-              <span><i class="fa fa-users"></i> ' . $nrFriends . '  </span>
-              <span><i class="fa fa-photo"></i> ' . $nrPhotos. '</span>
-              <span><i class="fa fa-comments"></i> '. $nrComments .'</span>
             </div>
           </div>
           <label class="pull-right">
@@ -159,7 +168,6 @@
       </li>
       <?php
       //include '..\database.php';
-      $pdo = Database::connect();
       // !!! HARDCODED STUFF -  TO BE CHANGED AFTER LOGIN IS IMPLEMENTED
       $sql = 'SELECT DISTINCT email, firstName, lastName, profileImage FROM users JOIN friendships ON users.email = friendships.emailFrom OR users.email=friendships.emailTo WHERE (friendships.emailFrom=\'charles@ucl.ac.uk\' OR friendships.emailTo=\'charles@ucl.ac.uk\') AND users.email!=\'charles@ucl.ac.uk\' AND status=\'accepted\';';
       foreach ($pdo->query($sql) as $row) {

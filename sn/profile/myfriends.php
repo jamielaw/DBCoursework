@@ -34,6 +34,40 @@
     $nr = $q1->fetch(PDO::FETCH_ASSOC);
     return $nr;
   }
+
+  // First get a list of your friends
+  // Then get a list of the other persons friends
+  // keep the ones which match
+  // count them
+  function nrOfMutualFriends($loggedInUser, $nonFriendedUser) {
+    $pdo = Database::connect();
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    $getLoggedInUserFriends = 'SELECT * FROM ( SELECT * FROM users JOIN
+      friendships ON users.email = friendships.emailFrom OR
+      users.email=friendships.emailTo WHERE(
+        (friendships.emailFrom="$loggedInUser" OR
+        friendships.emailTo="$loggedInUser" ) AND
+         users.email!= "$loggedInUser" AND
+         friendships.status = "accepted")) AS
+         T1 JOIN ( SELECT * FROM users JOIN
+         friendships ON users.email =
+          friendships.emailFrom OR
+          users.email=friendships.emailTo
+          WHERE( (friendships.emailFrom="$nonFriendedUser"
+          OR friendships.emailTo="$nonFriendedUser" )
+          AND users.email!= "$nonFriendedUser" AND
+          friendships.status = "$nonFriendedUser")) AS T2 ON T1.email
+          = T2.email';
+
+
+
+    $sql1 = 'SELECT COUNT(*) FROM comments WHERE email = ?;';
+    $q1 = $pdo->prepare($sql1);
+    $q1->execute(array($email));
+    $nr = $q1->fetch(PDO::FETCH_ASSOC);
+    return $nr;
+  }
 ?>
 
 <!DOCTYPE html>
@@ -95,6 +129,8 @@
     </ul>
   </div>
 
+
+<!--  FRIEND RECOMMENDATIONS SECTION!-->
   <div class="header padding">
     <h3 class="text-muted prj-name">
         <span class="fa fa-users fa-2x principal-title"></span>

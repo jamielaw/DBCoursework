@@ -1,9 +1,7 @@
 ## How to
-_ _ _
 To export the database to XML format run `/exportTo.php`. If successfully imported, check your XML folder for the backup file.
 
 ## What to expect?
-_ _ _
 The XML will have the following format:
 ```xml
 <database name="">
@@ -15,12 +13,12 @@ The XML will have the following format:
 ```
 A column will have the following output:
 ```xml
-<column name="photoId" orgname="photoId" max_length="1" length="11" charsetnr="63" flags="49160" type="3" decimals="0" />
+<column name="email" orgname="email" max_length="0" length="50" charsetnr="8" flags="20489" type="253" decimals="0" is_nullable="NO" column_type="varchar(50)" column_key="MUL" referenced_table_name="users" referenced_column_name="email" />
 ```
 
 ## What does all this mean?
 ![alt text](http://s2.quickmeme.com/img/db/dbc97d3b537a3b38f323b2cd9e97228de9342018e72bb18e3b36ec235a8783f5.jpg)
-_ _ _
+
 `array mysqli_fetch_fields ( mysqli_result $result )` returns the following values:
 
 | Property      | Description   |
@@ -35,6 +33,18 @@ _ _ _
 | flags         | An integer representing the bit-flags for the field. |
 | type          | The data type used for this field. |
 | decimals      | The number of decimals used (for integer fields). |
+
+`getConstraints($table, $columnName)` function returns the column constraints by interrogating the information_schema table and returns:
+
+| Property                | Description   |
+| ------------------------|:-------------|
+| is_nullable             | returns YES/NO |
+| column_type             | returns column type |
+| column_key              | return PRI for PK and MUL for FK/PFK |
+| extra                   | returns auto_icrement or null |
+| referenced_table_name   | if column is FK it returns the table that it references |
+| referenced_column_name  | if column is FK it returns the column that it references |
+
 
 Flags
 ```

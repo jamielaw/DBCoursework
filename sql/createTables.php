@@ -2,13 +2,15 @@
 //require '../sn/database.php'; //uncomment this if you need to call this individual script
 $pdo = Database::connect_fordrop();
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+$storageEngine = "SET default_storage_engine = INNODB";
 // Drop database if necessary
 $dropDatabase = "DROP DATABASE IF EXISTS MyDB";
 // Create users database
 $createDatabase = "CREATE DATABASE IF NOT EXISTS MyDB";
 //Create roles table
 $createRolesTable = "CREATE TABLE IF NOT EXISTS MyDB.roles(
-  roleID INT NOT NULL AUTO_INCREMENT, 
+  roleID INT NOT NULL AUTO_INCREMENT,
   roleTitle VARCHAR(50),
   PRIMARY KEY(roleID)
 )";
@@ -16,7 +18,7 @@ $createRolesTable = "CREATE TABLE IF NOT EXISTS MyDB.roles(
 $createUsersTable = "CREATE TABLE IF NOT EXISTS MyDB.users(
   email VARCHAR(50) NOT NULL,
   roleID INT NOT NULL,
-  password VARCHAR(20),
+  user_password VARCHAR(20),
   firstName VARCHAR(15),
   lastName VARCHAR(15),
   profileImage VARCHAR(255),
@@ -135,9 +137,7 @@ $createMessagesTable = "CREATE TABLE IF NOT EXISTS MyDB.messages(
   emailFrom VARCHAR(50) NOT NULL,
   messageText VARCHAR(255),
   dateCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY(messageId),
-  FOREIGN KEY(emailTo) REFERENCES MyDB.users(email),
-  FOREIGN KEY(emailFrom) REFERENCES MyDB.users(email) 
+  PRIMARY KEY(messageId)
 )";
 // Create table for privacy settings
 $createPrivacySettingsTable = "CREATE TABLE IF NOT EXISTS MyDB.privacySettings(
@@ -151,6 +151,7 @@ $createPrivacySettingsTable = "CREATE TABLE IF NOT EXISTS MyDB.privacySettings(
 )";
 $creatingTables = [ //make sure you create in the right order! foreign keys must refer to a primary key in an existing table
     //$dropDatabase, //uncomment this if there is a wrong format in any table
+    $storageEngine,
     $createDatabase,
     $createRolesTable,
     $createUsersTable,
@@ -168,17 +169,16 @@ $creatingTables = [ //make sure you create in the right order! foreign keys must
     $createAnnotationsTable,
     $createAccessRightsTable
 ];
-foreach ($creatingTables as $sqlquery){
-  echo nl2br("\n"); //Line break in HTML conversion
+foreach ($creatingTables as $sqlquery) {
+    echo nl2br("\n"); //Line break in HTML conversion
   echo "<b>Executing SQL statement: </b>";
-  echo $sqlquery; //Dispay statement being executed
+    echo $sqlquery; //Dispay statement being executed
   echo nl2br("\n");
-  $q= $pdo->prepare($sqlquery);
-  if ($q->execute() === TRUE) {
-      echo "<b><font color='green'>SQL statement performed correctly</b></font>";
-  } else {
-      echo "<b><font color='red'>Error executing statement: </b></font>" . $pdo->error;
-  }
+    $q= $pdo->prepare($sqlquery);
+    if ($q->execute() === true) {
+        echo "<b><font color='green'>SQL statement performed correctly</b></font>";
+    } else {
+        echo "<b><font color='red'>Error executing statement: </b></font>" . $pdo->error;
+    }
 }
   Database::disconnect();
-?>

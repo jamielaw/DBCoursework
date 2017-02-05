@@ -25,15 +25,35 @@ if (mysqli_num_rows($result)) {
 
         //get the rows
         $query3 = 'SELECT * FROM '.$table[0];
-        $records = mysqli_query($query3, $link) or die('cannot select from table: '.$table[0]);
+        $records = mysqli_query($link, $query3) or die('cannot select from table: '.$table[0]);
 
         //table attributes
-        $attributes = array('name','blob','maxlength','multiple_key','not_null','numeric','primary_key','table','type','default','unique_key','unsigned','zerofill');
+        $attributes = array('name','orgname','max_length','length','charsetnr','flags','type','decimals');
         $xml.= $tab.$tab.'<columns>'.$br;
         $x = 0;
         while ($x < mysqli_num_fields($records)) {
-            $meta = mysqli_fetch_field($records, $x);
+            $meta = mysqli_fetch_field($records);
             $xml.= $tab.$tab.$tab.'<column ';
+
+
+            echo 'name:'.$meta->name.'<br/>';
+            echo 'type:'.$meta->type.'<br/>';
+            echo 'flags:'.$meta->flags.'<br/>';
+            if ($meta->flags & MYSQLI_PRI_KEY_FLAG) {
+                echo 'PK ';
+            }
+            if ($meta->flags & MYSQLI_UNIQUE_KEY_FLAG) {
+                echo 'UNIQUE KEY ';
+            }
+            if ($meta->flags & MYSQLI_PART_KEY_FLAG) {
+                echo 'PART KEY ';
+            }
+            if ($meta->flags & MYSQLI_MULTIPLE_KEY_FLAG) {
+                echo 'MULTIPLE KEY ';
+            }
+            echo '<br/>';
+
+
             foreach ($attributes as $attribute) {
                 $xml.= $attribute.'="'.$meta->$attribute.'" ';
             }
@@ -56,6 +76,7 @@ if (mysqli_num_rows($result)) {
     }
     $xml.= '</database>';
 
+    echo 'Imported Successfully! Check your XML folder.';
     //save file
     $handle = fopen($name.'-backup-'.time().'.xml', 'w+');
     fwrite($handle, $xml);

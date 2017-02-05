@@ -35,6 +35,7 @@
     return $nr;
   }
 
+  // If you ever want to display mutual friends!
   // First get a list of your friends
   // Then get a list of the other persons friends
   // keep the ones which match
@@ -43,30 +44,31 @@
     $pdo = Database::connect();
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    $getLoggedInUserFriends = 'SELECT * FROM ( SELECT * FROM users JOIN
+    $getLoggedInUserFriends = "SELECT * FROM ( SELECT * FROM users JOIN
       friendships ON users.email = friendships.emailFrom OR
       users.email=friendships.emailTo WHERE(
-        (friendships.emailFrom="$loggedInUser" OR
-        friendships.emailTo="$loggedInUser" ) AND
-         users.email!= "$loggedInUser" AND
-         friendships.status = "accepted")) AS
+        (friendships.emailFrom='$loggedInUser' OR
+        friendships.emailTo='$loggedInUser' ) AND
+         users.email!= '$loggedInUser' AND
+         friendships.status = 'accepted')) AS
          T1 JOIN ( SELECT * FROM users JOIN
          friendships ON users.email =
           friendships.emailFrom OR
           users.email=friendships.emailTo
-          WHERE( (friendships.emailFrom="$nonFriendedUser"
-          OR friendships.emailTo="$nonFriendedUser" )
-          AND users.email!= "$nonFriendedUser" AND
-          friendships.status = "$nonFriendedUser")) AS T2 ON T1.email
-          = T2.email';
+          WHERE( (friendships.emailFrom='$nonFriendedUser'
+          OR friendships.emailTo='$nonFriendedUser' )
+          AND users.email!= '$nonFriendedUser' AND
+          friendships.status = 'accepted')) AS T2 ON T1.email
+          = T2.email";
 
+    //echo $getLoggedInUserFriends;
 
-
-    $sql1 = 'SELECT COUNT(*) FROM comments WHERE email = ?;';
-    $q1 = $pdo->prepare($sql1);
-    $q1->execute(array($email));
-    $nr = $q1->fetch(PDO::FETCH_ASSOC);
-    return $nr;
+    $count = 0;
+    foreach ($pdo->query($getLoggedInUserFriends) as $row){
+      //echo $row['email'];
+      $count = $count + 1;
+    }
+    return $count;
   }
 ?>
 
@@ -163,6 +165,7 @@
 
       foreach ($pdo->query($sql) as $row) {
 
+        $nrOfMutualFriends = nrOfMutualFriends($loggedinuser,$row['email']);
 
         echo '<li href="#" class="list-group-item text-left">
           <div class="panel-heading">
@@ -172,7 +175,8 @@
             </div>
             <div class="media-body">
               <h4 class="media-heading margin-v-5"><a href="#">'.$row['firstName'].' '.$row['lastName'].'</a></h4>
-              <div class="profile-icons">
+              <div class="profile-icons">'. $nrOfMutualFriends . ' mutal friends
+
             </div>
           </div>
           <label class="pull-right">

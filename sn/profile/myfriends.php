@@ -35,6 +35,10 @@
     return $nr;
   }
 
+  function compareOrder($a, $b){
+    return $b['mutualFriends'] - $a['mutualFriends'];
+  }
+
   // If you ever want to display mutual friends!
   // First get a list of your friends
   // Then get a list of the other persons friends
@@ -163,9 +167,21 @@
               AND
                users.email != '$loggedinuser' )));";
 
+      $recommendations = array();
       foreach ($pdo->query($sql) as $row) {
+        $row["mutualFriends"] = nrOfMutualFriends($loggedinuser,$row['email']);
+        $recommendations[] = $row;
+      }
 
-        $nrOfMutualFriends = nrOfMutualFriends($loggedinuser,$row['email']);
+
+      // sort by mutual friends, so highest to the top
+      usort($recommendations, 'compareOrder');
+
+
+
+      foreach ($recommendations as $row) {
+
+        // $nrOfMutualFriends = nrOfMutualFriends($loggedinuser,$row['email']);
 
         echo '<li href="#" class="list-group-item text-left">
           <div class="panel-heading">
@@ -175,7 +191,7 @@
             </div>
             <div class="media-body">
               <h4 class="media-heading margin-v-5"><a href="#">'.$row['firstName'].' '.$row['lastName'].'</a></h4>
-              <div class="profile-icons">'. $nrOfMutualFriends . ' mutal friends
+              <div class="profile-icons">'. $row['mutualFriends'] . ' mutal friends
 
             </div>
           </div>

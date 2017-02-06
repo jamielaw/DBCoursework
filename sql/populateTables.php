@@ -2,7 +2,7 @@
 //require '../sn/database.php'; //uncomment this if you need to call this individual script
 $pdo = Database::connect();
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-$insertRolesTable = "INSERT INTO MyDB.roles (roleID,roleTitle) VALUES (1,\"administartor\"), (2,\"user\")";
+$insertRolesTable = "INSERT INTO MyDB.roles (roleID,roleTitle) VALUES (1,\"administrator\"), (2,\"user\")";
 $insertRightsTable = "INSERT INTO MyDB.rights (roleID,rightTitle,rightDescription) VALUES
 (1, \"Delete User\", \"The user has the right to delete other user\"),
 (1, \"Delete User's Photos\", \"The user has the right to delete other user's photos\"),
@@ -10,13 +10,13 @@ $insertRightsTable = "INSERT INTO MyDB.rights (roleID,rightTitle,rightDescriptio
 (1, \"Delete User's Annotations\", \"The user has the right to delete other user's annotations\"),
 (1, \"Delete User's Blog Posts\", \"The user has the right to delete other user's blog posts\"),
 (1, \"Delete User's Blog\", \"The user has the right to delete other user's blog\"),
-(1, \"Edit User's Profile Details\", \"The user has the right toedit other user's profile details\"),
+(1, \"Edit User's Profile Details\", \"The user has the right to edit other user's profile details\"),
 (1, \"Edit User's Photo\", \"The user has the right to edit other user's photo\"),
 (1, \"Edit User's Photo Collection\", \"The user has the right to edit other user's photo collection\"),
 (1, \"Edit User's Annotations\", \"The user has the right to edit other user's annotations\"),
 (1, \"Edit User's Blog Posts\", \"The user has the right to edit other user's blog posts\"),
 (1, \"Edit User's Blog\", \"The user has the right to edit other user's blog\")";
-$insertUsersTable = "INSERT INTO MyDB.users (email,roleID,password,firstName,lastName,profileImage) VALUES
+$insertUsersTable = "INSERT INTO MyDB.users (email,roleID,user_password,firstName,lastName,profileImage) VALUES
 (\"alan@ucl.ac.uk\",2,\"test\",\"Alan\",\"Turing\",\"/images/profile/alan@ucl.ac.uk.jpg\"),
 (\"ada@ucl.ac.uk\",2,\"test\",\"Ada\",\"Lovelace\",\"/images/profile/ada@ucl.ac.uk.jpg\"),
 (\"grace@ucl.ac.uk\",2,\"test\",\"Grace\",\"Hopper\",\"/images/profile/grace@ucl.ac.uk.jpg\"),
@@ -25,8 +25,8 @@ $insertUsersTable = "INSERT INTO MyDB.users (email,roleID,password,firstName,las
 (\"dennis@ucl.ac.uk\",2,\"test\",\"Dennis\",\"Ritchie\",\"/images/profile/dennis@ucl.ac.uk.jpg\"),
 (\"ken@ucl.ac.uk\",2,\"test\",\"Ken\",\"Thompson\",\"/images/profile/ken@ucl.ac.uk.jpg\"),
 (\"larry@ucl.ac.uk\",2,\"test\",\"Larry\",\"Page\",\"/images/profile/larry@ucl.ac.uk.jpg\"),
-(\"charles@ucl.ac.uk\",2,\"test\",\"Charles\",\"Babbage\",\"/images/profile/charles@ucl.ac.uk.jpg\"),
-(\"vicky@ucl.ac.uk\",2,\"test\",\"Vicky\",\"LovesPHP\",\"/images/profile/vicky@ucl.ac.uk.jpg\")";
+(\"charles@ucl.ac.uk\",1,\"test\",\"Charles\",\"Babbage\",\"/images/profile/charles@ucl.ac.uk.jpg\"),
+(\"vicky@ucl.ac.uk\",1,\"test\",\"Vicky\",\"LovesPHP\",\"/images/profile/vicky@ucl.ac.uk.jpg\")";
 $insertFriendshipTable = "INSERT INTO MyDB.friendships (emailFrom,emailTo,status) VALUES
 (\"charles@ucl.ac.uk\",\"larry@ucl.ac.uk\",\"accepted\"),
 (\"charles@ucl.ac.uk\",\"ken@ucl.ac.uk\",\"accepted\"),
@@ -97,18 +97,26 @@ $insertPhotosTable = "INSERT INTO MyDB.photos (photoCollectionId,imageReference)
 (2, \"/images/photoCollection/25.jpg\")";
 
 
-$insertCircleOfFriendsTable = "INSERT INTO MyDB.circleOfFriends (circleOfFriendsName) VALUES
-(\"lmao\"),
-(\"lol\"),
-(\"rofl\")";
+$insertCircleOfFriendsTable = "INSERT INTO MyDB.circleOfFriends (circleFriendsId, circleOfFriendsName) VALUES
+(1,\"lmao\"),
+(2,\"lol\"),
+(3,\"The CS Friends\"),
+(4,\"The Science Club\")";
+
 
 $insertUserCircleRelationshipsTable = "INSERT INTO MyDB.userCircleRelationships (email, circleFriendsId) VALUES
+(\"ada@ucl.ac.uk\",1),
+(\"ada@ucl.ac.uk\",2),
+(\"ada@ucl.ac.uk\",3),
+(\"alan@ucl.ac.uk\",1),
 (\"charles@ucl.ac.uk\",1),
+(\"charles@ucl.ac.uk\",3),
+(\"charles@ucl.ac.uk\",4),
+(\"tim@ucl.ac.uk\",1),
 (\"vicky@ucl.ac.uk\",1),
 (\"vicky@ucl.ac.uk\",3),
 (\"larry@ucl.ac.uk\",1),
 (\"charles@ucl.ac.uk\",2)";
-
 
 
 $insertCommentsTable = "INSERT INTO MyDB.comments (photoId,email,commentText) VALUES
@@ -127,6 +135,14 @@ VALUES
 ('4', '4', 'charles@ucl.ac.uk', '20', '10', 'Annotations!'),
 ('5', '5', 'charles@ucl.ac.uk', '11', '1', 'Annotations!')";
 
+$insertMessages = "INSERT INTO MyDB.messages (emailTo, emailFrom, messageText) VALUES
+(\"ada@ucl.ac.uk\",\"charles@ucl.ac.uk\",\"Dear Ada, How are you? Haven't seen you in a while\"),
+(\"charles@ucl.ac.uk\",\"ada@ucl.ac.uk\",\"Hello, Charles. We haven't talked for quite a while. How have you been?\"),
+(\"ada@ucl.ac.uk\",\"charles@ucl.ac.uk\",\"I wanted to ask you if you have seen the last paper I published?\"),
+(\"charles@ucl.ac.uk\",\"ada@ucl.ac.uk\",\"I don't think so. What is it about and where did you publish it?\"),
+(\"3\",\"charles@ucl.ac.uk\",\"Hello World\"),
+(\"4\",\"ada@ucl.ac.uk\",\"Invitation\")";
+
 $populatingTables = [
     $insertRolesTable,
     $insertRightsTable,
@@ -139,20 +155,21 @@ $populatingTables = [
     $insertCircleOfFriendsTable,
     $insertUserCircleRelationshipsTable,
     $insertCommentsTable,
-    $insertAnnotationsTable
+    $insertAnnotationsTable,
+    $insertMessages
+
 ];
 
-foreach ($populatingTables as $sqlquery){
-  echo nl2br("\n"); //Line break in HTML conversion
+foreach ($populatingTables as $sqlquery) {
+    echo nl2br("\n"); //Line break in HTML conversion
   echo "<b>Executing SQL statement: </b>";
-  echo $sqlquery; //Dispay statement being executed
+    echo $sqlquery; //Dispay statement being executed
   echo nl2br("\n");
-  $q= $pdo->prepare($sqlquery);
-  if ($q->execute() === TRUE) {
-      echo "<b><font color='green'>SQL statement performed correctly</b></font>";
-  } else {
-      echo "<b><font color='red'>Error executing statement: </b></font>" . $pdo->error;
-  }
+    $q= $pdo->prepare($sqlquery);
+    if ($q->execute() === true) {
+        echo "<b><font color='green'>SQL statement performed correctly</b></font>";
+    } else {
+        echo "<b><font color='red'>Error executing statement: </b></font>" . $pdo->error;
+    }
 }
   Database::disconnect();
-?>

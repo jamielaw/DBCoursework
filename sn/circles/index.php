@@ -1,14 +1,6 @@
 <!-- Displays friend circles, each friend circle is linked to a chat page,
 also has link to creating friend circles -->
 
-<!--
-TODO:
-Convert UI similar to blog style
-Implement message link
-Implement leaving and joining a circle (if leaving the circle and you are the last member, delete the circle?)
-Implement inviting friends to circle
--->
-
 <?php
 $title = "Friendship Circles";
 $description = "";
@@ -47,11 +39,20 @@ include("../inc/header.php");
         $numberOfCircles=0;
         foreach ($pdo->query($personalCirclesQuery) as $row) {
             $numberOfCircles+=1;
-            $countMembers = "SELECT COUNT(email) FROM MyDB.circleOfFriends INNER JOIN MyDB.userCircleRelationships ON MyDB.circleOfFriends.circleFriendsId=MyDB.userCircleRelationships.circleFriendsId WHERE MyDB.circleOfFriends.circleFriendsId=" . $row["circleFriendsId"];
+            $id = $row["circleFriendsId"];
+
+            //count members in circle
+            $countMembers = "SELECT COUNT(email) FROM MyDB.circleOfFriends INNER JOIN MyDB.userCircleRelationships ON MyDB.circleOfFriends.circleFriendsId=MyDB.userCircleRelationships.circleFriendsId WHERE MyDB.circleOfFriends.circleFriendsId=" . $id;
             //echo $countMembers;
             $y = $pdo->query($countMembers);
             $countResults = $y->fetch(PDO::FETCH_ASSOC);
-            $id = $row["circleFriendsId"];
+            
+            //get members names in circle
+            $memberList = array();
+            $getMembers = "SELECT firstName, lastName FROM MyDB.users INNER JOIN MyDB.userCircleRelationships ON MyDB.users.email=MyDB.userCircleRelationships.email WHERE MyDB.userCircleRelationships.circleFriendsId=" . $id;
+            foreach ($pdo->query($getMembers) as $eachMember){
+                $memberList[] = $eachMember["firstName"] . " " . $eachMember["lastName"];
+            }
             //echo "<tr>";
             echo "<div class=\"col-md-6 col-sm-12 col-lg-3 blog-section friend-post-container\">";
             echo "<div class=\"blog-title\" style=\"font-style:normal;\">";
@@ -99,17 +100,28 @@ include("../inc/header.php");
             //echo "<table style='width:100%'> <tr> <th><center> Circle of Friends Name </center></th> <th><center> Members </center></th> <th><center> Date created </center></th> <th><center> Action </center></th> ";
             foreach ($pdo->query($impersonalCirclesQuery) as $row) {
                 $numberOfCircles+=1;
-                $countMembers = "SELECT COUNT(email) FROM MyDB.circleOfFriends INNER JOIN MyDB.userCircleRelationships ON MyDB.circleOfFriends.circleFriendsId=MyDB.userCircleRelationships.circleFriendsId WHERE MyDB.circleOfFriends.circleFriendsId=" . $row["circleFriendsId"];
-                //echo $countMembers;
+                $id = $row["circleFriendsId"];
+                //count members in circle
+                $countMembers = "SELECT COUNT(email) FROM MyDB.circleOfFriends INNER JOIN MyDB.userCircleRelationships ON MyDB.circleOfFriends.circleFriendsId=MyDB.userCircleRelationships.circleFriendsId WHERE MyDB.circleOfFriends.circleFriendsId=" . $id;
                 $y = $pdo->query($countMembers);
                 $countResults = $y->fetch(PDO::FETCH_ASSOC);
-                $id = $row["circleFriendsId"];
+                //echo $countMembers;
+
+                //get members names in circle
+                $memberList = array();
+                $getMembers = "SELECT firstName, lastName FROM MyDB.users INNER JOIN MyDB.userCircleRelationships ON MyDB.users.email=MyDB.userCircleRelationships.email WHERE MyDB.userCircleRelationships.circleFriendsId=" . $id;
+                foreach ($pdo->query($getMembers) as $eachMember){
+                    $memberList[] = $eachMember["firstName"] . " " . $eachMember["lastName"];
+                }
+
+    
                 //echo "<tr>";
                 echo "<div class=\"col-md-6 col-sm-12 col-lg-3 blog-section friend-post-container\">";
                 echo "<div class=\"blog-title\" style=\"font-style:normal;\">";
                 echo "<b>" . $row["circleOfFriendsName"] . "</b>";
                 echo "<font size=1>";
                 echo "<br>";
+                //echo "<a href=\"#\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"test\" id=\"circle". $id . "\">Members: " . $countResults["COUNT(email)"] . "</p>";
                 echo "Members: " . $countResults["COUNT(email)"];
                 echo "<br>";
                 echo "</font>";
@@ -130,7 +142,16 @@ include("../inc/header.php");
       </div>
     </div>
   </div>
-
+ <script>
+// $(document).ready(function(){
+//     $('[data-toggle="tooltip"]').tooltip({
+//         position: {
+//             my: "left-25 bottom", 
+//             at: "center"
+//         }
+//     }); 
+// });
+</script>
 
 
     <!-- Footer  -->

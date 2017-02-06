@@ -42,6 +42,8 @@ function getTableConstraints($xml, $tableName)
             //echo 'TABLE_NAME: '.$table['name'].'<br/>', PHP_EOL;
             $foreign_key=null;
             $primary_key=null;
+            $nr_of_pk=0;
+            $nr_of_fk=0;
             foreach ($table->columns->column as $column) {//iterate constraints
               /*
                 echo 'name: '.$column['name'].'<br/>', PHP_EOL;
@@ -66,17 +68,24 @@ function getTableConstraints($xml, $tableName)
                     $sqlQuery=$sqlQuery.' AUTO_INCREMENT';
                 }
                 if ($column['column_key']=='PRI') {
-                    $primary_key='PRIMARY KEY('.$column['name'].')';
-                }
-                if ($foreign_key!=null&&$column['referenced_table_name']!=null) {
-                    $foreign_key=$foreign_key.', ';
+                    if ($nr_of_pk==0) {
+                        $primary_key='PRIMARY KEY('.$column['name'];
+                        $nr_of_pk=1;
+                    } else { //first PK
+                      $primary_key=$primary_key.','.$column['name'];
+                    }
                 }
                 if ($column['referenced_table_name']!=null) {
-                    $foreign_key='FOREIGN KEY('.$column['name'].') REFERENCES '.$databaseName.'.'.$column['referenced_table_name'].'('.$column['referenced_column_name'].')';
+                    if ($nr_of_fk==0) {
+                        $foreign_key='FOREIGN KEY('.$column['name'].') REFERENCES '.$databaseName.'.'.$column['referenced_table_name'].'('.$column['referenced_column_name'].')';
+                        $nr_of_fk=1;
+                    } else {
+                        $foreign_key=$foreign_key.','.'FOREIGN KEY('.$column['name'].') REFERENCES '.$databaseName.'.'.$column['referenced_table_name'].'('.$column['referenced_column_name'].')';
+                    }
                 }
             }
             if ($primary_key!=null) {
-                $sqlQuery=$sqlQuery.', '.$primary_key;
+                $sqlQuery=$sqlQuery.', '.$primary_key.')';
             }
             if ($foreign_key!=null) {
                 $sqlQuery=$sqlQuery.', '.$foreign_key;
@@ -86,6 +95,65 @@ function getTableConstraints($xml, $tableName)
     }
     return $sqlQuery;
 }
+
+function getRecords($xml, $tableName)
+{
+    $databaseName=getDBName($xml);
+    $sqlQuery=null;
+    $records_exist=0;
+    foreach ($xml->table as $table) { //iterate tables
+        if ($table['name']==$tableName) {
+            $columnNames=array();
+            $columnTypes=array();
+            foreach ($table->columns->column as $column) {
+                array_push($columnNames, $column['name']);
+                array_push($columnTypes, $column['column_type']);
+            }
+
+            $sqlQuery='INSERT INTO '.$databaseName.'.'.$table['name']. ' VALUES ';
+            $ok2=0; //to keep track when to add comma between records
+            foreach ($table->records->record as $record) {//iterate constraints
+                if ($ok2==1) {
+                    $sqlQuery=$sqlQuery.',';
+                }
+                $sqlQuery=$sqlQuery.'(';
+                $ok=0; //to keep track when to add comma between elements in a record
+                foreach ($columnNames as $key=>$column) {
+                    $records_exist=1; //to keep track if the table doesn't have any records
+                    $value=$record[0]->$column;
+                    $value=str_replace('"', '\"', $value); //escape any quatations marks
+                    $datatype=$columnTypes[$key];
+                    if ($value=='') {
+                        $value="null";
+                    }
+
+                    if ($ok==0) { //first element in record
+                        if (strpos($datatype, "varchar") !== false || $datatype=="timestamp" || $datatype=="longtext") { //if element is varchar/date/timestamp/text add brackets
+                            $sqlQuery=$sqlQuery.'"'.$value.'"';
+                        } else {
+                            $sqlQuery=$sqlQuery.''.$value;
+                        }
+                        $ok=1;
+                    } else { //not first element in record => add comma before
+                        if (strpos($datatype, "varchar") !== false || $datatype=="timestamp" || $datatype=="longtext") {
+                            $sqlQuery=$sqlQuery.',"'.$value.'"';
+                        } else {
+                            $sqlQuery=$sqlQuery.','.$value;
+                        }
+                    }
+                    $ok2=1;
+                }
+                $sqlQuery=$sqlQuery.')';
+            }
+            //echo $sqlQuery.'<br/><br/>';
+        }
+    }
+    if ($records_exist==0) {
+        $sqlQuery=0;
+    }
+    return $sqlQuery;
+}
+
 
 function createTable($xml, $tables_order)
 {
@@ -97,6 +165,19 @@ function createTable($xml, $tables_order)
     return $sqlQueryArray;
 }
 
+function createRecords($xml, $tables_order)
+{
+    $sqlQueryArray2=array();
+    foreach ($tables_order as $value) {
+        $result = getRecords($xml, $value);
+        if ($result!='0') {
+            array_push($sqlQueryArray2, $result);
+        }
+    }
+    return $sqlQueryArray2;
+}
+
+
 require '../database.php';
 $pdo = Database::connect_fordrop();
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -106,19 +187,26 @@ $storageEngine = "SET default_storage_engine = INNODB";
 $dropDatabase = "DROP DATABASE IF EXISTS $name";
 $createDatabase = "CREATE DATABASE IF NOT EXISTS $name";
 
-$creatingTables = [ //make sure you create in the right order! foreign keys must refer to a primary key in an existing table
+$creatingDatabase = [ //make sure you create in the right order! foreign keys must refer to a primary key in an existing table
     $storageEngine,
     $dropDatabase, //uncomment this if there is a wrong format in any table
     $createDatabase,
 ];
 
+//Creating Tables
 $sqlQueryArray=createTable($xml, $tables_order);
 foreach ($sqlQueryArray as $value) {
-    echo $value.'<br/><br/>';
-    array_push($creatingTables, $value);
+    array_push($creatingDatabase, $value);
 }
 
-foreach ($creatingTables as $sqlquery) {
+//Populating Tables
+$sqlQueryArray2=createRecords($xml, $tables_order);
+foreach ($sqlQueryArray2 as $value) {
+    echo $value.'<br/><br/>';
+    array_push($creatingDatabase, $value);
+}
+
+foreach ($creatingDatabase as $sqlquery) {
     echo nl2br("\n"); //Line break in HTML conversion
   echo "<b>Executing SQL statement: </b>";
     echo $sqlquery; //Dispay statement being executed

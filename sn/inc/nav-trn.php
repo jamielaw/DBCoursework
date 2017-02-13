@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
-@media (max-width: 1245px) {
+@media (max-width: 1260px) {
   .navbar-header {
       float: none;
   }

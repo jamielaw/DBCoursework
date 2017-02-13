@@ -9,52 +9,105 @@ if (file_exists($path)) {
     exit('Failed to open xml file.');
 }
 
-//Establising the order in which the tables need to be created in order to assure there are no conflicts when applying the column constraints
-$tables_order = array(
-    0 => "roles",
-    1 => "users",
-    2 => "rights",
-    3 => "friendships",
-    4 => "blogs",
-    5 => "posts",
-    6 => "privacysettings",
-    7 => "circleoffriends",
-    8 => "messages",
-    9 => "usercirclerelationships",
-    10 => "photocollection",
-    11 => "photos",
-    12 => "comments",
-    13 => "annotations",
-    14 => "accessrights",
-);
 
+// <---------------------------Create Array of Ordered Tables------------------------------------------------------>
+
+//Gets the Tables without any references -> this means these tables can be created first
+function checkTableHaveReferences($xml, $tableName)
+{
+    $ok=0;
+    foreach ($xml->table as $table) { //iterate tables
+      if (strcmp($table['name'], $tableName)==0) {
+          foreach ($table->columns->column as $column) {
+              if ($column['referenced_table_name']!=null) {
+                  $ok=1;
+              }
+          }
+      }
+    }
+    return $ok;
+}
+
+function checkTableExistsInOrder($xml, $tableName, $tables_order)
+{
+    $ok=0;
+    foreach ($tables_order as $table) {
+        if (strcmp($table, $tableName)==0) {
+            $ok=1;
+        }
+    }
+    return $ok;
+}
+
+// Checks that the Tables it references are already in the ordered table;
+// if so, it means this table can be created and so add it to the ordered array;
+// if not, move on
+function checkReferencedAreOrdered($xml, $tables_order, $tableName)
+{
+    $ok=0;
+    foreach ($xml->table as $table) { //iterate tables
+      if (strcmp($table['name'], $tableName)==0) { //find the table we are looking for
+        foreach ($table->columns->column as $column) {
+            if ($column['referenced_table_name']!=null) {
+                if (!checkTableExistsInOrder($xml, $column['referenced_table_name'], $tables_order)) { //check that it references any tables that are not in the ordered array
+                    $ok=1;
+                }
+            }
+        }
+      }
+    }
+    return $ok;
+}
+
+function getTableNames($xml)
+{
+    $tables = array();
+    foreach ($xml->table as $table) { //iterate tables
+      array_push($tables, $table['name']);
+    }
+    return $tables;
+}
+
+$x = 0; //keeps track of ordered tables
+$tables=getTableNames($xml);
+$tables_order = array();
+foreach ($tables as $table) {
+    if (checkTableHaveReferences($xml, $table)==0) {
+        array_push($tables_order, $table);
+        $x=$x+1;
+    } else {
+    }
+}
+
+while ($x<count($tables)) { //don't stop unless all the tables have been ordered
+  foreach ($tables as $table) {
+      if (!in_array($table, $tables_order)) { //skip those that are already ordered
+        if (checkReferencedAreOrdered($xml, $tables_order, $table)==0) {
+            array_push($tables_order, $table);
+            $x=$x+1;
+        }
+      }
+  }
+}
+
+// <------------------------------------------------------------------------------------------------------->
 function getDBName($xml)
 {
     return $xml['name'];
 }
 
+//Getting Table Constraints
 function getTableConstraints($xml, $tableName)
 {
     $databaseName=getDBName($xml);
     $sqlQuery=null;
     foreach ($xml->table as $table) { //iterate tables
         if ($table['name']==$tableName) {
-            //echo 'TABLE_NAME: '.$table['name'].'<br/>', PHP_EOL;
             $foreign_key=null;
             $primary_key=null;
             $nr_of_pk=0;
             $nr_of_fk=0;
             foreach ($table->columns->column as $column) {//iterate constraints
-              /*
-                echo 'name: '.$column['name'].'<br/>', PHP_EOL;
-                echo 'is_nullable: '.$column['is_nullable'].'<br/>', PHP_EOL;
-                echo 'column_key: '.$column['column_key'].'<br/>', PHP_EOL;
-                echo 'column_type: '.$column['column_type'].'<br/>', PHP_EOL;
-                echo 'column_key: '.$column['name'].'<br/>', PHP_EOL;
-                echo 'extra: '.$column['extra'].'<br/>', PHP_EOL;
-                echo 'referenced_table_name: '.$column['referenced_table_name'].'<br/>', PHP_EOL;
-                echo 'referenced_column_name: '.$column['referenced_column_name'].'<br/>', PHP_EOL;
-                */
                 if ($sqlQuery!=null) {
                     $sqlQuery=$sqlQuery.', ';
                 } else {
@@ -96,6 +149,7 @@ function getTableConstraints($xml, $tableName)
     return $sqlQuery;
 }
 
+//Get Records
 function getRecords($xml, $tableName)
 {
     $databaseName=getDBName($xml);
@@ -154,7 +208,6 @@ function getRecords($xml, $tableName)
     return $sqlQuery;
 }
 
-
 function createTable($xml, $tables_order)
 {
     $sqlQueryArray=array();
@@ -202,7 +255,7 @@ foreach ($sqlQueryArray as $value) {
 //Populating Tables
 $sqlQueryArray2=createRecords($xml, $tables_order);
 foreach ($sqlQueryArray2 as $value) {
-    echo $value.'<br/><br/>';
+    //echo $value.'<br/><br/>';
     array_push($creatingDatabase, $value);
 }
 

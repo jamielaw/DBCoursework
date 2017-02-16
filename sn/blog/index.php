@@ -95,4 +95,5 @@
   </div>
 
 </body>
+    <?php include '../inc/footer.php'; ?>
 <?php Database::disconnect(); ?>

@@ -237,9 +237,7 @@
   </div>
 </div>
 
-<footer class="container-fluid">
-  <p>Footer Text</p>
-</footer>
+    <?php include '../inc/footer.php'; ?>
 </body>
 </html>
 

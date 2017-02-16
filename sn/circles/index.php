@@ -51,15 +51,17 @@ also has link to creating friend circles -->
 
             //get members names in circle
             $memberList = array();
-            $getMembers = "SELECT firstName, lastName FROM MyDB.users INNER JOIN MyDB.userCircleRelationships ON MyDB.users.email=MyDB.userCircleRelationships.email WHERE MyDB.userCircleRelationships.circleFriendsId=" . $id;
+            $getMembers = "SELECT firstName, lastName, users.email FROM MyDB.users INNER JOIN MyDB.userCircleRelationships ON MyDB.users.email=MyDB.userCircleRelationships.email WHERE MyDB.userCircleRelationships.circleFriendsId=" . $id;
             $currentMember = 0;
             foreach ($pdo->query($getMembers) as $eachMember){
                 //we know how many members there are in the circle already with the variable $countResults
                 $currentMember++;
-                if($currentMember==$countResults["COUNT(email)"]){ //final member in member list
-                    $memberList[] = $eachMember["firstName"] . " " . $eachMember["lastName"];
-                }else{ //non-final member in member list
-                    $memberList[] = $eachMember["firstName"] . " " . $eachMember["lastName"] . ", ";
+                $memberList[] = $eachMember["firstName"] . " " . $eachMember["lastName"];
+                if($eachMember["email"]==$loggedInUser){
+                    $memberList[] .= " (You)";
+                }
+                if($currentMember!=$countResults["COUNT(email)"]){ //non-final member in member list, need to append comma
+                    $memberList[] .= ", ";
                 }
             }
             

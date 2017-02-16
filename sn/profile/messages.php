@@ -126,7 +126,7 @@
                           date_default_timezone_set('Europe/London');
                           $date1 = date('m/d/Y h:i:s a', time());
                           $date2 = getMessageDate($row['email'])['dateCreated'];
-                          echo '<li onclick="getMessagesUser(\''.$row['email'].'\',\''.$email.'\')" class="left clearfix"><span class="chat-img pull-left">
+                          echo '<li style="cursor:pointer;" onclick="getMessagesUser(\''.$row['email'].'\',\''.$email.'\')" class="left clearfix"><span class="chat-img pull-left">
                          <img width=50 src=' . $profileImage . ' alt="User Avatar" class="img-circle" />
                          </span>
                             <div class="chat-body clearfix">
@@ -140,11 +140,37 @@
                       $sql = 'SELECT c.circleOfFriendsName, c.circleFriendsId FROM circleoffriends c INNER JOIN usercirclerelationships u ON c.circleFriendsId = u.circleFriendsId WHERE u.email = ?;';
                       $q1 = $pdo->prepare($sql);
                       $q1->execute(array($email));
+
                       foreach ($q1->fetchAll() as $row) {
                           date_default_timezone_set('Europe/London');
+                          $id = $row['circleFriendsId'];
                           $date1 = date('m/d/Y h:i:s a', time());
-                          $date2 = getMessageDate($row['circleFriendsId'])['dateCreated'];
-                          echo '<li onclick="getMessagesCircle('.$row['circleFriendsId'].')" class="left clearfix"><span class="chat-img pull-left">
+                          $date2 = getMessageDate($id)['dateCreated'];
+
+                        //QUERIES FOR TOOLTIPS:  
+                        //count members in circle
+                        $countMembers = "SELECT COUNT(email) FROM MyDB.circleOfFriends INNER JOIN MyDB.userCircleRelationships ON MyDB.circleOfFriends.circleFriendsId=MyDB.userCircleRelationships.circleFriendsId WHERE MyDB.circleOfFriends.circleFriendsId=" . $id;
+                        //echo $countMembers;
+                        $y = $pdo->query($countMembers);
+                        $countResults = $y->fetch(PDO::FETCH_ASSOC);
+
+                        //get members names in circle
+                        $memberList = array();
+                        $getMembers = "SELECT firstName, lastName, users.email FROM MyDB.users INNER JOIN MyDB.userCircleRelationships ON MyDB.users.email=MyDB.userCircleRelationships.email WHERE MyDB.userCircleRelationships.circleFriendsId=" . $id;
+                        $currentMember = 0;
+                        foreach ($pdo->query($getMembers) as $eachMember){
+                            //we know how many members there are in the circle already with the variable $countResults
+                            $currentMember++;
+                            $memberList[] = $eachMember["firstName"] . " " . $eachMember["lastName"];
+                            if($eachMember["email"]==$email){
+                                $memberList[] .= " (You)";
+                            }
+                            if($currentMember!=$countResults["COUNT(email)"]){ //non-final member in member list, need to append comma
+                                $memberList[] .= ", ";
+                            }
+                        }
+                        //END QUERIES FOR TOOLTIPS
+                          echo '<li style="cursor:pointer;" data-toggle="tooltip" data-placement="right" title="' . implode($memberList) . '" onclick="getMessagesCircle('.$row['circleFriendsId'].')" class="left clearfix"><span class="chat-img pull-left">
                          <img src="http://placehold.it/50/55C1E7/fff&text=U" alt="User Avatar" class="img-circle" />
                          </span>
                             <div class="chat-body clearfix">
@@ -254,6 +280,10 @@ function getMessagesCircle(id, email){
     $('#messageList li').html(data.lists);
   }, "json");
 }
+
+$(document).ready(function () { //for tooltips
+  $('[data-toggle="tooltip"]').tooltip()
+})
 </script>
 
 <style type="text/css">

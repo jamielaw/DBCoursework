@@ -11,7 +11,7 @@
 <script src="/sn/js/min/bootstrap-hover-dropdown.min.js"></script>
 
 <!-- Twitter Bootstrap framework -->
-<script src="/sn/js/min/bootstrap.min.js"></script>
+<!-- <script src="/sn/js/min/bootstrap.min.js"></script> -->
 
 <!-- footer -->
 <footer class="footer">

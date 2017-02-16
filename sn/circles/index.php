@@ -11,12 +11,11 @@ also has link to creating friend circles -->
     ?>
 </head>
   <body>
-              <p id="varsity2k17">Varsity 2017 Tickets are now on Sale!! Click <a href="http://bit.do/UCLICE" target="_blank" data-toggle="tooltip" title="Tickets are only £5 for students!">here</a> to get your ticket!</p>
     <div class="container">
     <div class="blog-container">
       <div class="row">
         <font size="10"> Circles </font> <br>
-        <font size="3"> You can view your circles and your friends' circles here. </font>
+        <font size="3"> You can view your circles and your friends' circles here. Hover over the 'members' link on a circle to see the list of members. </font>
       </div>
 
       <div class="row">
@@ -49,20 +48,29 @@ also has link to creating friend circles -->
             //echo $countMembers;
             $y = $pdo->query($countMembers);
             $countResults = $y->fetch(PDO::FETCH_ASSOC);
-            
+
             //get members names in circle
             $memberList = array();
             $getMembers = "SELECT firstName, lastName FROM MyDB.users INNER JOIN MyDB.userCircleRelationships ON MyDB.users.email=MyDB.userCircleRelationships.email WHERE MyDB.userCircleRelationships.circleFriendsId=" . $id;
+            $currentMember = 0;
             foreach ($pdo->query($getMembers) as $eachMember){
-                $memberList[] = $eachMember["firstName"] . " " . $eachMember["lastName"];
+                //we know how many members there are in the circle already with the variable $countResults
+                $currentMember++;
+                if($currentMember==$countResults["COUNT(email)"]){ //final member in member list
+                    $memberList[] = $eachMember["firstName"] . " " . $eachMember["lastName"];
+                }else{ //non-final member in member list
+                    $memberList[] = $eachMember["firstName"] . " " . $eachMember["lastName"] . ", ";
+                }
             }
+            
             //echo "<tr>";
             echo "<div class=\"col-md-6 col-sm-12 col-lg-3 blog-section friend-post-container\">";
             echo "<div class=\"blog-title\" style=\"font-style:normal;\">";
             echo "<b>" . $row["circleOfFriendsName"] . "</b>";
             echo "<font size=1>";
             echo "<br>";
-            echo "Members: " . $countResults["COUNT(email)"];
+            echo "<a href=\"#\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"". implode($memberList) . "\" id=\"circle". $id . "\">Members: " . $countResults["COUNT(email)"]; //implode converts array to string
+            //echo "Members: " . $countResults["COUNT(email)"];
             echo "<br>";
             echo "</font>";
                     //<a title=\"Add friends\" href=\"/sn/circles/invite.php?circleFriendsId=" . $id . "\"<i class=\"fa fa-user-plus\"></i></a> &nbsp; removed this option as it wasn't in the specs
@@ -113,8 +121,15 @@ also has link to creating friend circles -->
                 //get members names in circle
                 $memberList = array();
                 $getMembers = "SELECT firstName, lastName FROM MyDB.users INNER JOIN MyDB.userCircleRelationships ON MyDB.users.email=MyDB.userCircleRelationships.email WHERE MyDB.userCircleRelationships.circleFriendsId=" . $id;
+                $currentMember = 0;
                 foreach ($pdo->query($getMembers) as $eachMember){
-                    $memberList[] = $eachMember["firstName"] . " " . $eachMember["lastName"];
+                    //we know how many members there are in the circle already with the variable $countResults
+                    $currentMember++;
+                    if($currentMember==$countResults["COUNT(email)"]){ //final member in member list
+                        $memberList[] = $eachMember["firstName"] . " " . $eachMember["lastName"];
+                    }else{ //non-final member in member list
+                        $memberList[] = $eachMember["firstName"] . " " . $eachMember["lastName"] . ", ";
+                    }
                 }
 
     
@@ -124,8 +139,8 @@ also has link to creating friend circles -->
                 echo "<b>" . $row["circleOfFriendsName"] . "</b>";
                 echo "<font size=1>";
                 echo "<br>";
-                //echo "<a href=\"#\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"test\" id=\"circle". $id . "\">Members: " . $countResults["COUNT(email)"] . "</p>";
-                echo "Members: " . $countResults["COUNT(email)"];
+                echo "<a href=\"#\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"". implode($memberList) . "\" id=\"circle". $id . "\">Members: " . $countResults["COUNT(email)"];
+                //echo "Members: " . $countResults["COUNT(email)"];
                 echo "<br>";
                 echo "</font>";
                 echo "<a title=\"Join circle\" href=\"/sn/circles/joincircle.php?circleFriendsId=" . $id . "\"<i class=\"fa fa-sign-in\"></i></a>";

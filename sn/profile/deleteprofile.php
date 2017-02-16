@@ -40,7 +40,7 @@
 		    		
 	    			<form class="form-horizontal" action="delete.php" method="post">
 	    			  <input type="hidden" name="email" value="<?php echo $email;?>"/>
-					  <p class="alert alert-error">Are you sure to delete  ?</p>
+					  <p class="alert alert-error">Are you sure you want to delete  ?</p>
 					  <div class="form-actions">
 						  <button type="submit" class="btn btn-danger">Yes</button>
 						  <a class="btn" href="index.php">No</a>
@@ -50,4 +50,5 @@
 				
     </div> <!-- /container -->
   </body>
+    <?php include '../inc/footer.php'; ?>
 </html>

@@ -27,6 +27,7 @@
     <button onclick="window.location='/sn/circles/index.php'">Go back</button>
     </div>
   </body>
+    <?php include '../inc/footer.php'; ?>
 </html>
 <script>
 function empty() {

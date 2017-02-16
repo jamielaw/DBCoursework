@@ -1,19 +1,21 @@
 <!-- Displays friend circles, each friend circle is linked to a chat page,
 also has link to creating friend circles -->
-
-<?php
-$title = "Friendship Circles";
-$description = "";
-include("../inc/header.php");
- ?>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Circles</title>
+    <?php 
+    include("../inc/header.php");
+    include("../inc/nav-trn.php"); 
+    ?>
+</head>
   <body>
-    <!--  Navigation-->
-    <?php include '../inc/nav-trn.php'; ?>
     <div class="container">
     <div class="blog-container">
       <div class="row">
         <font size="10"> Circles </font> <br>
-        <font size="3"> You can view your circles and your friends' circles here. </font>
+        <font size="3"> You can view your circles and your friends' circles here. Hover over the 'members' link on a circle to see the list of members. </font>
       </div>
 
       <div class="row">
@@ -46,20 +48,29 @@ include("../inc/header.php");
             //echo $countMembers;
             $y = $pdo->query($countMembers);
             $countResults = $y->fetch(PDO::FETCH_ASSOC);
-            
+
             //get members names in circle
             $memberList = array();
             $getMembers = "SELECT firstName, lastName FROM MyDB.users INNER JOIN MyDB.userCircleRelationships ON MyDB.users.email=MyDB.userCircleRelationships.email WHERE MyDB.userCircleRelationships.circleFriendsId=" . $id;
+            $currentMember = 0;
             foreach ($pdo->query($getMembers) as $eachMember){
-                $memberList[] = $eachMember["firstName"] . " " . $eachMember["lastName"];
+                //we know how many members there are in the circle already with the variable $countResults
+                $currentMember++;
+                if($currentMember==$countResults["COUNT(email)"]){ //final member in member list
+                    $memberList[] = $eachMember["firstName"] . " " . $eachMember["lastName"];
+                }else{ //non-final member in member list
+                    $memberList[] = $eachMember["firstName"] . " " . $eachMember["lastName"] . ", ";
+                }
             }
+            
             //echo "<tr>";
             echo "<div class=\"col-md-6 col-sm-12 col-lg-3 blog-section friend-post-container\">";
             echo "<div class=\"blog-title\" style=\"font-style:normal;\">";
             echo "<b>" . $row["circleOfFriendsName"] . "</b>";
             echo "<font size=1>";
             echo "<br>";
-            echo "Members: " . $countResults["COUNT(email)"];
+            echo "<a href=\"#\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"". implode($memberList) . "\" id=\"circle". $id . "\">Members: " . $countResults["COUNT(email)"]; //implode converts array to string
+            //echo "Members: " . $countResults["COUNT(email)"];
             echo "<br>";
             echo "</font>";
                     //<a title=\"Add friends\" href=\"/sn/circles/invite.php?circleFriendsId=" . $id . "\"<i class=\"fa fa-user-plus\"></i></a> &nbsp; removed this option as it wasn't in the specs
@@ -110,8 +121,15 @@ include("../inc/header.php");
                 //get members names in circle
                 $memberList = array();
                 $getMembers = "SELECT firstName, lastName FROM MyDB.users INNER JOIN MyDB.userCircleRelationships ON MyDB.users.email=MyDB.userCircleRelationships.email WHERE MyDB.userCircleRelationships.circleFriendsId=" . $id;
+                $currentMember = 0;
                 foreach ($pdo->query($getMembers) as $eachMember){
-                    $memberList[] = $eachMember["firstName"] . " " . $eachMember["lastName"];
+                    //we know how many members there are in the circle already with the variable $countResults
+                    $currentMember++;
+                    if($currentMember==$countResults["COUNT(email)"]){ //final member in member list
+                        $memberList[] = $eachMember["firstName"] . " " . $eachMember["lastName"];
+                    }else{ //non-final member in member list
+                        $memberList[] = $eachMember["firstName"] . " " . $eachMember["lastName"] . ", ";
+                    }
                 }
 
     
@@ -121,8 +139,8 @@ include("../inc/header.php");
                 echo "<b>" . $row["circleOfFriendsName"] . "</b>";
                 echo "<font size=1>";
                 echo "<br>";
-                //echo "<a href=\"#\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"test\" id=\"circle". $id . "\">Members: " . $countResults["COUNT(email)"] . "</p>";
-                echo "Members: " . $countResults["COUNT(email)"];
+                echo "<a href=\"#\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"". implode($memberList) . "\" id=\"circle". $id . "\">Members: " . $countResults["COUNT(email)"];
+                //echo "Members: " . $countResults["COUNT(email)"];
                 echo "<br>";
                 echo "</font>";
                 echo "<a title=\"Join circle\" href=\"/sn/circles/joincircle.php?circleFriendsId=" . $id . "\"<i class=\"fa fa-sign-in\"></i></a>";
@@ -142,17 +160,13 @@ include("../inc/header.php");
       </div>
     </div>
   </div>
- <script>
-// $(document).ready(function(){
-//     $('[data-toggle="tooltip"]').tooltip({
-//         position: {
-//             my: "left-25 bottom", 
-//             at: "center"
-//         }
-//     }); 
-// });
-</script>
-
+</body>
+</html>
 
     <!-- Footer  -->
     <?php include '../inc/footer.php'; ?>
+<script>
+$(document).ready(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
+</script>

@@ -26,7 +26,7 @@
             //examples that don't work: "ad lovelace", "da lovelace", "ovelace"
 
             //get number of search results
-            $countQuery = "SELECT COUNT(email) FROM MyDB.users WHERE firstName LIKE '" . $name .  "%' OR lastName LIKE '" . $name ."%' OR concat_ws(' ', firstName, lastName) LIKE '" . $name . "%'"; 
+            $countQuery = "SELECT COUNT(email) FROM MyDB.users WHERE ((firstName LIKE '" . $name .  "%' OR lastName LIKE '" . $name ."%' OR concat_ws(' ', firstName, lastName) LIKE '" . $name . "%') AND (email IN (SELECT emailTo FROM MyDB.friendships WHERE (emailFrom='" . $loggedInUser . "' AND status='accepted')) OR email IN (SELECT emailFrom FROM MyDB.friendships WHERE ( emailTo='". $loggedInUser . "' AND status='accepted'))))"; 
             $y = $pdo->query($countQuery);
             $countResults = $y->fetch(PDO::FETCH_ASSOC);
             $count = $countResults["COUNT(email)"]; //extract the integer value from results
@@ -36,7 +36,10 @@
               echo "<h1>" . $countResults["COUNT(email)"] . " results found for first/last name matching with: <i>" . $name . "</i></h1>";
             }
 
-            $searchQuery="SELECT email, firstName, lastName, profileImage FROM MyDB.users WHERE ((firstName LIKE '" . $name .  "%' OR lastName LIKE '" . $name ."%' OR concat_ws(' ', firstName, lastName) LIKE '" . $name . "%'))"; //get search results
+            $searchQuery="SELECT email, firstName, lastName, profileImage FROM MyDB.users WHERE ((firstName LIKE '" . $name .  "%' OR lastName LIKE '" . $name ."%' OR concat_ws(' ', firstName, lastName) LIKE '" . $name . "%') AND (email IN (SELECT emailTo FROM MyDB.friendships WHERE (emailFrom='" . $loggedInUser . "' AND status='accepted')) OR email IN (SELECT emailFrom FROM MyDB.friendships WHERE ( emailTo='". $loggedInUser . "' AND status='accepted'))))"; 
+
+            //echo $searchQuery;
+            //query works by getting a matching query, then AND-ing it with a friend of logged in user
 
             if($count>0){ //only display table if 1 or more results
               echo "<table style='width:100%'> <tr> <th> Email </th> <th> First name </th> <th> Last Name </th> <th> Image </th> <th> Go to profile </th>";

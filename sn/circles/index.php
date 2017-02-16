@@ -1,14 +1,17 @@
 <!-- Displays friend circles, each friend circle is linked to a chat page,
 also has link to creating friend circles -->
-
-<?php
-$title = "Friendship Circles";
-$description = "";
-include("../inc/header.php");
- ?>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Circles</title>
+    <?php 
+    include("../inc/header.php");
+    include("../inc/nav-trn.php"); 
+    ?>
+</head>
   <body>
-    <!--  Navigation-->
-    <?php include '../inc/nav-trn.php'; ?>
+              <p id="varsity2k17">Varsity 2017 Tickets are now on Sale!! Click <a href="http://bit.do/UCLICE" target="_blank" data-toggle="tooltip" title="Tickets are only £5 for students!">here</a> to get your ticket!</p>
     <div class="container">
     <div class="blog-container">
       <div class="row">
@@ -142,17 +145,13 @@ include("../inc/header.php");
       </div>
     </div>
   </div>
- <script>
-// $(document).ready(function(){
-//     $('[data-toggle="tooltip"]').tooltip({
-//         position: {
-//             my: "left-25 bottom", 
-//             at: "center"
-//         }
-//     }); 
-// });
-</script>
-
+</body>
+</html>
 
     <!-- Footer  -->
     <?php include '../inc/footer.php'; ?>
+<script>
+$(document).ready(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
+</script>

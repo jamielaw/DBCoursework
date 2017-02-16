@@ -14,20 +14,34 @@
       <?php 
       //require("../database.php");
       $name=htmlspecialchars($_GET['submit']);
-      echo "<h1>Search results for first/last name matching with: ". $name ."</h1>";
-       if(isset($_GET['submit'])){ 
+      //echo "<h1>Search results for first/last name matching with: ". $name ."</h1>";
+       if(isset($name)){ 
           if(preg_match("/^[  a-zA-Z]+/", $_GET['submit'])){ //check search string isn't empty
             //connect  to the database 
             $pdo = Database::connect();
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             //-query  the database table 
-            //currently searches to see if the first or last name contains the search string at any location
-            $sql="SELECT email, firstName, lastName, profileImage FROM MyDB.users WHERE firstName LIKE '" . $name .  "%' OR lastName LIKE '" . $name ."%' OR concat_ws(' ', firstName, lastName) LIKE '" . $name . "%'"; 
+            //currently searches and matches IF it correlates correctly with a (possibly ENDING unfinished, has to start with the correct character) first or last name, see examples below
+            //examples that work: "ada", "ada l", "lovelace", "love" would all return ada lovelace
+            //examples don't work: "ad lovelace", "da lovelace", "ovelace"
+
+            //get number of search results
+            $countQuery = "SELECT COUNT(email) FROM MyDB.users WHERE firstName LIKE '" . $name .  "%' OR lastName LIKE '" . $name ."%' OR concat_ws(' ', firstName, lastName) LIKE '" . $name . "%'"; 
+            $y = $pdo->query($countQuery);
+            $countResults = $y->fetch(PDO::FETCH_ASSOC);
+            $count = $countResults["COUNT(email)"]; //extract the integer value from results
+            if($count==1){ //extra points for being finickity
+              echo "<h1>" . $countResults["COUNT(email)"] . " result found for first/last name matching with: <i>" . $name . "</i></h1>";
+            }else{
+              echo "<h1>" . $countResults["COUNT(email)"] . " results found for first/last name matching with: <i>" . $name . "</i></h1>";
+            }
+
+            $searchQuery="SELECT email, firstName, lastName, profileImage FROM MyDB.users WHERE firstName LIKE '" . $name .  "%' OR lastName LIKE '" . $name ."%' OR concat_ws(' ', firstName, lastName) LIKE '" . $name . "%'"; //get search results
             //echo $sql;
 
             echo "<table style='width:100%'> <tr> <th> Email </th> <th> First name </th> <th> Last Name </th> <th> Image </th> <th> Go to profile </th>";
             //- loop through result set 
-            foreach($pdo->query($sql) as $row){
+            foreach($pdo->query($searchQuery) as $row){
                 //-display the result of the array 
                 echo "<tr>"; 
                 echo "<td>" . $row["email"] . "</td><td> " . $row["firstName"] . "</td><td>" . $row["lastName"]  . "</td><td> <img style='height:100px;width=100px;' src='" . $row["profileImage"] . "'</td>" . "<td><a href=\"../profile/readprofile.php?email=" . $row["email"] . "\">View profile</a></td>";
@@ -37,7 +51,7 @@
             echo "</table>";
           } 
           else{ 
-            echo  "<p>Please enter a search query</p>"; 
+            echo  "<p>Please enter a valid search query</p>"; //this seems to be triggered when user inputs a query like <b>test, no big deal though because a query like that is invalid as it is
           }  
         }
       Database::disconnect(); 

@@ -1,1 +1,75 @@
 /*Custom CSS goes here*/
+
+/*Used for blog part of the site*/
+
+.blog-container{
+  text-align: center;
+
+}
+
+.blog-container p{
+  margin-top: 5px;
+  font-size: 15px;
+}
+
+.blog-section{
+  background-color: rgba(221,221,221,0.41);
+  border-radius: 5px;
+  border-style: solid;
+  border-color: rgba(221,221,221,0.41);
+  max-width: 100%;
+  width: 100%;
+  display: inline-block;
+  margin-top: 10px;
+  padding: 10px;
+}
+
+.blog-search-bar{
+  width:100%;
+}
+
+.blog-section .personal-post-container{
+  background-color: #fff;
+  border-radius: 5px;
+  border-style: solid;
+  border-color: #b40000;
+  display: inline-block;
+  padding: 10px;
+  width: 160px;
+  margin: 10px;
+}
+
+.blog-section .friend-post-container{
+  background-color: #fff;
+  border-radius: 5px;
+  border-style: solid;
+  border-color: #0093b4;
+  padding: 10px;
+  width: 160px;
+  margin: 10px;
+}
+
+.blog-section .create-blog{
+  width: 300px;
+  background-color: red;
+}
+
+.author-box{
+
+}
+.author-picture{
+  width: 50px;
+  height: 50px;
+  border-radius: 50px;
+}
+
+.blog-title{
+  font-size: large;
+  font-style: italic;
+  color: #002b7a;
+  margin-top: 5px;
+}
+
+.table-btn{
+  margin: 15px;
+}

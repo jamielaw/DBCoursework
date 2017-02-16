@@ -1,13 +1,16 @@
 <?php
+  // DB Auth Script
+  require '../../database.php';
 
+  // Given "string", returns "'string'" - useful for SQL queries
   function wrapArgument($arg){
     return "'" . $arg . "'";
   }
-
+  // Removes spaces
   function removeSpaces($arg){
     return str_replace(' ', '', $arg);
   }
-
+  // All functions should be moved to utils.php at some point
   function redirect($url) {
     ob_start();
     header('Location: '.$url);
@@ -15,18 +18,9 @@
     die();
   }
 
-  $servername = "localhost:3306";
-  $username = "root";
-  $password = "root";
 
-
-  $conn = new mysqli($servername, $username, $password);
-
-  if ($conn->connect_error) {
-      //die("Connection failed: " . $conn->connect_error);
-  }else{
-      //echo "Connection established";
-  }
+  $pdo = Database::connect();
+  $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 
   $sql = "UPDATE MyDB.users SET
@@ -37,12 +31,16 @@
   . "profileDescription =" . wrapArgument($_POST['profileDescription'])
   . " WHERE email='" . removeSpaces($_POST['argument1']) . "'";
 
-  //echo $sql;
 
-  if($conn->query($sql) == TRUE){
-    $conn->close();
-    redirect('http://localhost:8888/sn/admin/');
-  }
+  $pdo->exec($sql);
+
+  // Need to handle error catching etc
+
+  Database::disconnect();
+
+  // Direct back to sn/admin
+  redirect('http://localhost:8888/sn/admin/');
+
 
 
 

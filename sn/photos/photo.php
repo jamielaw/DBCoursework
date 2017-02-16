@@ -43,4 +43,5 @@ other annotations on photos (n.b images, videos?), browseable by other friends.-
       </div>
     </div>
   </body>
+    <?php include '../inc/footer.php'; ?>
 </html>

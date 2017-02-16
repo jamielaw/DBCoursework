@@ -1,23 +1,32 @@
+<?php
+
+    $title = "Bookface Social Network";
+    $description = "A far superior social network";
+    include("../inc/header.php");
+    include("../inc/nav-trn.php");
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-
-    <script src="../js/min/bootstrap.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 </head>
-<!--  Navigation-->
-<?php include '../inc/nav-trn.php'; ?>
+
+<style type="text/css">
+	.padding {
+		padding-left: 50px;
+		padding-right: 50px;
+	}
+</style>
+
 <body>
-    <div class="container">
+    <div class="container-fullwidth padding">
     		<div class="row" id="friends">
     			<p><img src="../../images/profile/charles@ucl.ac.uk.jpg" class="rounded float-left" height="200">
     			<font size="5"> Charles Babbage </font> </p>
     		</div>
 
-    			<br><br>
+    		<br><br>
     		<ul class="nav nav-tabs">
     			<li class="active">
 		        	<a  href="#1" data-toggle="tab">Profile</a>
@@ -47,8 +56,8 @@
 		                	</tr>
 		              	</thead>
 		              	<tbody>
-		              		<?php 
-					   			include '..\database.php';
+		             <?php
+					   			//include '..\database.php';
 					   			$pdo = Database::connect();
 					   			// !!! HARDCODED STUFF -  TO BE CHANGED AFTER LOGIN IS IMPLEMENTED
 					   			$sql = 'SELECT DISTINCT email, firstName, lastName FROM users JOIN friendships ON users.email = friendships.emailFrom OR users.email=friendships.emailTo WHERE (friendships.emailFrom=\'charles@ucl.ac.uk\' OR friendships.emailTo=\'charles@ucl.ac.uk\') AND users.email!=\'charles@ucl.ac.uk\' AND status=\'accepted\';';
@@ -74,7 +83,6 @@
 		          <h3>Messages</h3>
 				</div>
 				<div class="tab-pane" id="4">
-		          <h3>Photo Collections</h3>
 		          <table class="table table-striped table-bordered">
 		         	<thead>
 		            	<tr>
@@ -83,9 +91,9 @@
 		                </tr>
 		            </thead>
 			        <tbody>
-			          	<?php 
+			          	<?php
 			          		// !!! HARDCODED STUFF - TO BE CHANGED AFTER LOGIN IS IMPLEMENTED
-						   	$sql = 'SELECT * FROM photocollection WHERE createdBy = "charles@ucl.ac.uk" ORDER BY dateCreated'; 
+						   	$sql = 'SELECT * FROM photocollection WHERE createdBy = "charles@ucl.ac.uk" ORDER BY dateCreated';
 		 				   	foreach ($pdo->query($sql) as $row) {
 								echo '<td>'. $row['title'] . '</td>';
 								echo '<td width=350>';
@@ -101,9 +109,9 @@
 						?>
 					</tbody>
 				   </table>
-				
+
 				    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#collection_dialog">Create Collection</button>
-					
+
 
 					<!-- modal to create new collection -->
 					<!-- the div that represents the modal dialog -->
@@ -122,7 +130,7 @@
 					                </div>
 					                <div class="modal-footer">
 					                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-					                    <button type="button" id="submitForm" class="btn btn-success	">Create</button>
+					                    <button type="button" id="submitForm" class="btn btn-success">Create</button>
 					                </div>
 					            </div>
 					        </div>
@@ -172,16 +180,11 @@
 					            </div>
 					        </div>
 					    </div>
-
-		          <form action="uploadphoto.php" method="post" enctype="multipart/form-data">
-			    	Select image to upload:
-			    	<input type="file" name="fileToUpload" id="fileToUpload">
-			    	<input type="submit" value="Upload Image" name="submit">
-				  </form>
 				</div>
 		  	</div>
     </div> <!-- /container -->
   </body>
+    <?php include '../inc/footer.php'; ?>
 </html>
 
 
@@ -209,7 +212,7 @@ $(document).ready(function () {
         });
         e.preventDefault();
     });
-     
+
     $("#submitForm").on('click', function() {
         $("#collection_form").submit();
     });
@@ -248,7 +251,7 @@ $(document).on("click", ".open-update_dialog", function () {
         });
         e.preventDefault();
     });
-     
+
     $("#submitForm2").on('click', function() {
         $("#update_form").submit();
     });
@@ -282,7 +285,7 @@ $(document).on("click", ".open-delete_dialog", function () {
         });
         e.preventDefault();
     });
-     
+
     $("#submitForm3").on('click', function() {
         $("#delete_form").submit();
     });

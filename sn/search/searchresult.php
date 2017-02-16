@@ -13,10 +13,10 @@
       <!--php for search-->
       <?php 
       //require("../database.php");
-      echo "<h1>Search results for first/last name matching with: ". $_GET['submit'] ."</h1>";
+      $name=htmlspecialchars($_GET['submit']);
+      echo "<h1>Search results for first/last name matching with: ". $name ."</h1>";
        if(isset($_GET['submit'])){ 
           if(preg_match("/^[  a-zA-Z]+/", $_GET['submit'])){ //check search string isn't empty
-            $name=$_GET['submit']; 
             //connect  to the database 
             $pdo = Database::connect();
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -37,7 +37,7 @@
             echo "</table>";
           } 
           else{ 
-            echo  "<p>Please enter a search query</p>" .$_GET['submit']; 
+            echo  "<p>Please enter a search query</p>"; 
           }  
         }
       Database::disconnect(); 

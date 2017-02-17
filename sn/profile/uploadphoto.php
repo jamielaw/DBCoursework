@@ -2,7 +2,9 @@
 require '../database.php';
 
 $photoCollectionId = null;
-if ( !empty($_GET['photoCollectionId'])) {
+$loggedInUser="charles@ucl.ac.uk";
+
+if (!empty($_GET['photoCollectionId'])) {
     $photoCollectionId = $_REQUEST['photoCollectionId'];
 }
 
@@ -11,11 +13,11 @@ $path_parts = pathinfo($_FILES["fileToUpload"]["name"]);
 $name = $path_parts['filename'].'_'.time().'.'.$path_parts['extension'];
 $target_file =  $target_dir . $name;
 $uploadOk = 1;
-$imageFileType = pathinfo($target_file,PATHINFO_EXTENSION);
+$imageFileType = pathinfo($target_file, PATHINFO_EXTENSION);
 // Check if image file is a actual image or fake image
-if(isset($_POST["submit"])) {
+if (isset($_POST["submit"])) {
     $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
-    if($check !== false) {
+    if ($check !== false) {
         echo "File is an image - " . $check["mime"] . ".";
         $uploadOk = 1;
     } else {
@@ -34,8 +36,8 @@ if ($_FILES["fileToUpload"]["size"] > 500000) {
     $uploadOk = 0;
 }
 // Allow certain file formats
-if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
-&& $imageFileType != "gif" ) {
+if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
+&& $imageFileType != "gif") {
     echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
     $uploadOk = 0;
 }
@@ -45,22 +47,21 @@ if ($uploadOk == 0) {
 // if everything is ok, try to upload file
 } else {
     if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
-        echo "The file ". basename( $_FILES["fileToUpload"]["name"]). " has been uploaded at ". basename($target_dir) . "  ";
-        savePhoto($photoCollectionId,$name);
+        echo "The file ". basename($_FILES["fileToUpload"]["name"]). " has been uploaded at ". basename($target_dir) . "  ";
+        savePhoto($photoCollectionId, $name);
+        $URL="readphotocollection.php?createdBy=".$loggedInUser."&photoCollectionId=".$photoCollectionId;
+        header("Location: " . $URL);
     } else {
         echo "Sorry, there was an error uploading your file.";
     }
 }
 
-function savePhoto($photoCollectionId,$name) {
-
-  $imageReference = '../../images/photoCollection/' . $name;
-  $pdo = Database::connect();
-  $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-  $sql = "INSERT INTO photos (photoCollectionId,imageReference) VALUES (?,?)";
-  $q = $pdo->prepare($sql);
-  $q->execute(array($photoCollectionId, $imageReference));
-
+function savePhoto($photoCollectionId, $name)
+{
+    $imageReference = '../../images/photoCollection/' . $name;
+    $pdo = Database::connect();
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $sql = "INSERT INTO photos (photoCollectionId,imageReference) VALUES (?,?)";
+    $q = $pdo->prepare($sql);
+    $q->execute(array($photoCollectionId, $imageReference));
 }
-
-?>

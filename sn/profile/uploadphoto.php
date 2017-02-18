@@ -1,14 +1,17 @@
 <?php
 require '../database.php';
 
-$photoCollectionId = null;
+$id = null;
 $loggedInUser="charles@ucl.ac.uk";
 
-if (!empty($_GET['photoCollectionId'])) {
-    $photoCollectionId = $_REQUEST['photoCollectionId'];
+if (!empty($_GET['id'])) {
+    $id = $_REQUEST['id'];
 }
 
-$target_dir = $_SERVER['DOCUMENT_ROOT'] . '/images/photoCollection/';
+if(is_numeric($id))
+    $target_dir = $_SERVER['DOCUMENT_ROOT'] . '/images/photoCollection/';
+else
+    $target_dir = $_SERVER['DOCUMENT_ROOT'] . '/images/profile/';
 $path_parts = pathinfo($_FILES["fileToUpload"]["name"]);
 $name = $path_parts['filename'].'_'.time().'.'.$path_parts['extension'];
 $target_file =  $target_dir . $name;
@@ -48,20 +51,43 @@ if ($uploadOk == 0) {
 } else {
     if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
         echo "The file ". basename($_FILES["fileToUpload"]["name"]). " has been uploaded at ". basename($target_dir) . "  ";
-        savePhoto($photoCollectionId, $name);
-        $URL="readphotocollection.php?createdBy=".$loggedInUser."&photoCollectionId=".$photoCollectionId;
-        header("Location: " . $URL);
+        if(is_numeric($id))
+        {
+            savePhoto($id, $name);
+            $URL="readphotocollection.php?createdBy=".$loggedInUser."&photoCollectionId=".$id;
+            header("Location: " . $URL);
+        }
+        else
+        {
+            updateProfile($id, $name);
+            $URL="http://localhost/sn/profile/readprofile.php?email=".$loggedInUser;
+            header("Location: " . $URL);    
+        }
     } else {
         echo "Sorry, there was an error uploading your file.";
     }
 }
 
-function savePhoto($photoCollectionId, $name)
+function savePhoto($id, $name)
 {
     $imageReference = '../../images/photoCollection/' . $name;
+
+    echo $id;
     $pdo = Database::connect();
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $sql = "INSERT INTO photos (photoCollectionId,imageReference) VALUES (?,?)";
     $q = $pdo->prepare($sql);
-    $q->execute(array($photoCollectionId, $imageReference));
+    $q->execute(array($id, $imageReference));
+}
+
+function updateProfile($id, $name)
+{
+    $imageReference = '../../images/profile/' . $name;
+
+    echo $id;
+    $pdo = Database::connect();
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $sql = "UPDATE users SET profileImage=? WHERE email=?";
+    $q = $pdo->prepare($sql);
+    $q->execute(array($imageReference,$id));
 }

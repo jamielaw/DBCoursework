@@ -54,7 +54,7 @@
 		</div>
 
  <div>
-	<form class="col-md-2 col-md-offset-5" action="uploadphoto.php?photoCollectionId=<?php echo $photoCollectionId; ?>" method="post" enctype="multipart/form-data">
+	<form class="col-md-2 col-md-offset-5" action="uploadphoto.php?id=<?php echo $photoCollectionId; ?>" method="post" enctype="multipart/form-data">
 		<p class=""> Select image to upload: </p>
 		<input class="" type="file" name="fileToUpload" id="fileToUpload"> <br>
 		<input class= "btn btn-primary" type="submit" value="Upload Image" name="submit">

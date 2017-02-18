@@ -47,6 +47,13 @@
           return $data;
     }
 
+    function checkDescription($description)
+    {
+        if(strcmp($description,'null')==0)
+            $description = "This person has not written anything about themselves.";
+        return $description;
+    }
+
 
 ?>
 
@@ -101,8 +108,17 @@
 					<div class="row">
 						<div class="col-xs-12 col-sm-3 center">
 							<span class="profile-picture">
-								<img class="editable img-responsive" alt=" Avatar" id="avatar2" width="300" src= <?php echo $data['profileImage'];?> >
+                            <a class="open-update_photo" width="300" data-toggle="modal" href="#update_photo" data-rel="colorbox">
+                                <img height="300" src=<?php echo $data['profileImage'];?>>
+                            </a>
+
+                            <div class="tools tools-bottom">
+                                <a class="open-update_photo" data-toggle="modal" href="#update_photo">
+                                    <i class="ace-icon fa fa-pencil"></i>
+                                </a>
+                            </div>
 							</span>
+
 
 							<div class="space space-4"></div>
 
@@ -150,7 +166,8 @@
 								</div>
 								<div class="widget-body">
 									<div class="widget-main">
-										<p> <?php echo $data['profileDescription'];?> </p>
+										<p> <?php echo checkDescription($data['profileDescription']);?> 
+                                        </p>
 									</div>
 								</div>
 							</div>
@@ -168,7 +185,7 @@
 
 						<?php
                             $pdo = Database::connect();
-                              $sql = 'SELECT DISTINCT email, firstName, lastName, profileImage FROM users JOIN friendships ON users.email = friendships.emailFrom OR users.email=friendships.emailTo WHERE (friendships.emailFrom= ? OR friendships.emailTo= ?) AND users.email!= ? AND status=\'accepted\';';
+                            $sql = 'SELECT DISTINCT email, firstName, lastName, profileImage FROM users JOIN friendships ON users.email = friendships.emailFrom OR users.email=friendships.emailTo WHERE (friendships.emailFrom= ? OR friendships.emailTo= ?) AND users.email!= ? AND status=\'accepted\';';
                             $q1 = $pdo->prepare($sql);
                             $q1->execute(array($email,$email,$email));
                             foreach ($q1->fetchAll() as $row) {
@@ -236,6 +253,31 @@
 				</div><!-- /#pictures -->
 			</div>
 		</div>
+
+        <!-- modal to edit profile picture -->
+        <div class="modal fade" id="update_photo" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Update Profile Picture</h4>
+                    </div>
+                    <form class="" action="uploadphoto.php?id=charles@ucl.ac.uk" method="post" enctype="multipart/form-data">
+                    <div class="modal-body">
+                        <p>Once a new picture is submitted, the old one will be removed.</p>
+                            <p class=""> Select image to upload: </p>
+                            <input class="" type="file" name="fileToUpload" id="fileToUpload"> <br>
+                    </div>
+                    <div class="modal-footer">
+                    <input class= "btn btn-primary" type="submit" value="Upload Image" name="submit">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- modal to create new collection -->
         <div class="modal fade" id="collection_dialog" role="dialog">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -269,7 +311,7 @@
                     <div class="modal-body">
                         <form id="update_form" action="updatephotocollection.php" method="POST">
                             Collection Title: <input type="text" name="albumName" id="albumName" placeholder="Edit Album Name"><br/><br/>
-                             Collection Description: <input type="text" name="albumDescription" id="albumDescription" placeholder="Edit Album Description"><br/>
+                            Collection Description: <input type="text" name="albumDescription" id="albumDescription" placeholder="Edit Album Description"><br/>
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -410,6 +452,19 @@ $(document).on("click", ".open-delete_dialog", function () {
     $("#submitForm3").on('click', function() {
         $("#delete_form").submit();
     });
+});
+
+// Update Profile Picture
+var profilePicture = null;
+
+$(document).on("click", ".open-update_photo", function () {
+     albumName = $(this).data('title');
+     $(".modal-body #albumName").val(albumName);
+     albumDescription = $(this).data('description');
+     $(".modal-body #albumDescription").val(albumDescription);
+     albumId = $(this).data('id');
+
+    
 });
 
 

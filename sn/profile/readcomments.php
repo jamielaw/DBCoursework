@@ -9,7 +9,6 @@ $loggedInUser = $_POST['loggedInUser'];
 $sql = "SELECT * FROM messages WHERE (emailTo = ? AND emailFrom = ?) or (emailFrom = ? AND emailTo = ?) ORDER BY dateCreated";
 $q = $pdo->prepare($sql);
 $q->execute(array($user,$loggedInUser,$user,$loggedInUser));
-$data['lists'] = '';
 
 function date_difference($date_1, $date_2)
 {
@@ -80,6 +79,8 @@ function getUserData($email)
 
     return $result;
 }
+
+$data['lists'] = '<p style="color:white; background-color:#337AB7;" class="text-center">Your messages with ' .getUserData($user)['firstName']. '</p>';
 
 foreach ($q as $row) {
     $firstName = getUserData($row['emailFrom'])['firstName'];

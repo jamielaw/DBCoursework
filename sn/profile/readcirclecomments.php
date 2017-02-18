@@ -81,6 +81,20 @@ function getUserData($email)
     return $result;
 }
 
+function getCircleName($id)
+{
+    $pdo = Database::connect();
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $sql = 'SELECT * FROM circleoffriends  WHERE circleFriendsId = ?';
+    $q = $pdo->prepare($sql);
+    $q->execute(array($id));
+    $result = $q->fetch(PDO::FETCH_ASSOC);
+
+    return $result;
+}
+
+$data['lists'] = '<p style="color:white; background-color:#337AB7;" class="text-center">Your messages with ' .getCircleName($id)['circleOfFriendsName']. '</p>';
+
 foreach ($q as $row) {
     $firstName = getUserData($row['emailFrom'])['firstName'];
     $lastName = getUserData($row['emailFrom'])['lastName'];

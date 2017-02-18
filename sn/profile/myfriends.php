@@ -114,7 +114,7 @@
               <img src='.$row['profileImage'].' alt="people" class="media-object img-circle">
             </div>
             <div class="media-body">
-              <h4 class="media-heading margin-v-5"><a href="#">'.$row['firstName'].' '.$row['lastName'].'</a></h4>
+              <h4 class="media-heading margin-v-5"><a href="readprofile.php?email='.$row['email'].'">'.$row['firstName'].' '.$row['lastName'].'</a></h4>
               <div class="profile-icons">
               <span><i class="fa fa-users"></i> ' . $nrFriends . '  </span>
               <span><i class="fa fa-photo"></i> ' . $nrPhotos. '</span>
@@ -147,7 +147,7 @@
   <div class="jumbotron list-content">
     <ul class="list-group">
       <li href="#" class="list-group-item title">
-        Requests sent from people!
+        Suggestions...
       </li>
       <?php
       //include '..\database.php';
@@ -190,7 +190,7 @@
               <img src='.$row['profileImage'].' alt="people" class="media-object img-circle">
             </div>
             <div class="media-body">
-              <h4 class="media-heading margin-v-5"><a href="#">'.$row['firstName'].' '.$row['lastName'].'</a></h4>
+              <h4 class="media-heading margin-v-5"><a href="readprofile.php?email='.$row['email'].'">'.$row['firstName'].' '.$row['lastName'].'</a></h4>
               <div class="profile-icons">'. $row['mutualFriends'] . ' mutal friends
 
             </div>
@@ -236,7 +236,7 @@
               <img src='.$row['profileImage'].' alt="people" class="media-object img-circle">
             </div>
             <div class="media-body">
-              <h4 class="media-heading margin-v-5"><a href="#">'.$row['firstName'].' '.$row['lastName'].'</a></h4>
+              <h4 class="media-heading margin-v-5"><a href="readprofile.php?email='.$row['email'].'">'.$row['firstName'].' '.$row['lastName'].'</a></h4>
               <div class="profile-icons">
               <span><i class="fa fa-users"></i> ' . $nrFriends . '  </span>
               <span><i class="fa fa-photo"></i> ' . $nrPhotos. '</span>

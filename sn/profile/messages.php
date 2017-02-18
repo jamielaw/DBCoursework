@@ -150,31 +150,13 @@
     }
 ?>
 
-<div class="paddingTop container">
-    <div class="row">
+<div class="container-fluid">
+    <div class="row content">
     <!-- Left Pannel -->
-    <div class="col-md-3">
+    <div class="col-sm-3 sidenav">
         <div class="panel panel-primary">
             <div class="panel-heading">
                 <span class="glyphicon glyphicon-user"></span> People
-                <div class="btn-group pull-right">
-                    <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
-                        <span class="glyphicon glyphicon-chevron-down"></span>
-                    </button>
-                        <ul class="dropdown-menu slidedown">
-                            <li><a href="http://www.jquery2dotnet.com"><span class="glyphicon glyphicon-refresh">
-                            </span>Refresh</a></li>
-                            <li><a href="http://www.jquery2dotnet.com"><span class="glyphicon glyphicon-ok-sign">
-                            </span>Available</a></li>
-                            <li><a href="http://www.jquery2dotnet.com"><span class="glyphicon glyphicon-remove">
-                            </span>Busy</a></li>
-                            <li><a href="http://www.jquery2dotnet.com"><span class="glyphicon glyphicon-time"></span>
-                                Away</a></li>
-                            <li class="divider"></li>
-                            <li><a href="http://www.jquery2dotnet.com"><span class="glyphicon glyphicon-off"></span>
-                                Sign Out</a></li>
-                        </ul>
-                    </div>
                 </div>
                 <div class="panel-body">
                     <ul id="left-panel" class="chat">
@@ -184,7 +166,7 @@
                           date_default_timezone_set('Europe/London');
                           $date1 = date('m/d/Y h:i:s a', time());
                           $date2 = getMessageDate($row['email'])['dateCreated'];
-                          echo '<li style="cursor:pointer;" onclick="getMessagesUser(\''.$row['email'].'\',\''.$email.'\')" class="left clearfix"><span class="chat-img pull-left">
+                          echo '<li style="cursor:pointer;" id="'.$email.'" onclick="getMessagesUser(\''.$row['email'].'\',\''.$email.'\')" class="left clearfix"><span class="chat-img pull-left">
                          <img width=50 src=' . $profileImage . ' alt="User Avatar" class="img-circle" />
                          </span>
                             <div class="chat-body clearfix">
@@ -252,39 +234,17 @@
                 </div>
                 <div class="panel-footer">
                     <div class="input-group">
-                        <input id="btn-input" type="text" class="form-control input-sm" placeholder="Search messages here..." />
-                        <span class="input-group-btn">
-                            <button class="btn btn-warning btn-sm" id="btn-chat">
-                                Search</button>
-                        </span>
+                    <p><br></p>
                     </div>
                 </div>
             </div>
     </div>
 
     <!--Right Pannel -->
-        <div class="col-md-8">
+        <div class="col-sm-9">
             <div class="panel panel-primary">
                 <div class="panel-heading">
                     <span class="glyphicon glyphicon-comment"></span> Chat
-                    <div class="btn-group pull-right">
-                        <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
-                            <span class="glyphicon glyphicon-chevron-down"></span>
-                        </button>
-                        <ul class="dropdown-menu slidedown">
-                            <li><a href="http://www.jquery2dotnet.com"><span class="glyphicon glyphicon-refresh">
-                            </span>Refresh</a></li>
-                            <li><a href="http://www.jquery2dotnet.com"><span class="glyphicon glyphicon-ok-sign">
-                            </span>Available</a></li>
-                            <li><a href="http://www.jquery2dotnet.com"><span class="glyphicon glyphicon-remove">
-                            </span>Busy</a></li>
-                            <li><a href="http://www.jquery2dotnet.com"><span class="glyphicon glyphicon-time"></span>
-                                Away</a></li>
-                            <li class="divider"></li>
-                            <li><a href="http://www.jquery2dotnet.com"><span class="glyphicon glyphicon-off"></span>
-                                Sign Out</a></li>
-                        </ul>
-                    </div>
                 </div>
                 <div class="panel-body">
                     <ul class="chat">
@@ -310,8 +270,11 @@
 <script>
 
 var clicked = null;
-var inWhich = null;
+var inWhich = null; 
 function sendMessage($email) {
+    $li.removeClass('active');
+    $(this).addClass('active');
+
     var loggedInUser = $email;
     var messageText = document.getElementById('myMessage').value;
     if (messageText == '' || clicked==null)
@@ -327,6 +290,7 @@ function sendMessage($email) {
 }
 
 function getMessagesUser(id, email){
+
   inWhich = 0;
   var postData =  $(this).serializeArray();
   var loggedInUser = email;
@@ -353,6 +317,13 @@ $(document).ready(function () { //for tooltips
 </script>
 
 <style type="text/css">
+.active {
+  background-color: green !important;
+}
+.padding
+{
+    padding-left: 10px;
+}
 .paddingTop
 {
 	padding-top: 30px;

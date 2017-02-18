@@ -147,7 +147,7 @@
   <div class="jumbotron list-content">
     <ul class="list-group">
       <li href="#" class="list-group-item title">
-        Requests sent from people!
+        Suggestions...
       </li>
       <?php
       //include '..\database.php';

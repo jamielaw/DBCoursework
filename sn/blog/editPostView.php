@@ -29,6 +29,8 @@
       <div class="row">
         <font size="5">Update Blog Post</font>
       </div>
+      <button id="previewBtn" > Preview </button>
+      <button id="editBtn" style=""> Edit </button>
 
       <form class="form-horizontal" method="POST" action="editPost.php">
         <input type="hidden" name="argument1" value="<?php echo $argument1;?>">
@@ -39,19 +41,45 @@
           </div>
         </div>
         <div class="control-group">
+
+          <div class="controls" id="editArea">
           <label class="control-label">Content:</label>
-          <div class="controls">
-            <textarea style="width:100%" name="blogDescription" ><?php echo $row['blogDescription'];?></textarea> <br>
+            <textarea id="rawText" style="width:100%" name="blogDescription" ><?php echo $row['blogDescription'];?></textarea> <br>
+          </div>
+          <div id="MDpreview" style="width:100%;">
+
           </div>
         </div>
-
         <button type="submit">Update!</button>
       </form>
     </div>
     </div>
 
 <?php Database::disconnect(); ?>
-
-
 </body>
+
+<script>
+
+$(document).ready(function(){
+  $("#previewBtn").click(function(){
+    var converter = new showdown.Converter(),
+        text      = $('#rawText')[0]['textContent'];
+        html      =  converter.makeHtml(text);
+    $("#MDpreview").html(html);// = html;
+    $("#MDpreview").show();
+    $("#editArea").hide();
+    $("#editBtn").show();
+
+  });
+
+  $("#editBtn").click(function(){
+    $("#MDpreview").hide();
+    $("#editArea").show();
+  });
+
+});
+
+</script>
+
+
     <?php include '../inc/footer.php'; ?>

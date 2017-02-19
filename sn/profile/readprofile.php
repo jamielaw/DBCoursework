@@ -127,7 +127,7 @@
 								<span class="bigger-110" >Add as a friend</span>
 							</a>
 
-							<a href="#" class="btn btn-sm btn-block btn-primary">
+							<a href="messages.php" class="btn btn-sm btn-block btn-primary">
 								<i class="ace-icon fa fa-envelope-o bigger-110"></i>
 								<span class="bigger-110">Send a message</span>
 							</a>

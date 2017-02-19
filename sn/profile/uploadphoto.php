@@ -60,7 +60,7 @@ if ($uploadOk == 0) {
         else
         {
             updateProfile($id, $name);
-            $URL="http://localhost/sn/profile/readprofile.php?email=".$loggedInUser;
+            $URL="readprofile.php?email=".$loggedInUser;
             header("Location: " . $URL);    
         }
     } else {

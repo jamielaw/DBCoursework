@@ -18,7 +18,7 @@
     if ($ok==1 && !empty($_GET['comment'])) {
         $comment = $_REQUEST['comment'];
         $ok==0;
-        sendToDatabase($photoId, "charles@ucl.ac.uk", $comment);
+        sendToDatabase($photoId, $email, $comment);
         $comment = null;
     }
     $imageReference = $_GET['imageReference'];
@@ -60,6 +60,17 @@
         $q4 = $pdo->prepare($sql4);
         $q4->execute(array($photoId,$email,$comment));
         $comment=null;
+        header("Location: index.php");
+    }
+    function getCollectionId($photoId)
+    {
+      $pdo = Database::connect();
+      $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+      $sql3 = "SELECT * FROM photos WHERE photoId = ? ";
+      $q3 = $pdo->prepare($sql3);
+      $q3->execute(array($photoId));
+      $result = $q3->fetch(PDO::FETCH_ASSOC);
+      return $result;
     }
     function date_difference($date_1, $date_2)
     {
@@ -186,13 +197,13 @@
       <div class="row">
        <?php
            while ($row = $q->fetch(PDO::FETCH_ASSOC)) {
-               ?>
+        ?>
         <div class="col-sm-2 text-center">
          	<?php $email = $row['email']; ?>
 			     <img src="<?php echo getUserDetails($email)['profileImage']; ?>" class="img-circle" height="65" width="65" alt="Avatar">
         </div>
         <div class="col-sm-10">
-          <h4 href='#'><b><?php echo getUserDetails($email)['firstName']; ?> <?php echo getUserDetails($email)['lastName']; ?></b>
+          <h4 href='#'><a href="readprofile.php?email=<?php echo $email?>"><b><?php echo getUserDetails($email)['firstName']; ?> <?php echo getUserDetails($email)['lastName']; ?></b></a>
           	<small><?php
               date_default_timezone_set('Europe/London');
                $date1 = date('m/d/Y h:i:s a', time());
@@ -200,7 +211,7 @@
                echo date_difference($date1, $date2); ?>
       			ago</small>
 
-          <small> <strong data-id= "<?php echo $row['commentId']; ?>" data-title= "<?php echo $row['commentText']; ?>" class="hover open-delete_dialog2 text-danger text-right" data-toggle="modal" href="#delete_dialog2">Delete</strong></small>
+          <small> <strong data-collection = "<?php echo getCollectionId($photoId)['photoCollectionId']; ?>" data-reference = "<?php echo $imageReference; ?>" data-photo ="<?php echo $photoId; ?>" data-id= "<?php echo $row['commentId']; ?>" data-title= "<?php echo $row['commentText']; ?>" class="hover open-delete_dialog2 text-danger text-right" data-toggle="modal" href="#delete_dialog2">Delete</strong></small>
 
           </h4>
           <p><?php echo $row['commentText']; ?></p>
@@ -280,10 +291,21 @@ $(document).on("click", ".open-delete_dialog", function () {
 
 // Delete Comment
 var deleteComment = null;
+var photoId = null;
+var imageReference = null;
+var collectionId = null;
 
 $(document).on("click", ".open-delete_dialog2", function () {
      deleteComment = $(this).data('title');
+     photoId = $(this).data('photo');
+     imageReference = $(this).data('reference');
+     collectionId = $(this).data('collection');
+
+     console.log("photoId: ", photoId);
+     console.log("imageReference: ", imageReference);
      console.log("comment: ", deleteComment);
+     console.log("collection: ", collectionId);
+
      $(".modal-body #deleteComment").val(deleteComment);
      commentId = $(this).data('id');
 
@@ -300,6 +322,9 @@ $(document).on("click", ".open-delete_dialog2", function () {
                 $('#delete_dialog2 .modal-header .modal-title').html("Result");
                 $('#delete_dialog2 .modal-body').html(data);
                 $("#submitForm4").remove();
+
+                $URL="readphoto.php?photoId=" + photoId + "&imageReference="+ imageReference + "&photoCollectionId=" + collectionId;
+                window.location.href = $URL;
             },
             error: function(jqXHR, status, error) {
                 console.log(status + ": " + error);

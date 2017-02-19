@@ -99,6 +99,7 @@ foreach ($q as $row) {
     $firstName = getUserData($row['emailFrom'])['firstName'];
     $lastName = getUserData($row['emailFrom'])['lastName'];
     $profilePicture = getUserData($row['emailFrom'])['profileImage'];
+    $email = getUserData($row['emailFrom'])['email'];
     $date1 = date('m/d/Y h:i:s a', time());
     $date2 = $row['dateCreated'];
     $data['lists'] .= '
@@ -108,7 +109,9 @@ foreach ($q as $row) {
       </span>
       <div class="chat-body clearfix">
         <div class="header">
+        <a href="readprofile.php?email='.$email.'">
           <strong class="primary-font">'.$firstName.' '.$lastName.'</strong> <small class="pull-right text-muted">
+        </a>
             <span class="glyphicon glyphicon-time"></span>'.date_difference($date1, $date2).'</small>
         </div>
         <p>' . $row['messageText'] . '</p>

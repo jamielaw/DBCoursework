@@ -11,7 +11,7 @@
   }
 
   // Get PK of Table
-  $argument1 = $_GET['annotationsId'];
+  $argument1 = htmlspecialchars($_GET['annotationsId']);
 
   // sql to delete a record
   $sql = "DELETE FROM annotations WHERE annotationsId=".  $argument1;

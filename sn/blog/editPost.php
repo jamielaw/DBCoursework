@@ -4,6 +4,7 @@
 
   // Given "string", returns "'string'" - useful for SQL queries
   function wrapArgument($arg){
+    $arg = htmlspecialchars($arg);
     return "'" . $arg . "'";
   }
   // Removes spaces
@@ -26,7 +27,7 @@
   $sql = "UPDATE blogs SET "
   . "blogTitle=" . wrapArgument($_POST['blogTitle']) .  ","
   . "blogDescription=" . wrapArgument($_POST['blogDescription'])
-  . " WHERE blogId=" . $_POST['argument1'];
+  . " WHERE blogId=" . htmlspecialchars($_POST['argument1']);
 
   #echo $sql;
   $pdo->exec($sql);

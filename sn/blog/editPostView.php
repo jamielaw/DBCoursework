@@ -10,7 +10,7 @@
   $pdo = Database::connect();
   $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-  $argument1 = $_GET['blogId'];
+  $argument1 = htmlspecialchars($_GET['blogId']);
 
 
 

@@ -34,9 +34,9 @@
 
       </div>
 
-      <p>
+    <div id="rawText">
         <?php echo $postQueryResult["blogDescription"];  ?>
-      </p>
+    </div>
 
 
 
@@ -58,3 +58,17 @@
 
 </body>
 <?php Database::disconnect(); ?>
+<script>
+
+$(document).ready(function(){
+  var converter = new showdown.Converter(),
+      text      = $('#rawText')[0]['textContent'];
+      html      =  converter.makeHtml(text);
+
+  console.log(text);
+  console.log(html);
+  $("#rawText").html(html);// = html;
+});
+
+
+  </script>

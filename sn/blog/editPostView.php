@@ -63,7 +63,7 @@
 $(document).ready(function(){
   $("#previewBtn").click(function(){
     var converter = new showdown.Converter(),
-        text      = $('#rawText')[0]['textContent'];
+        text      = $('#rawText').val();
         html      =  converter.makeHtml(text);
     $("#MDpreview").html(html);// = html;
     $("#MDpreview").show();

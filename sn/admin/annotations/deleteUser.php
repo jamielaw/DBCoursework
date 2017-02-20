@@ -11,7 +11,7 @@
   }
 
   // Get PK of Table
-  $argument1 = $_GET['email'];
+  $argument1 = htmlspecialchars($_GET['email']);
   // sql to delete a record
   $sql = "DELETE FROM users WHERE email=". "'" . $argument1 . "'";
   $pdo = Database::connect();

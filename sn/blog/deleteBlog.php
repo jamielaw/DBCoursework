@@ -11,7 +11,7 @@
   }
 
   // Get PK of Table
-  $argument1 = $_GET['blogId'];
+  $argument1 = $htmlspecialchars($_GET['blogId']);
   // sql to delete a record
   $sql = "DELETE FROM blogs WHERE blogId=". $argument1 ;
   #echo $sql;

@@ -8,7 +8,8 @@
   }
   // Removes spaces
   function removeSpaces($arg){
-    return str_replace(' ', '', $arg);
+
+    return str_replace(' ', '', htmlspecialchars($arg));
   }
   // All functions should be moved to utils.php at some point
   function redirect($url) {

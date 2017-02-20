@@ -11,7 +11,7 @@
     $pdo = Database::connect();
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    $argument1 = $_GET['email'];
+    $argument1 = htmlspecialchars($_GET['email']);
     $sql = "SELECT * FROM users WHERE email=" . "'" . $argument1 . "'";
 
     $q= $pdo->prepare($sql);

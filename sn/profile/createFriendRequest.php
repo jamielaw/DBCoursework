@@ -26,6 +26,6 @@
   // Need to handle error catching etc
   Database::disconnect();
 
-  redirect("http://localhost:8888/sn/profile/myfriends.php");
+  redirect("myfriends.php");
 
 ?>

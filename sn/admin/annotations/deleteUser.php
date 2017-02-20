@@ -21,7 +21,7 @@
 
   //Redirect to /sn/admin page to create "refresh "
   // URL TO BE MADE RELATIVE LATER
-  redirect('http://localhost:8888/sn/admin/');
+  redirect('sn/admin/');
 
 
 ?>

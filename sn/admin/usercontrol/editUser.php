@@ -40,7 +40,7 @@
   Database::disconnect();
 
   // Direct back to sn/admin
-  redirect('http://localhost:8888/sn/admin/');
+  redirect('sn/admin/');
 
 
 

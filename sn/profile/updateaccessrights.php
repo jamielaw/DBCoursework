@@ -82,10 +82,10 @@
         foreach ($q as $row) {
            // echo $row['email'].' '.$photoCollectionId;
             if (in_array($row['email'], $checked)) {
-                echo $row['email']." has access rights </br>";
+                //echo $row['email']." has access rights </br>";
                 if(checkAccessRights($row['email'], $photoCollectionId)['value']!=1)
                 {
-                    echo 'need to be updated';
+                    ///=echo 'need to be updated';
                     addAccessRightFriend($row['email'],$photoCollectionId);
                 }
             }
@@ -110,10 +110,10 @@
         foreach ($q as $row) {
            // echo $row['email'].' '.$photoCollectionId;
             if (in_array($row['circleFriendsId'], $checked)) {
-                echo $row['circleFriendsId']." has access rights </br>";
+                //echo $row['circleFriendsId']." has access rights </br>";
                 if(checkAccessRights($row['circleFriendsId'], $photoCollectionId)['value']!=1)
                 {
-                    echo 'need to be updated';
+                    //echo 'need to be updated';
                     addAccessRightCircle($row['circleFriendsId'],$photoCollectionId);
                 }
             }
@@ -145,10 +145,10 @@
         foreach ($q as $row) {
            // echo $row['email'].' '.$photoCollectionId;
             if (in_array($row['email'], $checked)) {
-                echo $row['email']." has access rights </br>";
+                // echo $row['email']." has access rights </br>";
                 if(checkAccessRights($row['email'], $photoCollectionId)['value']!=1)
                 {
-                    echo 'need to be updated';
+                    //echo 'need to be updated';
                     addAccessRightFriend($row['email'],$photoCollectionId);
                 }
             }
@@ -165,4 +165,5 @@
     getFriends($checked,$email,$photoCollectionId);
     getCircles($checked,$email,$photoCollectionId);
     getFriendsOfFriends($checked, $email, $photoCollectionId);
+    echo 'Access Rights Updated!';
 ?>

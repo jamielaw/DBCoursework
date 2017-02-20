@@ -340,6 +340,7 @@ $(document).on("click", ".open-update_dialog", function () {
                 $('#update_dialog .modal-header .modal-title').html("Result");
                 $('#update_dialog .modal-body').html(data);
                 $("#submitForm").remove();
+                location.reload();
             },
             error: function(jqXHR, status, error) {
                 console.log(status + ": " + error);

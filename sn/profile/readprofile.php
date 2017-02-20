@@ -356,6 +356,8 @@ $(document).ready(function () {
                 $('#collection_dialog .modal-header .modal-title').html("Result");
                 $('#collection_dialog .modal-body').html(data);
                 $("#submitForm").remove();
+
+                location.reload();
             },
             error: function(jqXHR, status, error) {
                 console.log(status + ": " + error);
@@ -429,6 +431,8 @@ $(document).on("click", ".open-delete_dialog", function () {
                 $('#delete_dialog .modal-header .modal-title').html("Result");
                 $('#delete_dialog .modal-body').html(data);
                 $("#submitForm3").remove();
+
+                location.reload();
             },
             error: function(jqXHR, status, error) {
                 console.log(status + ": " + error);

@@ -31,6 +31,6 @@
     // dont do anything because the action is wrong!
   }
 
-  redirect("http://localhost:8888/sn/profile/myfriends.php");
+  redirect("myfriends.php");
 
 ?>

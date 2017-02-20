@@ -60,7 +60,7 @@
         $q4 = $pdo->prepare($sql4);
         $q4->execute(array($photoId,$email,$comment));
         $comment=null;
-        header("Location: index.php");
+        //header("Location: index.php");
     }
     function getCollectionId($photoId)
     {

@@ -272,7 +272,7 @@
 var clicked = null;
 var inWhich = null; 
 function sendMessage($email) {
-    $li.removeClass('active');
+    console.log("here");
     $(this).addClass('active');
 
     var loggedInUser = $email;

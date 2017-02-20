@@ -16,7 +16,9 @@
         $q = $pdo->prepare($sql);
         $q->execute(array($commentId));
         Database::disconnect();
-        echo "The comment has been deleted";
+
+
+
     } else {
         echo "There was an error in your system! We appologise for the inconvenience.";
     }

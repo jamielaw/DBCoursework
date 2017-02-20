@@ -23,18 +23,6 @@
         Database::disconnect();
     }
 
-    function getFriends($email)
-    {
-        $pdo = Database::connect();
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $sql = 'SELECT DISTINCT email, firstName, lastName, profileImage FROM users JOIN friendships ON users.email = friendships.emailFrom OR users.email=friendships.emailTo WHERE (friendships.emailFrom=? OR friendships.emailTo=?) AND users.email!=? AND status=\'accepted\';';
-        $q = $pdo->prepare($sql);
-        $q->execute(array($email,$email,$email));
-        $data = $q->fetch(PDO::FETCH_ASSOC);
-          //echo $data;
-          return $data;
-    }
-
     function getPhoto($photoId)
     {
         $pdo = Database::connect();
@@ -43,9 +31,8 @@
         $q = $pdo->prepare($sql);
         $q->execute(array($photoId));
         $data = $q->fetch(PDO::FETCH_ASSOC);
-          //echo $data;
-          return $data;
-    }
+        return $data;
+    }   
 
     function checkDescription($description)
     {
@@ -127,7 +114,7 @@
 								<span class="bigger-110" >Add as a friend</span>
 							</a>
 
-							<a href="#" class="btn btn-sm btn-block btn-primary">
+							<a href="messages.php" class="btn btn-sm btn-block btn-primary">
 								<i class="ace-icon fa fa-envelope-o bigger-110"></i>
 								<span class="bigger-110">Send a message</span>
 							</a>
@@ -420,6 +407,7 @@ $(document).on("click", ".open-update_dialog", function () {
     });
 });
 
+var clicked = null;
 // Delete Collection
 var deletealbumName = null;
 
@@ -463,7 +451,6 @@ $(document).on("click", ".open-update_photo", function () {
      albumDescription = $(this).data('description');
      $(".modal-body #albumDescription").val(albumDescription);
      albumId = $(this).data('id');
-
     
 });
 

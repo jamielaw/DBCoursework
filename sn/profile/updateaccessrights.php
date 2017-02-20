@@ -33,11 +33,29 @@
         $q->execute(array($photoCollectionId,$email));  
     }
 
+    function deleteAccessRightFriend($email,$photoCollectionId)
+    {
+        $pdo = Database::connect();
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $sql = 'DELETE FROM accessrights WHERE photoCollectionId = ? and email = ?;';
+        $q = $pdo->prepare($sql);
+        $q->execute(array($photoCollectionId,$email));  
+    }
+
     function addAccessRightCircle($circleFriendsId,$photoCollectionId)
     {
         $pdo = Database::connect();
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $sql = 'INSERT INTO accessrights (photoCollectionId, circleFriendsId) VALUES (?,?);';
+        $q = $pdo->prepare($sql);
+        $q->execute(array($photoCollectionId,$circleFriendsId));  
+    }
+
+    function deleteAccessRightCircle($circleFriendsId,$photoCollectionId)
+    {
+        $pdo = Database::connect();
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $sql = 'DELETE FROM accessrights WHERE photoCollectionId = ? AND circleFriendsId = ?;';
         $q = $pdo->prepare($sql);
         $q->execute(array($photoCollectionId,$circleFriendsId));  
     }
@@ -71,8 +89,13 @@
                     addAccessRightFriend($row['email'],$photoCollectionId);
                 }
             }
-            else
-                echo $row['email']." doesn't have access rights </br>";
+            else // delete if it has access right in db
+            {
+                if(checkAccessRights($row['email'], $photoCollectionId)['value']==1)
+                {
+                    deleteAccessRightFriend($row['email'],$photoCollectionId);
+                }
+            }
         }
     }
 
@@ -94,12 +117,17 @@
                     addAccessRightCircle($row['circleFriendsId'],$photoCollectionId);
                 }
             }
-            else
-                echo $row['circleFriendsId']." doesn't have access rights </br>";
+            else // delete if it has access right in db
+            {
+                if(checkAccessRights($row['circleFriendsId'], $photoCollectionId)['value']==1)
+                {
+                    deleteAccessRightCircle($row['circleFriendsId'],$photoCollectionId);
+                }
+            }
         }
     }
 
-    function getFriendsOfFriends($email)
+    function getFriendsOfFriends($checked, $email, $photoCollectionId)
     {
         $pdo = Database::connect();
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -113,9 +141,28 @@
         AND users.email!=?';
         $q = $pdo->prepare($sql);
         $q->execute(array($email,$email,$email,$email,$email,$email,$email,$email,$email,$email));
-        return $q;
+        
+        foreach ($q as $row) {
+           // echo $row['email'].' '.$photoCollectionId;
+            if (in_array($row['email'], $checked)) {
+                echo $row['email']." has access rights </br>";
+                if(checkAccessRights($row['email'], $photoCollectionId)['value']!=1)
+                {
+                    echo 'need to be updated';
+                    addAccessRightFriend($row['email'],$photoCollectionId);
+                }
+            }
+            else // delete if it has access right in db
+            {
+                if(checkAccessRights($row['email'], $photoCollectionId)['value']==1)
+                {
+                    deleteAccessRightFriend($row['email'],$photoCollectionId);
+                }
+            }
+        }
     }
 
     getFriends($checked,$email,$photoCollectionId);
     getCircles($checked,$email,$photoCollectionId);
+    getFriendsOfFriends($checked, $email, $photoCollectionId);
 ?>

@@ -102,7 +102,7 @@
 		<input class="" type="file" name="fileToUpload" id="fileToUpload"> <br>
 		<input class= "btn btn-primary" type="submit" value="Upload Image" name="submit">
 	</form>
-    <a data-title="<?php echo $row['title']?>" data-description="" data-id="" class="open-update_dialog btn btn-success" data-toggle="modal" href="#update_dialog">Access Rights</a>
+    <a data-title="<?php echo $row['title']?>" data-id="" class="open-update_dialog btn btn-success" data-toggle="modal" href="#update_dialog">Access Rights</a>
 </div>
 
  <div class="row"><br></div>
@@ -134,7 +134,7 @@
 
         <!-- modal to update access rights -->
         <!-- the div that represents the modal dialog -->
-        <div class="modal fade" id="update_dialog" role="dialog">
+        <div class="modal fade" action="updateaccessrights.php" id="update_dialog" role="dialog">
             <div class="modal-dialog">
                <div class="modal-content">
                     <div class="modal-header">
@@ -143,7 +143,7 @@
                     </div>
                     <div class="modal-body">
                     <p> </p>
-                        <form id="update_form2" action="" method="POST">
+                        <form id="update_form" action="" method="POST">
                             <div class="tabbable">
                                 <ul class="nav nav-tabs padding-18">
                                     <li class="active">
@@ -171,8 +171,8 @@
                                         <ul id="check-list-box" class="list-group checked-list-box">
                                          <?php
                                             foreach (getFriends($createdBy) as $row) {
-                                                $flag = checkAccessRights($row['email'],1)['value'];
-                                                echo '<li class="list-group-item" data-checked='.$flag.'>'.$row['firstName'].' '.$row['lastName'].'</li>';
+                                                $flag = checkAccessRights($row['email'],$photoCollectionId)['value'];
+                                                echo '<li data-collection="'.$photoCollectionId.'" data-title="'.$row['email'].'" class="list-group-item" data-checked='.$flag.'>'.$row['firstName'].' '.$row['lastName'].'</li>';
                                             }
                                         ?>
                                         </ul>  
@@ -181,7 +181,8 @@
                                         <ul id="check-list-box" class="list-group checked-list-box">
                                          <?php
                                             foreach (getCircles($createdBy) as $row) {
-                                                echo '<li class="list-group-item">'.$row['circleOfFriendsName'].'</li>';
+                                                $flag = checkAccessRights($row['circleFriendsId'],$photoCollectionId)['value'];
+                                                echo '<li data-collection="'.$photoCollectionId.'" data-title="'.$row['circleFriendsId'].'" class="list-group-item" data-checked='.$flag.'>'.$row['circleOfFriendsName'].'</li>';
                                             }
                                         ?>
                                         </ul>  
@@ -190,18 +191,21 @@
                                         <ul id="check-list-box" class="list-group checked-list-box">
                                          <?php
                                             foreach (getFriendsOfFriends($createdBy) as $row) {
-                                                echo '<li class="list-group-item">'.$row['firstName'].' '.$row['lastName'].'</li>';
+                                                $flag = checkAccessRights($row['email'],$photoCollectionId)['value'];
+                                                echo '<li data-collection="'.$photoCollectionId.'" data-title="'.$row['email'].'" class="list-group-item" data-checked='.$flag.'>'.$row['firstName'].' '.$row['lastName'].'</li>';
                                             }
                                         ?>
                                         </ul>                                     
                                     </div>
                                 </div>
+                                <button class="btn btn-primary col-xs-12" id="get-checked-data">Get Checked Data</button>
+                                <pre id="display-json"></pre>
                             </div>
                         </form>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" id="submitForm2" class="btn btn-success">Update</button>
+                        <button type="button" id="submitForm" class="btn btn-success">Update</button>
                     </div>
                 </div>
             </div>
@@ -287,8 +291,11 @@ $(function () {
         event.preventDefault(); 
         var checkedItems = {}, counter = 0;
         $("#check-list-box li.active").each(function(idx, li) {
-            checkedItems[counter] = $(li).text();
+           
+            checkedItems[counter] = $(li).attr('data-title');
+            console.log(checkedItems[counter]);
             counter++;
+
         });
         $('#display-json').html(JSON.stringify(checkedItems, null, '\t'));
     });
@@ -304,6 +311,46 @@ $(document).on("click", ".open-update_dialog", function () {
      clicked = $(this).data('id');
 
      $( "p" ).text( "Collection Title: " + albumName );
+
+    // Update Collection Button
+    $("#update_dialog").on("submit", function(e) {
+        var postData2 =  $(this).serializeArray();
+
+        event.preventDefault(); 
+        var checkedItems = {}, counter = 0;
+        $("#check-list-box li.active").each(function(idx, li, ul) {
+            if(counter==0){
+                collectionId = $(li).attr('data-collection');
+                console.log(collectionId);
+                postData2.push({name: "photoCollectionId", value: collectionId});
+            }
+            checkedItems[counter] = $(li).attr('data-title');
+            postData2.push({name: counter, value: checkedItems[counter]});
+
+            counter++;
+        });
+
+        postData2.push({name: "totalNumber", value:counter});
+        var formURL = $(this).attr("action");
+        $.ajax({
+            url: formURL,
+            type: "POST",
+            data: postData2,
+            success: function(data, textStatus, jqXHR) {
+                $('#update_dialog .modal-header .modal-title').html("Result");
+                $('#update_dialog .modal-body').html(data);
+                $("#submitForm").remove();
+            },
+            error: function(jqXHR, status, error) {
+                console.log(status + ": " + error);
+            }
+        });
+        e.preventDefault();
+    });
+
+    $("#submitForm").on('click', function() {
+        $("#update_form").submit();
+    });
    
 });
 </script>

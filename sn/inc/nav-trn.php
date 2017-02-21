@@ -56,7 +56,7 @@
           $countq = $pdo->query($count);
           $isLoggedInExec = $countq->fetch(PDO::FETCH_ASSOC);
           $isLoggedIn = $isLoggedInExec["COUNT(firstName)"];
-          $isLoggedIn=0;
+          //$isLoggedIn=0;
           if($isLoggedIn){ //if user is logged in, display relevant navbar
                     echo "<div class=\"collapse navbar-collapse\">
                     <ul class=\"nav navbar-nav\">

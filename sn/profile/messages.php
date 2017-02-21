@@ -5,7 +5,7 @@
     include("../inc/header.php");
     include("../inc/nav-trn.php");
 
-    $email = 'charles@ucl.ac.uk';
+    $email = $loggedInUser;
 
     function getProfilePicture($email)
     {

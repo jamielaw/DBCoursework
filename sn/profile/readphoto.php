@@ -6,7 +6,7 @@
     include("../inc/nav-trn.php");
       //require '../database.php';
 
-    $email="charles@ucl.ac.uk";
+    $email=$loggedInUser;
     $photoId = null;
     $photoCollectionId = null;
     $imageReference = null;

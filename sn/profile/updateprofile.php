@@ -1,6 +1,6 @@
 <?php 
 	
-	require '../database.php';
+	require '../session.php';
 
 	$email = null;
 	if ( !empty($_GET['email'])) {

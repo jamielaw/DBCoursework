@@ -99,8 +99,8 @@ $createCommentsTable = "CREATE TABLE IF NOT EXISTS MyDB.comments(
 $createAccessRightsTable = "CREATE TABLE IF NOT EXISTS MyDB.accessRights(
   accessRightsId INT NOT NULL AUTO_INCREMENT,
   photoCollectionId INT NOT NULL,
-  email VARCHAR(50) NOT NULL,
-  circleFriendsId INT NOT NULL,
+  email VARCHAR(50) NULL,
+  circleFriendsId INT NULL,
   PRIMARY KEY(accessRightsId),
   FOREIGN KEY(photoCollectionId) REFERENCES myDB.photoCollection(photoCollectionId),
   FOREIGN KEY(email) REFERENCES myDB.users(email),

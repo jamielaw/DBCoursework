@@ -53,11 +53,9 @@
         <li class="dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">
           <?php
-          require("$root/sn/database.php");
+          require("$root/sn/session.php");
           $pdo = Database::connect();
           $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-          //update this later when we have info on who logged in user is
-          $loggedInUser = "vicky@ucl.ac.uk";
           $sql="SELECT firstName, lastName, profileImage FROM MyDB.users WHERE email='" . $loggedInUser . "'"; //change this to be for logged-in user
           foreach ($pdo->query($sql) as $row) {
               echo "<img style='height:20px;width:20px;border-radius:2px;' src='" . $row["profileImage"] . "'> ";
@@ -67,7 +65,7 @@
           ?>
           <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="/sn/profile/index.php"><i class="fa fa-user"></i> My Profile</a></li>
+            <li><a href="/sn/profile/readprofile.php?email=<?php echo $loggedInUser ?>"><i class="fa fa-user"></i> My Profile</a></li>
             <li><a href="/sn/profile/settings.php"><i class="fa fa-cog"></i> Settings</a></li>
             <li><a href="/sn/logout.php"><i class="fa fa-sign-out"></i> Logout</a></li>
           </ul>

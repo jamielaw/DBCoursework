@@ -13,7 +13,7 @@
   <!--  Boostrap Framework  -->
   <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <!--  Custom stylesheet -->
-  <link href="/sn/css/custom.css" rel="stylesheet">
+  <link href="../sn/css/custom.css" rel="stylesheet">
 
 
   <!-- MD -> HTML Library -->

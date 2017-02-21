@@ -1,5 +1,5 @@
 <?php
-  $conn = mysqli_connect("localhost", "root", "root", "logintest2");
+  $conn = mysqli_connect("localhost", "root", "root", "mydb");
   if (!$conn) {
     die("Connection failed!");
   }

@@ -12,8 +12,7 @@
 
   $action = $_GET['action'];
   $requestingUser = $_GET['email'];
-  // CHANGE TO SOMETHING THATS NOT HARDCODED!
-  $decidingUser = "charles@ucl.ac.uk";
+  $decidingUser = $loggedInUser;
 
 
   $pdo = Database::connect();

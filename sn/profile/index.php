@@ -22,8 +22,8 @@
 <body>
     <div class="container-fullwidth padding">
     		<div class="row" id="friends">
-    			<p><img src="../../images/profile/charles@ucl.ac.uk.jpg" class="rounded float-left" height="200">
-    			<font size="5"> Charles Babbage </font> </p>
+    			<p><img src="<?php echo $photo ?>" class="rounded float-left" height="200">
+    			<font size="5"> <?php echo $firstName.' '.$lastName ?> </font> </p>
     		</div>
 
     		<br><br>
@@ -32,11 +32,6 @@
 		        	<a  href="#1" data-toggle="tab">Profile</a>
 				</li>
 				<li>
-					<a href="#2" data-toggle="tab">Friends</a>
-				</li>
-				<li>
-					<a href="#3" data-toggle="tab">Messages</a>
-				</li>
 				<li>
 					<a href="#4" data-toggle="tab">Photo Collections</a>
 				</li>
@@ -45,42 +40,6 @@
 			<div class="tab-content ">
 				<div class="tab-pane active" id="1">
 		          <h3>Standard tab panel created on bootstrap using nav-tabs</h3>
-				</div>
-				<div class="tab-pane" id="2">
-		          	<table class="table table-striped table-bordered">
-		            	<thead>
-		                	<tr>
-		                  		<th>First Name</th>
-		                  		<th>Last Name</th>
-		                  		<th>Action</th>
-		                	</tr>
-		              	</thead>
-		              	<tbody>
-		             <?php
-					   			//include '..\database.php';
-					   			$pdo = Database::connect();
-					   			// !!! HARDCODED STUFF -  TO BE CHANGED AFTER LOGIN IS IMPLEMENTED
-					   			$sql = 'SELECT DISTINCT email, firstName, lastName FROM users JOIN friendships ON users.email = friendships.emailFrom OR users.email=friendships.emailTo WHERE (friendships.emailFrom=\'charles@ucl.ac.uk\' OR friendships.emailTo=\'charles@ucl.ac.uk\') AND users.email!=\'charles@ucl.ac.uk\' AND status=\'accepted\';';
-	 				   			foreach ($pdo->query($sql) as $row) {
-							   		echo '<tr>';
-								   	echo '<td>'. $row['firstName'] . '</td>';
-								   	echo '<td>'. $row['lastName'] . '</td>';
-								   	echo '<td width=250>';
-								   	echo '<a class="btn btn-info" href="readprofile.php?email='.$row['email'].'">Read</a>';
-								   	echo '&nbsp;';
-								   	echo '<a class="btn btn-success" href="updateprofile.php?email='.$row['email'].'">Update</a>';
-								   	echo '&nbsp;';
-								   	echo '<a class="btn btn-danger" href="deleteprofile.php?email='.$row['email'].'">Delete</a>';
-								   	echo '</td>';
-								   	echo '</tr>';
-					  			}
-					   			//Database::disconnect();
-					  		?>
-				      	</tbody>
-	            	</table>
-				</div>
-				<div class="tab-pane" id="3">
-		          <h3>Messages</h3>
 				</div>
 				<div class="tab-pane" id="4">
 		          <table class="table table-striped table-bordered">
@@ -93,8 +52,10 @@
 			        <tbody>
 			          	<?php
 			          		// !!! HARDCODED STUFF - TO BE CHANGED AFTER LOGIN IS IMPLEMENTED
-						   	$sql = 'SELECT * FROM photocollection WHERE createdBy = "charles@ucl.ac.uk" ORDER BY dateCreated';
-		 				   	foreach ($pdo->query($sql) as $row) {
+						   	$sql = 'SELECT * FROM photocollection WHERE createdBy = ? ORDER BY dateCreated';
+						   	$q = $pdo->prepare($sql);
+							$q->execute(array($loggedInUser));
+		 				   	foreach ($q as $row) {
 								echo '<td>'. $row['title'] . '</td>';
 								echo '<td width=350>';
 								echo '<a class="btn btn-info" href="readphotocollection.php?createdBy='.$row['createdBy'].'&photoCollectionId='.$row['photoCollectionId'].'">Read</a>';
@@ -123,7 +84,7 @@
 					                <h4 class="modal-title">Create New Collection</h4>
 					            </div>
 					                <div class="modal-body">
-					                    <form id="collection_form" action="createcollection.php" method="POST">
+					                    <form data-title=<?php echo $loggedInUser ?> id="collection_form" action="createcollection.php" method="POST">
 					                        <input type="text" name="albumName" placeholder="Enter Album Name"><br/><br/>
 					                        <input type="text" name="descriptionName" placeholder="Enter Album Description"><br/>
 					                    </form>
@@ -195,7 +156,8 @@ $(document).ready(function () {
 	// Create Collection Button
     $("#collection_form").on("submit", function(e) {
         var postData = $(this).serializeArray();
-        postData.push({name: "email", value: "charles@ucl.ac.uk"});
+        var email = $(this).data('title');
+        postData.push({name: "email", value: email});
         var formURL = $(this).attr("action");
         $.ajax({
             url: formURL,

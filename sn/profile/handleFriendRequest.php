@@ -1,6 +1,6 @@
 <?php
 // Import DB Auth Script
-  require '../database.php';
+  require '../session.php';
 
   //function to redirect - to be moved into a utils.php file later?
   function redirect($url) {
@@ -12,8 +12,7 @@
 
   $action = $_GET['action'];
   $requestingUser = $_GET['email'];
-  // CHANGE TO SOMETHING THATS NOT HARDCODED!
-  $decidingUser = "charles@ucl.ac.uk";
+  $decidingUser = $loggedInUser;
 
 
   $pdo = Database::connect();
@@ -31,6 +30,6 @@
     // dont do anything because the action is wrong!
   }
 
-  redirect("http://localhost:8888/sn/profile/myfriends.php");
+  redirect("myfriends.php");
 
 ?>

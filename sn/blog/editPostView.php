@@ -10,7 +10,7 @@
   $pdo = Database::connect();
   $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-  $argument1 = $_GET['blogId'];
+  $argument1 = htmlspecialchars($_GET['blogId']);
 
 
 
@@ -25,33 +25,61 @@
 
 <body>
   <div class="container">
-    <div class="span10 offset1">
+    <div class="">
       <div class="row">
-        <font size="5">Update Blog Post</font>
-      </div>
+        <h1 style="margin-bottom: 15px;"> Update Blog Post</h1>
+
+      <button class="btn btn-info" id="previewBtn" > Preview </button>
+      <button class="btn btn-warning" id="editBtn" style=""> Edit </button>
 
       <form class="form-horizontal" method="POST" action="editPost.php">
         <input type="hidden" name="argument1" value="<?php echo $argument1;?>">
-        <div class="control-group">
-          <label class="control-label">Blog Title:</label>
-          <div class="controls">
-            <input type="text" name="blogTitle" value="<?php echo $row['blogTitle'];?>"> <br>
+        <div id="blogTitleBar">
+          <div class="control-group">
+            <label class="control-label">Blog Title:</label>
+            <div class="controls">
+              <input type="text" name="blogTitle" style="width: 30vw;"value="<?php echo $row['blogTitle'];?>"> <br>
+            </div>
           </div>
         </div>
         <div class="control-group">
+          <div class="controls" id="editArea">
           <label class="control-label">Content:</label>
-          <div class="controls">
-            <textarea style="width:100%" name="blogDescription" ><?php echo $row['blogDescription'];?></textarea> <br>
+            <textarea id="rawText" style="width:100%; height: 55vh;" name="blogDescription" ><?php echo $row['blogDescription'];?></textarea> <br>
+          </div>
+          <div id="MDpreview" style="width:100%; text-align:center;">
           </div>
         </div>
-
-        <button type="submit">Update!</button>
+        <button class="btn btn-success" type="submit">Save</button>
       </form>
+      </div>
     </div>
     </div>
 
 <?php Database::disconnect(); ?>
-
-
 </body>
-    <?php include '../inc/footer.php'; ?>
+
+<script>
+
+$(document).ready(function(){
+  $("#previewBtn").click(function(){
+    var converter = new showdown.Converter(),
+        text      = $('#rawText').val();
+        html      =  converter.makeHtml(text);
+    $("#MDpreview").html(html);
+    $("#MDpreview").show();
+    $("#editArea").hide();
+    $("#editBtn").show();
+    $("#blogTitleBar").hide();
+
+  });
+
+  $("#editBtn").click(function(){
+    $("#MDpreview").hide();
+    $("#editArea").show();
+    $("#blogTitleBar").show();
+  });
+
+});
+
+</script>

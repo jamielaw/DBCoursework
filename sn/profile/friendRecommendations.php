@@ -1,6 +1,6 @@
 <?php
 
-  require("$root/sn/database.php");
+  require("$root/sn/session.php");
 
 
   function redirect($url) {

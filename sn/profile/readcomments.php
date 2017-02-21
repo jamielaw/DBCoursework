@@ -1,5 +1,5 @@
 <?php
-require '../database.php';
+require '../session.php';
 
 // fetch all tags
 $pdo = Database::connect();
@@ -9,7 +9,6 @@ $loggedInUser = $_POST['loggedInUser'];
 $sql = "SELECT * FROM messages WHERE (emailTo = ? AND emailFrom = ?) or (emailFrom = ? AND emailTo = ?) ORDER BY dateCreated";
 $q = $pdo->prepare($sql);
 $q->execute(array($user,$loggedInUser,$user,$loggedInUser));
-$data['lists'] = '';
 
 function date_difference($date_1, $date_2)
 {
@@ -81,10 +80,13 @@ function getUserData($email)
     return $result;
 }
 
+$data['lists'] = '<p style="color:white; background-color:#337AB7;" class="text-center">Your messages with ' .getUserData($user)['firstName']. '</p>';
+
 foreach ($q as $row) {
     $firstName = getUserData($row['emailFrom'])['firstName'];
     $lastName = getUserData($row['emailFrom'])['lastName'];
     $profilePicture = getUserData($row['emailFrom'])['profileImage'];
+    $email = getUserData($row['emailFrom'])['email'];
     $date1 = date('m/d/Y h:i:s a', time());
     $date2 = $row['dateCreated'];
     $data['lists'] .= '
@@ -94,7 +96,9 @@ foreach ($q as $row) {
       </span>
       <div class="chat-body clearfix">
         <div class="header">
+        <a href="readprofile.php?email='.$email.'">
           <strong class="primary-font">'.$firstName.' '.$lastName.'</strong> <small class="pull-right text-muted">
+        </a>
             <span class="glyphicon glyphicon-time"></span>'.date_difference($date1, $date2).'</small>
         </div>
         <p>' . $row['messageText'] . '</p>

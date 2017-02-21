@@ -25,8 +25,8 @@
 
 
   $sql = "UPDATE MyDB.annotations SET "
-  . "annotationText=" . wrapArgument($_POST['annotationText'])
-  . " WHERE annotationsId=" . $_POST['argument1'];
+  . "annotationText=" . wrapArgument( htmlspecialchars($_POST['annotationText']))
+  . " WHERE annotationsId=" . htmlspecialchars($_POST['argument1']);
 
 
     $q = $pdo->prepare($sql);
@@ -48,7 +48,7 @@
   Database::disconnect();
 
   // Direct back to sn/admin
-  redirect('http://localhost:8888/sn/admin/');
+  redirect('sn/admin/');
 
 
 

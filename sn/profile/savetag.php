@@ -1,8 +1,7 @@
 <?php
 
-require '../database.php';
+require '../session.php';
 
-echo 'heree';
 if( !empty( $_POST['type'] ) && $_POST['type'] == "insert" )
 {
   $id = $_POST['pic_id'];  
@@ -14,7 +13,7 @@ if( !empty( $_POST['type'] ) && $_POST['type'] == "insert" )
   $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
   $sql = "INSERT INTO annotations (photoId,email,coordinateX,coordinateY,annotationText) VALUES (?,?,?,?,?)";
   $q = $pdo->prepare($sql);
-  $q->execute(array($id, "charles@ucl.ac.uk", $pic_x, $pic_y, $name));
+  $q->execute(array($id, $loggedInUser, $pic_x, $pic_y, $name));
 }
 
 if( !empty( $_POST['type'] ) && $_POST['type'] == "remove")

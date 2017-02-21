@@ -8,7 +8,8 @@
   }
   // Removes spaces
   function removeSpaces($arg){
-    return str_replace(' ', '', $arg);
+
+    return str_replace(' ', '', htmlspecialchars($arg));
   }
   // All functions should be moved to utils.php at some point
   function redirect($url) {
@@ -39,7 +40,7 @@
   Database::disconnect();
 
   // Direct back to sn/admin
-  redirect('http://localhost:8888/sn/admin/');
+  redirect('sn/admin/');
 
 
 

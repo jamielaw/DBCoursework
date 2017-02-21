@@ -30,8 +30,6 @@ also has link to creating friend circles -->
 
         <div class="blog-section">
         <?php
-        //CHANGE THIS TO BE AUTHENTICATED LATER
-        $loggedInUser="charles@ucl.ac.uk";
         $pdo=Database::connect();
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 

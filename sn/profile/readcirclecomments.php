@@ -1,5 +1,5 @@
 <?php
-require '../database.php';
+require '../session.php';
 
 // fetch all tags
 $pdo = Database::connect();

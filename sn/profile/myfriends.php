@@ -99,11 +99,11 @@
         Requests sent from people!
       </li>
       <?php
-      //include '..\database.php';
       $pdo = Database::connect();
-      // !!! HARDCODED STUFF -  TO BE CHANGED AFTER LOGIN IS IMPLEMENTED
-      $sql = 'SELECT DISTINCT email, firstName, lastName, profileImage FROM users JOIN friendships ON users.email = friendships.emailFrom OR users.email=friendships.emailTo WHERE (friendships.emailTo=\'charles@ucl.ac.uk\') AND users.email!=\'charles@ucl.ac.uk\' AND status=\'pending\';';
-      foreach ($pdo->query($sql) as $row) {
+      $sql = 'SELECT DISTINCT email, firstName, lastName, profileImage FROM users JOIN friendships ON users.email = friendships.emailFrom OR users.email=friendships.emailTo WHERE (friendships.emailTo=?) AND users.email!=? AND status=\'pending\';';
+      $q = $pdo->prepare($sql);
+      $q->execute(array($loggedInUser,$loggedInUser));
+      foreach ($q as $row) {
       $nrFriends = nrOfFriends($row['email'])['COUNT(*)'];
       $nrPhotos = nrOfPhotos($row['email'])['COUNT(*)'];
       $nrComments = nrOfComments($row['email'])['COUNT(*)'];
@@ -150,10 +150,7 @@
         Suggestions...
       </li>
       <?php
-      //include '..\database.php';
-      // !!! HARDCODED STUFF -  TO BE CHANGED AFTER LOGIN IS IMPLEMENTED
-      $loggedinuser = 'vicky@ucl.ac.uk';
-      $sql = "SELECT DISTINCT * FROM users WHERE users.email !='$loggedinuser'
+      $sql = "SELECT DISTINCT * FROM users WHERE users.email !='$loggedInUser'
        AND (users.email NOT IN
          ( SELECT users.email
            FROM users
@@ -162,26 +159,21 @@
            friendships.emailFrom
            OR users.email=friendships.emailTo
            WHERE(
-              (friendships.emailFrom= '$loggedinuser'
-              OR friendships.emailTo= '$loggedinuser' )
+              (friendships.emailFrom= '$loggedInUser'
+              OR friendships.emailTo= '$loggedInUser' )
               AND
-               users.email != '$loggedinuser' )));";
+               users.email != '$loggedInUser' )));";
 
       $recommendations = array();
       foreach ($pdo->query($sql) as $row) {
-        $row["mutualFriends"] = nrOfMutualFriends($loggedinuser,$row['email']);
+        $row["mutualFriends"] = nrOfMutualFriends($loggedInUser,$row['email']);
         $recommendations[] = $row;
       }
-
 
       // sort by mutual friends, so highest to the top
       usort($recommendations, 'compareOrder');
 
-
-
       foreach ($recommendations as $row) {
-
-        // $nrOfMutualFriends = nrOfMutualFriends($loggedinuser,$row['email']);
 
         echo '<li href="#" class="list-group-item text-left">
           <div class="panel-heading">
@@ -222,10 +214,10 @@
         Your friend zone
       </li>
       <?php
-      //include '..\database.php';
-      // !!! HARDCODED STUFF -  TO BE CHANGED AFTER LOGIN IS IMPLEMENTED
-      $sql = 'SELECT DISTINCT email, firstName, lastName, profileImage FROM users JOIN friendships ON users.email = friendships.emailFrom OR users.email=friendships.emailTo WHERE (friendships.emailFrom=\'charles@ucl.ac.uk\' OR friendships.emailTo=\'charles@ucl.ac.uk\') AND users.email!=\'charles@ucl.ac.uk\' AND status=\'accepted\';';
-      foreach ($pdo->query($sql) as $row) {
+      $sql = 'SELECT DISTINCT email, firstName, lastName, profileImage FROM users JOIN friendships ON users.email = friendships.emailFrom OR users.email=friendships.emailTo WHERE (friendships.emailFrom=? OR friendships.emailTo=?) AND users.email!=? AND status=\'accepted\';';
+      $q = $pdo->prepare($sql);
+      $q->execute(array($loggedInUser,$loggedInUser,$loggedInUser));
+      foreach ($q as $row) {
       $nrFriends = nrOfFriends($row['email'])['COUNT(*)'];
       $nrPhotos = nrOfPhotos($row['email'])['COUNT(*)'];
       $nrComments = nrOfComments($row['email'])['COUNT(*)'];

@@ -3,7 +3,6 @@
     $description = "A far superior social network";
     include("../inc/header.php");
     include("../inc/nav-trn.php");
-    //require '../database.php';
 
     $createdBy = null;
     $photoCollectionId = null;
@@ -93,6 +92,7 @@
                 $row = $q2->fetch(PDO::FETCH_ASSOC)
                 ?>
 	    	<h3 class="col-md-2 col-md-offset-5"><?php echo $row['title'];?></h3>
+            <a data-title="<?php echo $row['title']?>" data-id="" class="open-update_dialog btn btn-success" data-toggle="modal" href="#update_dialog">Access Rights</a>
 	    </div>
 		</div>
 
@@ -102,7 +102,6 @@
 		<input class="" type="file" name="fileToUpload" id="fileToUpload"> <br>
 		<input class= "btn btn-primary" type="submit" value="Upload Image" name="submit">
 	</form>
-    <a data-title="<?php echo $row['title']?>" data-id="" class="open-update_dialog btn btn-success" data-toggle="modal" href="#update_dialog">Access Rights</a>
 </div>
 
  <div class="row"><br></div>

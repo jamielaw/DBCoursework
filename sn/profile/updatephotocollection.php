@@ -1,6 +1,6 @@
 <?php
 
-    require '../database.php';
+    require '../session.php';
 
     $photoCollectionId = null;
     $albumName = null;

@@ -22,8 +22,8 @@
 <body>
     <div class="container-fullwidth padding">
     		<div class="row" id="friends">
-    			<p><img src="../../images/profile/charles@ucl.ac.uk.jpg" class="rounded float-left" height="200">
-    			<font size="5"> Charles Babbage </font> </p>
+    			<p><img src="<?php echo $photo ?>" class="rounded float-left" height="200">
+    			<font size="5"> <?php echo $firstName.' '.$lastName ?> </font> </p>
     		</div>
 
     		<br><br>
@@ -52,8 +52,10 @@
 			        <tbody>
 			          	<?php
 			          		// !!! HARDCODED STUFF - TO BE CHANGED AFTER LOGIN IS IMPLEMENTED
-						   	$sql = 'SELECT * FROM photocollection WHERE createdBy = "charles@ucl.ac.uk" ORDER BY dateCreated';
-		 				   	foreach ($pdo->query($sql) as $row) {
+						   	$sql = 'SELECT * FROM photocollection WHERE createdBy = ? ORDER BY dateCreated';
+						   	$q = $pdo->prepare($sql);
+							$q->execute(array($loggedInUser));
+		 				   	foreach ($q as $row) {
 								echo '<td>'. $row['title'] . '</td>';
 								echo '<td width=350>';
 								echo '<a class="btn btn-info" href="readphotocollection.php?createdBy='.$row['createdBy'].'&photoCollectionId='.$row['photoCollectionId'].'">Read</a>';
@@ -82,7 +84,7 @@
 					                <h4 class="modal-title">Create New Collection</h4>
 					            </div>
 					                <div class="modal-body">
-					                    <form id="collection_form" action="createcollection.php" method="POST">
+					                    <form data-title=<?php echo $loggedInUser ?> id="collection_form" action="createcollection.php" method="POST">
 					                        <input type="text" name="albumName" placeholder="Enter Album Name"><br/><br/>
 					                        <input type="text" name="descriptionName" placeholder="Enter Album Description"><br/>
 					                    </form>
@@ -154,7 +156,8 @@ $(document).ready(function () {
 	// Create Collection Button
     $("#collection_form").on("submit", function(e) {
         var postData = $(this).serializeArray();
-        postData.push({name: "email", value: "charles@ucl.ac.uk"});
+        var email = $(this).data('title');
+        postData.push({name: "email", value: email});
         var formURL = $(this).attr("action");
         $.ajax({
             url: formURL,

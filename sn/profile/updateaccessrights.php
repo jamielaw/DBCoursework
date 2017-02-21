@@ -1,13 +1,13 @@
 <?php
 
-    require '../database.php';
+    require '../session.php';
 
     $photoCollectionId = null;
     $totalNumber = null;
     $value = null;
     $checked = array();  
 
-    $email = 'charles@ucl.ac.uk';
+    $email = $loggedInUser;
 
     if (!empty($_POST['photoCollectionId'])) {
         $photoCollectionId = $_POST['photoCollectionId'];

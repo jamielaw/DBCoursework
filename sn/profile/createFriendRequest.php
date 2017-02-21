@@ -1,6 +1,6 @@
 <?php
 // Import DB Auth Script
-  require '../database.php';
+  require '../session.php';
 
   //function to redirect - to be moved into a utils.php file later?
   function redirect($url) {
@@ -11,8 +11,6 @@
   }
 
   $emailTo = $_GET['email'];
-  // CHANGE TO SOMETHING THATS NOT HARDCODED!
-  $loggedInUser = "vicky@ucl.ac.uk";
   $emailFrom = $loggedInUser;
   $pdo = Database::connect();
   $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

@@ -5,7 +5,6 @@
     include("../inc/header.php");
     include("../inc/nav-trn.php");
 
-    //require '../database.php';
     $email = null;
     if (!empty($_GET['email'])) {
         $email = $_REQUEST['email'];
@@ -49,17 +48,6 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <!--  This file has been downloaded from bootdey.com    @bootdey on twitter -->
-    <!--  All snippets are MIT license http://bootdey.com/license -->
-    <!--
-    	The codes are free, but we require linking to our web site.
-    	Why to Link?
-    	A true story: one girl didn't set a link and had no decent date for two years, and another guy set a link and got a top ranking in Google!
-    	Where to Put the Link?
-    	home, about, credits... or in a good page that you want
-    	THANK YOU MY FRIEND!
-    -->
-    <title>User Profile with tabs - Bootdey.com</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
 </head>
@@ -249,7 +237,7 @@
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                             <h4 class="modal-title">Update Profile Picture</h4>
                     </div>
-                    <form class="" action="uploadphoto.php?id=charles@ucl.ac.uk" method="post" enctype="multipart/form-data">
+                    <form class="" action="uploadphoto.php?id=<?php echo $loggedInUser ?>" method="post" enctype="multipart/form-data">
                     <div class="modal-body">
                         <p>Once a new picture is submitted, the old one will be removed.</p>
                             <p class=""> Select image to upload: </p>
@@ -273,7 +261,7 @@
                             <h4 class="modal-title">Create New Collection</h4>
                     </div>
                     <div class="modal-body">
-                        <form id="collection_form" action="createcollection.php" method="POST">
+                        <form data-title=<?php echo $loggedInUser ?> id="collection_form" action="createcollection.php" method="POST">
                             <input type="text" name="albumName" placeholder="Enter Album Name"><br/><br/>
                             <input type="text" name="descriptionName" placeholder="Enter Album Description"><br/>
                         </form>
@@ -346,7 +334,8 @@ $(document).ready(function () {
     // Create Collection Button
     $("#collection_form").on("submit", function(e) {
         var postData = $(this).serializeArray();
-        postData.push({name: "email", value: "charles@ucl.ac.uk"});
+        var email = $(this).data('title');
+        postData.push({name: "email", value: email});
         var formURL = $(this).attr("action");
         $.ajax({
             url: formURL,

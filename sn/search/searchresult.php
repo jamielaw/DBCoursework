@@ -46,6 +46,7 @@
               }else{
                 $friends[] .= "'" . $row["email"] . "',";
               }
+              $friends2[] .= $row["email"]; //this array is for checking friendship status later on when displaying the table
             }
             $friends[] .= ")";
 
@@ -54,7 +55,13 @@
             //echo $friendStr;
 
             //get number of search results, similar to search query below except we're just selecting the count. explanation of how this query works is defined below
-            $countQuery = "SELECT COUNT(email) FROM MyDB.users WHERE ((firstName LIKE '" . $name .  "%' OR lastName LIKE '" . $name ."%' OR concat_ws(' ', firstName, lastName) LIKE '" . $name . "%') AND (email IN (SELECT emailTo FROM MyDB.friendships WHERE (emailFrom='" . $loggedInUser . "' AND status='accepted')) OR email IN (SELECT emailFrom FROM MyDB.friendships WHERE ( emailTo='". $loggedInUser . "' AND status='accepted')) OR email IN (SELECT emailFrom FROM MyDB.friendships WHERE ( emailTo='". $loggedInUser . "' AND status='accepted')) OR email IN (SELECT emailTo FROM MyDB.friendships WHERE (emailFrom IN " .$friendStr . ") OR email IN (SELECT emailFrom FROM MyDB.friendships WHERE(emailTo IN " . $friendStr . ")))))"; 
+            $countQuery = "SELECT COUNT(email) FROM MyDB.users WHERE ((firstName LIKE '" . $name .  "%' OR lastName LIKE '" . $name ."%' OR concat_ws(' ', firstName, lastName) LIKE '" . $name . "%') 
+            AND 
+            (email IN (SELECT emailTo FROM MyDB.friendships WHERE (emailFrom='" . $loggedInUser . "' AND status='accepted')) 
+            OR email IN (SELECT emailFrom FROM MyDB.friendships WHERE ( emailTo='". $loggedInUser . "' AND status='accepted')) 
+            OR email IN (SELECT emailFrom FROM MyDB.friendships WHERE ( emailTo='". $loggedInUser . "' AND status='accepted')) 
+            OR email IN (SELECT emailTo FROM MyDB.friendships WHERE (emailFrom IN " .$friendStr . ") OR email IN (SELECT emailFrom FROM MyDB.friendships WHERE(emailTo IN " . $friendStr . ")
+            ))))"; 
             $y = $pdo->query($countQuery);
             $countResults = $y->fetch(PDO::FETCH_ASSOC);
             $count = $countResults["COUNT(email)"]; //extract the integer value from results
@@ -77,12 +84,16 @@
 
 
             if($count>0){ //only display table if 1 or more results
-              echo "<table style='width:100%'> <tr> <th> Email </th> <th> First name </th> <th> Last Name </th> <th> Image </th> <th> Go to profile </th>";
+              echo "<table style='width:100%'> <tr> <th> Email </th> <th> First name </th> <th> Last Name </th> <th> Image </th> <th> Friendship Status </th> <th> Go to profile </th>";
               //- loop through result set 
               foreach($pdo->query($searchQuery) as $row){
                   //-display the result of the array 
                   echo "<tr>"; 
-                  echo "<td>" . $row["email"] . "</td><td> " . $row["firstName"] . "</td><td>" . $row["lastName"]  . "</td><td> <img style='height:100px;width=100px;' src='" . $row["profileImage"] . "'</td>" . "<td><a href=\"../profile/readprofile.php?email=" . $row["email"] . "\">View profile</a></td>";
+                  if(in_array($row["email"],$friends2)){ //this indexed member is a friend
+                    echo "<td>" . $row["email"] . "</td><td> " . $row["firstName"] . "</td><td>" . $row["lastName"]  . "</td><td> <img style='height:100px;width=100px;' src='" . $row["profileImage"] . "'</td>" . "<td>Friend</td><td><a href=\"../profile/readprofile.php?email=" . $row["email"] . "\">View profile</a></td>";
+                  }else{ //this indexed member is a friend-of-friend
+                    echo "<td>" . $row["email"] . "</td><td> " . $row["firstName"] . "</td><td>" . $row["lastName"]  . "</td><td> <img style='height:100px;width=100px;' src='" . $row["profileImage"] . "'</td>" . "<td>Friend-of-friend</td><td><a href=\"../profile/readprofile.php?email=" . $row["email"] . "\">View profile</a></td>";
+                  }
                   echo "</tr>"; 
                   }
 

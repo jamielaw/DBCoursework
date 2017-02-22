@@ -29,7 +29,7 @@ if (isset($_REQUEST['query'])) {
 
     $friendStr = implode($friends);
 
-    $sql="SELECT firstName, lastName FROM MyDB.users WHERE ((firstName LIKE '" . $query .  "%' OR lastName LIKE '" . $query ."%') AND (email IN (SELECT emailTo FROM MyDB.friendships WHERE (emailFrom='" . $loggedInUser . "' AND status='accepted')) OR email IN (SELECT emailFrom FROM MyDB.friendships WHERE ( emailTo='". $loggedInUser . "' AND status='accepted')) OR email IN (SELECT emailTo FROM MyDB.friendships WHERE (emailFrom IN " .$friendStr . ") OR email IN (SELECT emailFrom FROM MyDB.friendships WHERE(emailTo IN " . $friendStr . ")))))";
+    $sql="SELECT firstName, lastName FROM MyDB.users WHERE ((firstName LIKE '" . $query .  "%' OR lastName LIKE '" . $query ."%') AND (email IN (SELECT emailTo FROM MyDB.friendships WHERE (emailFrom='" . $loggedInUser . "' AND status='accepted')) OR email IN (SELECT emailFrom FROM MyDB.friendships WHERE ( emailTo='". $loggedInUser . "' AND status='accepted')) OR email IN (SELECT emailTo FROM MyDB.friendships WHERE (emailFrom IN " .$friendStr . " AND status='accepted') OR email IN (SELECT emailFrom FROM MyDB.friendships WHERE(emailTo IN " . $friendStr . " AND status='accepted')))))";
     foreach($pdo->query($sql) as $row){
                 //-display the result of the array
     	//we don't want to use array() as that messes up the formatting of the output, we just want to push onto it

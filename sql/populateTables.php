@@ -34,6 +34,8 @@ $insertFriendshipTable = "INSERT INTO MyDB.friendships (emailFrom,emailTo,status
 (\"charles@ucl.ac.uk\",\"alan@ucl.ac.uk\",\"pending\"),
 (\"charles@ucl.ac.uk\",\"john@ucl.ac.uk\",\"denied\"),
 (\"vicky@ucl.ac.uk\",\"charles@ucl.ac.uk\",\"accepted\"),
+(\"vicky@ucl.ac.uk\",\"ada@ucl.ac.uk\",\"accepted\"),
+(\"vicky@ucl.ac.uk\",\"alan@ucl.ac.uk\",\"accepted\"),
 (\"grace@ucl.ac.uk\",\"ada@ucl.ac.uk\",\"accepted\"),
 (\"grace@ucl.ac.uk\",\"alan@ucl.ac.uk\",\"accepted\"),
 (\"grace@ucl.ac.uk\",\"john@ucl.ac.uk\",\"accepted\"),

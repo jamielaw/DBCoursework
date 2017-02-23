@@ -5,6 +5,9 @@
     include("../inc/header.php");
     include("../inc/nav-trn.php");
 
+    //Access Rights - changing view
+    $showEmail='true';
+
     $email = null;
     if (!empty($_GET['email'])) {
         $email = $_REQUEST['email'];
@@ -106,6 +109,17 @@
 								<i class="ace-icon fa fa-envelope-o bigger-110"></i>
 								<span class="bigger-110">Send a message</span>
 							</a>
+
+                            <a data-toggle="modal" data-target="#export_dialog" class="btn btn-sm btn-block btn-primary">
+                                <i class="ace-icon fa fa-download bigger-110"></i>
+                                <span class="bigger-110">Export Profile</span>
+                            </a>
+
+                            <a data-toggle="modal" data-target="#import_dialog" class="btn btn-sm btn-block btn-primary">
+                                <i class="ace-icon fa fa-upload bigger-110"></i>
+                                <span class="bigger-110">Import Profile</span>
+                            </a>
+
 						</div><!-- /.col -->
 
 						<div class="col-xs-12 col-sm-9">
@@ -120,9 +134,9 @@
 
 							<div class="profile-user-info">
 								<div class="profile-info-row">
-									<div class="profile-info-name"> Email </div>
+									<div style="visibility: <?php echo $showEmail ?>" class="profile-info-name"> Email </div>
 
-									<div class="profile-info-value">
+									<div style="visibility: <?php echo $showEmail ?>" class="profile-info-value">
 										<span> <?php echo $data['email'];?> </span>
 									</div>
 								</div>
@@ -252,6 +266,57 @@
             </div>
         </div>
 
+        <!-- modal to export user profile -->
+        <div class="modal fade" id="export_dialog" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Export your profile to XML format</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form data-title=<?php echo $loggedInUser ?> id="export_form" action="../XML/exportProfile.php" method="POST">
+                            <p> Are you sure you want to export your profile? We appreciate your patience as it may take a while.</p>
+                            <div id="myProgress">
+                              <div id="myBar">
+                                <div id="label">0%</div>
+                              </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" id="submitForm4" class="btn btn-success">Export</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- modal to import user profile -->
+        <div class="modal fade" id="import_dialog" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Import your profile to XML format</h4>
+                    </div>
+                    <div class="modal-body">
+                       <form  data-title=<?php echo $loggedInUser ?> action="../XML/importProfile.php?" method="post" enctype="multipart/form-data">
+                            <div class="modal-body">
+                                <p> Upload your XML file! All your current data will be lost! </p>
+                                <p class=""> Select XML file to upload: </p>
+                                <input class="" type="file" name="fileToUpload" id="fileToUpload"> <br>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                <input class= "btn btn-primary" type="submit" value="Import" name="submit">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- modal to create new collection -->
         <div class="modal fade" id="collection_dialog" role="dialog">
             <div class="modal-dialog">
@@ -360,6 +425,81 @@ $(document).ready(function () {
     });
 });
 
+
+$(document).ready(function () {
+
+    // Export Collection Button
+    $("#export_form").on("submit", function(e) {
+
+      var elem = document.getElementById("myBar");   
+      var width = 10;
+      var id = setInterval(frame, 300);
+      function frame() {
+        if (width >= 100) {
+          clearInterval(id);
+        } else {
+          width++; 
+          elem.style.width = width + '%'; 
+          document.getElementById("label").innerHTML = width * 1  + '%';
+        }
+      }
+        var postData = $(this).serializeArray();
+        var email = $(this).data('title');
+        postData.push({name: "email", value: email});
+        var formURL = $(this).attr("action");
+        $.ajax({
+            url: formURL,
+            type: "POST",
+            data: postData,
+            success: function(data, textStatus, jqXHR) {
+                $('#export_dialog .modal-header .modal-title').html("Result");
+                $('#export_dialog .modal-body').html(data);
+                $("#submitForm4").remove();
+
+                //location.reload();
+            },
+            error: function(jqXHR, status, error) {
+                console.log(status + ": " + error);
+            }
+        });
+        e.preventDefault();
+    });
+
+    $("#submitForm4").on('click', function() {
+        $("#export_form").submit();
+    });
+});
+
+$(document).ready(function () {
+
+    // Import Collection Button
+    $("#import_form").on("submit", function(e) {
+
+        var formURL = $(this).attr("action");
+        $.ajax({
+            url: formURL,
+            type: "POST",
+            data: postData,
+            success: function(data, textStatus, jqXHR) {
+                $('#import_dialog .modal-header .modal-title').html("Result");
+                $('#import_dialog .modal-body').html(data);
+                $("#submitForm5").remove();
+
+                //location.reload();
+            },
+            error: function(jqXHR, status, error) {
+                console.log(status + ": " + error);
+            }
+        });
+        e.preventDefault();
+    });
+
+    $("#submitForm5").on('click', function() {
+        $("#import_form").submit();
+    });
+});
+
+
 // Update Collection
 var albumName = null;
 var albumDescription = null;
@@ -454,6 +594,22 @@ $(document).on("click", ".open-update_photo", function () {
 <style type="text/css">
 /*body{margin-top:20px;}*/
 
+#myProgress {
+  width: 100%;
+  background-color: #ddd;
+}
+
+#myBar {
+  width: 1%;
+  height: 30px;
+  background-color: #4CAF50;
+}
+
+#label {
+  text-align: center;
+  line-height: 30px;
+  color: white;
+}
 .align-center, .center {
     text-align: center!important;
 }

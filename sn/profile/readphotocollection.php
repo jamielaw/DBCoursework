@@ -14,6 +14,16 @@
     }
 
 
+    // Access Rights - changing views
+    if(strcmp($loggedInUser, $createdBy)==0) {$adminAccess='true';}else{$adminAccess='hidden';}
+    if(checkAccessRights($loggedInUser, $photoCollectionId)['value']==1 || strcmp($createdBy, $loggedInUser)==0){
+        $userAccess='true';
+        $showMessage='hidden';
+    } else {
+        $userAccess='hidden';
+        $showMessage='true';
+    }
+
     if (null==$createdBy || null==$photoCollectionId) {
         header("Location: index.php");
     } else {
@@ -92,22 +102,23 @@
                 $row = $q2->fetch(PDO::FETCH_ASSOC)
                 ?>
 	    	<h3 class="col-md-2 col-md-offset-5"><?php echo $row['title'];?></h3>
-            <a data-title="<?php echo $row['title']?>" data-id="" class="open-update_dialog btn btn-success" data-toggle="modal" href="#update_dialog">Access Rights</a>
+            <a  style="visibility: <?php echo $adminAccess ?>" data-title="<?php echo $row['title']?>" data-id="" class="open-update_dialog btn btn-success" data-toggle="modal" href="#update_dialog">Access Rights</a>
 	    </div>
 		</div>
 
- <div>
+ <div style="visibility: <?php echo $adminAccess ?>">
 	<form class="col-md-2 col-md-offset-5" action="uploadphoto.php?id=<?php echo $photoCollectionId; ?>" method="post" enctype="multipart/form-data">
 		<p class=""> Select image to upload: </p>
 		<input class="" type="file" name="fileToUpload" id="fileToUpload"> <br>
 		<input class= "btn btn-primary" type="submit" value="Upload Image" name="submit">
 	</form>
 </div>
+<p class="col-md-2 col-md-offset-5" style="visibility: <?php echo $showMessage ?>">Sorry, you don't have access to see this album!</p>
 
  <div class="row"><br></div>
  <div class="row"><br></div>
 
-	<div class="row">
+	<div style="visibility: <?php echo $userAccess ?>" class="row">
     <div class="container">
 	    	<div class="form-horizontal" >
 			  <div class="control-group">
@@ -141,7 +152,7 @@
                         <h4 class="modal-title">Update Access Rights</h4>
                     </div>
                     <div class="modal-body">
-                    <p> </p>
+                    <xx> </xx>
                         <form id="update_form" action="" method="POST">
                             <div class="tabbable">
                                 <ul class="nav nav-tabs padding-18">
@@ -309,7 +320,7 @@ $(document).on("click", ".open-update_dialog", function () {
      $(".modal-body #albumDescription").val(albumDescription);
      clicked = $(this).data('id');
 
-     $( "p" ).text( "Collection Title: " + albumName );
+     $( "xx" ).text( "Collection Title: " + albumName );
 
     // Update Collection Button
     $("#update_dialog").on("submit", function(e) {

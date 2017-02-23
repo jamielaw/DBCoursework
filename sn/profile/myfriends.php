@@ -153,7 +153,7 @@
       </li>
       <?php
       $sql = "SELECT DISTINCT * FROM users WHERE users.email !='$loggedInUser'
-       AND (users.email NOT IN
+       AND (users.email LIKE 'ucl.ac.uk' OR users.email NOT IN
          ( SELECT users.email
            FROM users
            JOIN friendships ON

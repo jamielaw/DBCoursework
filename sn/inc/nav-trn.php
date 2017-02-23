@@ -63,7 +63,7 @@
                     <li class=\"dropdown\">
                     <a class=\"dropdown-toggle\" data-toggle=\"dropdown\" href=\"#\">";
                     //get user details for sprite in navbar
-                    $sql="SELECT firstName, lastName, profileImage FROM MyDB.users WHERE email='" . $loggedInUser . "'"; 
+                    $sql="SELECT firstName, lastName, profileImage FROM MyDB.users WHERE email='" . $loggedInUser . "'";
                     $userq = $pdo->query($sql);
                     $row = $userq->fetch(PDO::FETCH_ASSOC);
                     echo "<img style='height:20px;width:20px;border-radius:2px;' src='" . $row["profileImage"] . "'> ";
@@ -77,7 +77,8 @@
                     echo "</li>";
 
                 //Check for new friend requests!
-                  $friendRequestCount = 'SELECT COUNT( DISTINCT email, firstName, lastName, profileImage )FROM users JOIN friendships ON users.email = friendships.emailFrom OR users.email=friendships.emailTo WHERE (friendships.emailTo=\'charles@ucl.ac.uk\') AND users.email!=\'charles@ucl.ac.uk\' AND status=\'pending\';';
+                  $friendRequestCount = "SELECT COUNT( * )FROM users JOIN friendships ON users.email = friendships.emailFrom OR users.email=friendships.emailTo WHERE (friendships.emailTo='$loggedInUser' OR friendships.emailFrom='$loggedInUser' ) AND users.email!= '$loggedInUser' AND status='pending';";
+                  //echo $friendRequestCount;
                   $q = $pdo->prepare($friendRequestCount);
                   $q->execute();
 
@@ -120,7 +121,7 @@
                     <ul class=\"nav navbar-nav\">
                     <li><a href=\"/loginTest/login.php\">Log In</a></li>
                     <li><a href=\"/loginTest/signup.php\">Sign Up</a></li>
-                </div>";        
+                </div>";
         }
         Database::disconnect();
         ?>

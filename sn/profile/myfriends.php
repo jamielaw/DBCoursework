@@ -49,21 +49,21 @@
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     $getLoggedInUserFriends = "SELECT * FROM ( SELECT * FROM users JOIN
-      friendships ON users.email = friendships.emailFrom OR
-      users.email=friendships.emailTo WHERE(
-        (friendships.emailFrom='$loggedInUser' OR
-        friendships.emailTo='$loggedInUser' ) AND
-         users.email!= '$loggedInUser' AND
-         friendships.status = 'accepted')) AS
-         T1 JOIN ( SELECT * FROM users JOIN
-         friendships ON users.email =
-          friendships.emailFrom OR
-          users.email=friendships.emailTo
-          WHERE( (friendships.emailFrom='$nonFriendedUser'
-          OR friendships.emailTo='$nonFriendedUser' )
-          AND users.email!= '$nonFriendedUser' AND
-          friendships.status = 'accepted')) AS T2 ON T1.email
-          = T2.email";
+       friendships ON users.email = friendships.emailFrom OR
+       users.email=friendships.emailTo WHERE(
+         (friendships.emailFrom='$loggedInUser' OR
+         friendships.emailTo='$loggedInUser' ) AND
+          users.email!= '$loggedInUser' AND
+          friendships.status = 'accepted')) AS
+          T1 JOIN ( SELECT * FROM users JOIN
+          friendships ON users.email =
+           friendships.emailFrom OR
+           users.email=friendships.emailTo
+           WHERE( (friendships.emailFrom='$nonFriendedUser'
+           OR friendships.emailTo='$nonFriendedUser' )
+           AND users.email!= '$nonFriendedUser' AND
+           friendships.status = 'accepted')) AS T2 ON T1.email
+           = T2.email";
 
     //echo $getLoggedInUserFriends;
 
@@ -100,9 +100,10 @@
       </li>
       <?php
       $pdo = Database::connect();
-      $sql = 'SELECT DISTINCT email, firstName, lastName, profileImage FROM users JOIN friendships ON users.email = friendships.emailFrom OR users.email=friendships.emailTo WHERE (friendships.emailTo=?) AND users.email!=? AND status=\'pending\';';
+      $sql = "SELECT DISTINCT email, firstName, lastName, profileImage FROM users JOIN friendships ON users.email = friendships.emailFrom OR users.email=friendships.emailTo WHERE (friendships.emailTo= '$loggedInUser' OR friendships.emailFrom = '$loggedInUser') AND users.email!= '$loggedInUser'  AND status='pending';";
       $q = $pdo->prepare($sql);
-      $q->execute(array($loggedInUser,$loggedInUser));
+      $q->execute();
+      //echo $sql;
       foreach ($q as $row) {
       $nrFriends = nrOfFriends($row['email'])['COUNT(*)'];
       $nrPhotos = nrOfPhotos($row['email'])['COUNT(*)'];
@@ -145,6 +146,7 @@
   </div>
 
   <div class="jumbotron list-content">
+
     <ul class="list-group">
       <li href="#" class="list-group-item title">
         Suggestions...
@@ -160,9 +162,10 @@
            OR users.email=friendships.emailTo
            WHERE(
               (friendships.emailFrom= '$loggedInUser'
-              OR friendships.emailTo= '$loggedInUser' )
+              OR friendships.emailTo= '$loggedInUser'
+              AND users.email LIKE 'ucl.ac.uk' )
               AND
-               users.email != '$loggedInUser' )));";
+              users.email != '$loggedInUser'  ) ));";
 
       $recommendations = array();
       foreach ($pdo->query($sql) as $row) {
@@ -177,7 +180,7 @@
 
 
         if($row['mutualFriends'] == 0) continue;
-        
+
         echo '<li href="#" class="list-group-item text-left">
           <div class="panel-heading">
             <div class="media">

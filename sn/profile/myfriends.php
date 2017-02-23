@@ -175,6 +175,9 @@
 
       foreach ($recommendations as $row) {
 
+
+        if($row['mutualFriends'] == 0) continue;
+        
         echo '<li href="#" class="list-group-item text-left">
           <div class="panel-heading">
             <div class="media">

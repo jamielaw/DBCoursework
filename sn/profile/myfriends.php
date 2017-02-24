@@ -74,6 +74,19 @@
     }
     return $count;
   }
+
+  function getUsersUniversity($loggedInUser){
+    $matches = array();
+    $uni = preg_match("@(.)$", $loggedInUser, $matches, PREG_OFFSET_CAPTURE);
+    //echo $matches[0][0];
+    return $matches[0][0];
+  }
+  function getDomainFromEmail($email) {
+  // Get the data after the @ sign
+  $domain = substr(strrchr($email, "@"), 1);
+  $uni = strtok($domain,".");
+  return strtoupper($uni);
+  }
 ?>
 
 <!DOCTYPE html>
@@ -153,7 +166,7 @@
       </li>
       <?php
       $sql = "SELECT DISTINCT * FROM users WHERE users.email !='$loggedInUser'
-       AND (users.email LIKE 'ucl.ac.uk' OR users.email NOT IN
+       AND ( users.email NOT IN
          ( SELECT users.email
            FROM users
            JOIN friendships ON
@@ -163,10 +176,11 @@
            WHERE(
               (friendships.emailFrom= '$loggedInUser'
               OR friendships.emailTo= '$loggedInUser'
-              AND users.email LIKE 'ucl.ac.uk' )
+              OR users.email LIKE '@ucl.ac.uk')
               AND
               users.email != '$loggedInUser'  ) ));";
 
+      //echo $sql;
       $recommendations = array();
       foreach ($pdo->query($sql) as $row) {
         $row["mutualFriends"] = nrOfMutualFriends($loggedInUser,$row['email']);
@@ -177,9 +191,8 @@
       usort($recommendations, 'compareOrder');
 
       foreach ($recommendations as $row) {
-
-
-        if($row['mutualFriends'] == 0) continue;
+        $uni = getDomainFromEmail($row['email']);
+        if($uni != getDomainFromEmail($loggedInUser)) continue;
 
         echo '<li href="#" class="list-group-item text-left">
           <div class="panel-heading">
@@ -189,9 +202,16 @@
             </div>
             <div class="media-body">
               <h4 class="media-heading margin-v-5"><a href="readprofile.php?email='.$row['email'].'">'.$row['firstName'].' '.$row['lastName'].'</a></h4>
-              <div class="profile-icons">'. $row['mutualFriends'] . ' mutal friends
+              <div class="profile-icons">';
 
-            </div>
+              if($row['mutualFriends'] != 0){
+                echo $row['mutualFriends'] . " mutal friends";
+              }else{
+                echo "also goes to $uni" ;
+
+              }
+
+         echo '</div>
           </div>
           <label class="pull-right">
             <a  class="btn btn-success btn-xs glyphicon glyphicon-plus" href="createFriendRequest.php?email='.$row['email'].'" title="Add as friend"></a>
@@ -201,6 +221,9 @@
         </div>
       </div>
       </li>';
+
+
+
       }
       ?>
     </ul>

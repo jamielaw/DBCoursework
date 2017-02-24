@@ -5,13 +5,14 @@
     include("../inc/header.php");
     include("../inc/nav-trn.php");
 
-    //Access Rights - changing view
-    $showEmail='true';
-
     $email = null;
     if (!empty($_GET['email'])) {
         $email = $_REQUEST['email'];
     }
+
+    //Access Rights - changing view
+    $showEmail='true';
+    if(strcmp($loggedInUser, $email)==0) {$userAccess='hidden'; $adminAccess='true';}else{$userAccess='true'; $adminAccess='hidden';}
 
     if (null==$email) {
         header("Location: index.php");
@@ -110,12 +111,12 @@
 								<span class="bigger-110">Send a message</span>
 							</a>
 
-                            <a data-toggle="modal" data-target="#export_dialog" class="btn btn-sm btn-block btn-primary">
+                            <a style="visibility: <?php echo $adminAccess ?>" data-toggle="modal" data-target="#export_dialog" class="btn btn-sm btn-block btn-primary">
                                 <i class="ace-icon fa fa-download bigger-110"></i>
                                 <span class="bigger-110">Export Profile</span>
                             </a>
 
-                            <a data-toggle="modal" data-target="#import_dialog" class="btn btn-sm btn-block btn-primary">
+                            <a style="visibility: <?php echo $adminAccess ?>" data-toggle="modal" data-target="#import_dialog" class="btn btn-sm btn-block btn-primary">
                                 <i class="ace-icon fa fa-upload bigger-110"></i>
                                 <span class="bigger-110">Import Profile</span>
                             </a>
@@ -205,7 +206,7 @@
 
 				<div id="pictures" class="tab-pane">
 
-                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#collection_dialog">Create Collection</button>
+                    <button style="visibility: <?php echo $adminAccess ?>" type="button" class="btn btn-info" data-toggle="modal" data-target="#collection_dialog">Create Collection</button>
 
 					<?php
                             //$pdo = Database::connect();
@@ -226,7 +227,7 @@
 											</div>
 										</a>
 
-										<div class="tools tools-bottom">
+										<div style="visibility: '.$adminAccess.'" class="tools tools-bottom">
 											<a data-title="'.$row['title'].'" data-description="'.$row['description'].'" data-id="'.$row['photoCollectionId'].'" class="open-update_dialog" data-toggle="modal" href="#update_dialog">
 												<i class="ace-icon fa fa-pencil"></i>
 											</a>
@@ -253,11 +254,12 @@
                     </div>
                     <form class="" action="uploadphoto.php?id=<?php echo $loggedInUser ?>" method="post" enctype="multipart/form-data">
                     <div class="modal-body">
-                        <p>Once a new picture is submitted, the old one will be removed.</p>
-                            <p class=""> Select image to upload: </p>
-                            <input class="" type="file" name="fileToUpload" id="fileToUpload"> <br>
+                        <p style="visibility: <?php echo $userAccess ?>">You don't have access to change oher users'profile picture.<p>
+                        <p style="visibility: <?php echo $adminAccess ?>">Once a new picture is submitted, the old one will be removed.</p>
+                            <p style="visibility: <?php echo $adminAccess ?>" class=""> Select image to upload: </p>
+                            <input style="visibility: <?php echo $adminAccess ?>" class="" type="file" name="fileToUpload" id="fileToUpload"> <br>
                     </div>
-                    <div class="modal-footer">
+                    <div style="visibility: <?php echo $adminAccess ?>" class="modal-footer">
                     <input class= "btn btn-primary" type="submit" value="Upload Image" name="submit">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     </div>

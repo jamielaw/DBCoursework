@@ -1,7 +1,7 @@
 <?php
 require 'database.php';
 
-$loggedInUser='vicky@ucl.ac.uk';
+$loggedInUser='charles@ucl.ac.uk';
 
 //Getting user data
 $pdo = Database::connect();

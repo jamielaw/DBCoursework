@@ -10,16 +10,16 @@
 <body>
 	<div class="container">
 		<h1>Your Privacy Settings</h1>
-		<form class="" action="createcircle.php" method="get" id="createform">
+		<form class="" action="updatesettings.php" method="get" id="updateform">
 			<?php //we want to get the privacy settings of the user here and echo it accordingly
 				$sql = "SELECT * FROM MyDB.privacySettings WHERE email='" . $loggedInUser . "'";
 				foreach($pdo->query($sql) as $row){
 					echo "<h3>" . $row["privacySettingsTitle"] . "</h3>";
-					if($row["status"]==True){
-						echo "<input type='checkbox' name='" . $row["privacySettingsId"] . "' value = '" . $row["privacySettingsTitle"] . "' checked>" . $row["privacySettingsDescription"] . "</input>";
+					if($row["status"]==True){ //check the box if it's already true
+						echo "<input type='checkbox' class='form' name='setting[]' value = '" . $row["privacySettingsId"] . "' checked>" . $row["privacySettingsDescription"] . "</input>";
 					}
 					else{
-						echo "<input type='checkbox' name='" . $row["privacySettingsId"] . "' value = '" . $row["privacySettingsTitle"] . "'>" . $row["privacySettingsDescription"] . "</input>";
+						echo "<input type='checkbox' class='form' name='setting[]' value = '" . $row["privacySettingsId"] . "'>" . $row["privacySettingsDescription"] . "</input>";
 					}
 					echo "<br>";
 				}

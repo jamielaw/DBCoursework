@@ -49,13 +49,15 @@
       <a class="navbar-brand">BookFace</a>
     </div>
           <?php
+          session_start();
           require("$root/sn/session.php");
           $pdo = Database::connect();
           $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-          $count="SELECT COUNT(firstName)FROM MyDB.users WHERE email='" . $loggedInUser . "'"; //count results, to check if user is logged in
-          $countq = $pdo->query($count);
-          $isLoggedInExec = $countq->fetch(PDO::FETCH_ASSOC);
-          $isLoggedIn = $isLoggedInExec["COUNT(firstName)"];
+          if (isset($_SESSION['id'])) {
+            $isLoggedIn=1;
+          }else{
+            $isLoggedIn=0;
+          }
           //$isLoggedIn=0;
           if($isLoggedIn){ //if user is logged in, display relevant navbar
                     echo "<div class=\"collapse navbar-collapse\">
@@ -72,7 +74,7 @@
                   <ul class=\"dropdown-menu\">
                     <li><a href=\"/sn/profile/readprofile.php?email=" . $loggedInUser . "\"><i class=\"fa fa-user\"></i> My Profile</a></li>
                     <li><a href=\"/sn/profile/settings.php\"><i class=\"fa fa-cog\"></i> Settings</a></li>
-                    <li><a href=\"/sn/logout.php\"><i class=\"fa fa-sign-out\"></i> Logout</a></li>
+                    <li><a href=\"/loginTest/logout.php\"><i class=\"fa fa-sign-out\"></i> Logout</a></li>
                   </ul>";
                     echo "</li>";
 

@@ -1,4 +1,6 @@
 <?php
+  include '../sn/inc/header.php'; 
+  include '../sn/inc/nav-trn.php';
   session_start();
  ?>
 

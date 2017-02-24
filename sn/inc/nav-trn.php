@@ -58,7 +58,7 @@
           }else{
             $isLoggedIn=0;
           }
-          //$isLoggedIn=0;
+          $isLoggedIn=1;
           if($isLoggedIn){ //if user is logged in, display relevant navbar
                     echo "<div class=\"collapse navbar-collapse\">
                     <ul class=\"nav navbar-nav\">

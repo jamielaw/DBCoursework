@@ -34,6 +34,8 @@ $insertFriendshipTable = "INSERT INTO MyDB.friendships (emailFrom,emailTo,status
 (\"charles@ucl.ac.uk\",\"alan@ucl.ac.uk\",\"pending\"),
 (\"charles@ucl.ac.uk\",\"john@ucl.ac.uk\",\"denied\"),
 (\"vicky@ucl.ac.uk\",\"charles@ucl.ac.uk\",\"accepted\"),
+(\"vicky@ucl.ac.uk\",\"ada@ucl.ac.uk\",\"accepted\"),
+(\"vicky@ucl.ac.uk\",\"alan@ucl.ac.uk\",\"accepted\"),
 (\"grace@ucl.ac.uk\",\"ada@ucl.ac.uk\",\"accepted\"),
 (\"grace@ucl.ac.uk\",\"alan@ucl.ac.uk\",\"accepted\"),
 (\"grace@ucl.ac.uk\",\"john@ucl.ac.uk\",\"accepted\"),
@@ -143,6 +145,11 @@ $insertMessages = "INSERT INTO MyDB.messages (emailTo, emailFrom, messageText) V
 (\"3\",\"charles@ucl.ac.uk\",\"Hello World\"),
 (\"4\",\"ada@ucl.ac.uk\",\"Invitation\")";
 
+$insertPrivacySettings = "INSERT INTO MyDB.privacySettings (email, privacySettingsTitle, privacySettingsDescription, status) VALUES
+(\"charles@ucl.ac.uk\", \"Photo/Blog privacy\", \"Restrict audience of your future photos/blog posts to friends only\", TRUE),
+(\"charles@ucl.ac.uk\", \"Friend request privacy\", \"Restrict friend requests to only people who you share mutual friends with\", TRUE);
+";
+
 $populatingTables = [
     $insertRolesTable,
     $insertRightsTable,
@@ -156,7 +163,8 @@ $populatingTables = [
     $insertUserCircleRelationshipsTable,
     $insertCommentsTable,
     $insertAnnotationsTable,
-    $insertMessages
+    $insertMessages,
+    $insertPrivacySettings
 
 ];
 

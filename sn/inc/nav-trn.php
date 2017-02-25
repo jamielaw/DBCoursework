@@ -49,21 +49,23 @@
       <a class="navbar-brand">BookFace</a>
     </div>
           <?php
+          session_start();
           require("$root/sn/session.php");
           $pdo = Database::connect();
           $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-          $count="SELECT COUNT(firstName)FROM MyDB.users WHERE email='" . $loggedInUser . "'"; //count results, to check if user is logged in
-          $countq = $pdo->query($count);
-          $isLoggedInExec = $countq->fetch(PDO::FETCH_ASSOC);
-          $isLoggedIn = $isLoggedInExec["COUNT(firstName)"];
-          //$isLoggedIn=0;
+          if (isset($_SESSION['id'])) {
+            $isLoggedIn=1;
+          }else{
+            $isLoggedIn=0;
+          }
+          $isLoggedIn=1;
           if($isLoggedIn){ //if user is logged in, display relevant navbar
                     echo "<div class=\"collapse navbar-collapse\">
                     <ul class=\"nav navbar-nav\">
                     <li class=\"dropdown\">
                     <a class=\"dropdown-toggle\" data-toggle=\"dropdown\" href=\"#\">";
                     //get user details for sprite in navbar
-                    $sql="SELECT firstName, lastName, profileImage FROM MyDB.users WHERE email='" . $loggedInUser . "'"; 
+                    $sql="SELECT firstName, lastName, profileImage FROM MyDB.users WHERE email='" . $loggedInUser . "'";
                     $userq = $pdo->query($sql);
                     $row = $userq->fetch(PDO::FETCH_ASSOC);
                     echo "<img style='height:20px;width:20px;border-radius:2px;' src='" . $row["profileImage"] . "'> ";
@@ -72,12 +74,13 @@
                   <ul class=\"dropdown-menu\">
                     <li><a href=\"/sn/profile/readprofile.php?email=" . $loggedInUser . "\"><i class=\"fa fa-user\"></i> My Profile</a></li>
                     <li><a href=\"/sn/profile/settings.php\"><i class=\"fa fa-cog\"></i> Settings</a></li>
-                    <li><a href=\"/sn/logout.php\"><i class=\"fa fa-sign-out\"></i> Logout</a></li>
+                    <li><a href=\"/loginTest/logout.php\"><i class=\"fa fa-sign-out\"></i> Logout</a></li>
                   </ul>";
                     echo "</li>";
 
                 //Check for new friend requests!
-                  $friendRequestCount = 'SELECT COUNT( DISTINCT email, firstName, lastName, profileImage )FROM users JOIN friendships ON users.email = friendships.emailFrom OR users.email=friendships.emailTo WHERE (friendships.emailTo=\'charles@ucl.ac.uk\') AND users.email!=\'charles@ucl.ac.uk\' AND status=\'pending\';';
+                  $friendRequestCount = "SELECT COUNT( * )FROM users JOIN friendships ON users.email = friendships.emailFrom OR users.email=friendships.emailTo WHERE (friendships.emailTo='$loggedInUser' OR friendships.emailFrom='$loggedInUser' ) AND users.email!= '$loggedInUser' AND status='pending';";
+                  //echo $friendRequestCount;
                   $q = $pdo->prepare($friendRequestCount);
                   $q->execute();
 
@@ -120,7 +123,7 @@
                     <ul class=\"nav navbar-nav\">
                     <li><a href=\"/loginTest/login.php\">Log In</a></li>
                     <li><a href=\"/loginTest/signup.php\">Sign Up</a></li>
-                </div>";        
+                </div>";
         }
         Database::disconnect();
         ?>

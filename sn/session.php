@@ -1,7 +1,7 @@
 <?php
 require 'database.php';
 
-$loggedInUser='vicky@ucl.ac.uk';
+$loggedInUser='charles@ucl.ac.uk';
 
 //Getting user data
 $pdo = Database::connect();
@@ -15,5 +15,5 @@ $firstName = $data['firstName'];
 $lastName = $data['lastName'];
 $photo = $data['profileImage'];
 
-
-?> 
+Database::disconnect(); // remember to disconnect otherwise this causes bugs 
+?>

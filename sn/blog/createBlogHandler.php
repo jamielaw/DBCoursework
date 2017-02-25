@@ -36,7 +36,7 @@
   Database::disconnect();
 
   // Direct back to sn/admin
-  redirect('sn/blog/');
+  redirect('../sn/blog/');
 
 
 

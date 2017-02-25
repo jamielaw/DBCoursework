@@ -10,9 +10,13 @@
     die();
   }
 
+
+
+
   $action = $_GET['action'];
   $requestingUser = $_GET['email'];
   $decidingUser = $loggedInUser;
+
 
 
   $pdo = Database::connect();
@@ -20,16 +24,20 @@
 
   if($action == "accepted" || $action == "denied"){
     // update with appropiate action
-    $sql = "UPDATE friendships SET status='$action' WHERE emailFrom='$requestingUser'
-    AND emailTo='$decidingUser'";
+    $sql = "UPDATE friendships SET status='$action' WHERE ( emailFrom='$requestingUser'
+    AND emailTo='$decidingUser') OR ( emailFrom='$decidingUser'
+    AND emailTo='$requestingUser') ";
 
     $q = $pdo->prepare($sql);
     $q->execute();
 
+    //echo $sql;
   }else{
     // dont do anything because the action is wrong!
   }
 
-  redirect("myfriends.php");
+    redirect("myfriends.php");
+
+  // completed
 
 ?>

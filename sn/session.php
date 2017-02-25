@@ -15,5 +15,5 @@ $firstName = $data['firstName'];
 $lastName = $data['lastName'];
 $photo = $data['profileImage'];
 
-
-?> 
+Database::disconnect();
+?>

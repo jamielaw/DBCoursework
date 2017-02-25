@@ -1,7 +1,6 @@
 <?php
   // Import DB Auth Script
-  require '../database.php';
-  $loggedInUser = 'charles@ucl.ac.uk';
+  require("../session.php");
 
   //function to redirect - to be moved into a utils.php file later?
   function redirect($url) {

@@ -27,8 +27,8 @@
         $q->execute(array($albumName,$descriptionName,$email));
         Database::disconnect();
        
-        echo $albumName . " has been created! You can now add photos to your collection. Please try again!";
+        echo $albumName . " has been created! You can now add photos to your collection.";  
     } else {
-        echo "You haven't given a name to your collection.";
+        echo "You haven't given a name to your collection. Please try again!";
     }
 ?>

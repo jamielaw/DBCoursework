@@ -4,6 +4,7 @@
 
   // Given "string", returns "'string'" - useful for SQL queries
   function wrapArgument($arg){
+    $arg = htmlspecialchars($arg);
     return "'" . $arg . "'";
   }
   // Removes spaces
@@ -35,7 +36,7 @@
   Database::disconnect();
 
   // Direct back to sn/admin
-  redirect('http://localhost:8888/sn/blog/');
+  redirect('sn/blog/');
 
 
 

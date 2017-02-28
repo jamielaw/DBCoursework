@@ -1,7 +1,6 @@
 <?php
   // Import DB Auth Script
-  require '../database.php';
-  $loggedInUser = 'charles@ucl.ac.uk';
+  require("../session.php");
 
   //function to redirect - to be moved into a utils.php file later?
   function redirect($url) {
@@ -12,7 +11,7 @@
   }
 
   // Get PK of Table
-  $circlename = $_GET['circlename'];
+  $circlename = htmlspecialchars($_GET['circlename']);
   // sql to delete a record
   $sql = "INSERT INTO MyDB.circleOfFriends (circleOfFriendsName) VALUES (\"" . $circlename . "\")";
   $getId = "SELECT circleFriendsId FROM MyDB.circleOfFriends WHERE(circleOfFriendsName='" . $circlename . "') ORDER BY circleFriendsId DESC LIMIT 1"; //get ID of the circle we just created as it is autoincrement

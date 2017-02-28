@@ -5,7 +5,7 @@
     include("../inc/header.php");
     include("../inc/nav-trn.php");
 
-    $email = 'charles@ucl.ac.uk';
+    $email = $loggedInUser;
 
     function getProfilePicture($email)
     {
@@ -27,6 +27,70 @@
         $q1->execute(array($email,$email));
         $value = $q1->fetch(PDO::FETCH_ASSOC);
         return $value;
+    }
+
+    function getFriendsMessages($email)
+    {
+        $pdo = Database::connect();
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $sql = 'SELECT DISTINCT emailTo AS email FROM messages WHERE emailFrom = ? AND emailTo NOT REGEXP \'^[0-9]+$\' UNION SELECT DISTINCT emailFrom AS email FROM messages WHERE emailTo = ? AND emailFrom NOT REGEXP \'^[0-9]+$\';';
+        $q1 = $pdo->prepare($sql);
+        $q1->execute(array($email,$email));
+        return $q1;
+    }
+
+    function getCircleMessages($email)
+    {
+        $pdo = Database::connect();
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $sql = 'SELECT DISTINCT a.circleOfFriendsName, a.circleFriendsId, MAX(a.date) as date FROM (SELECT DISTINCT c.circleOfFriendsName, c.circleFriendsId, m.dateCreated as date FROM circleoffriends c 
+            INNER JOIN usercirclerelationships u ON c.circleFriendsId = u.circleFriendsId 
+            INNER JOIN messages m ON m.emailTo=c.circleFriendsId WHERE u.email = ? AND (m.emailTo REGEXP \'^[0-9]+$\' OR m.emailFrom REGEXP \'^[0-9]+$\')) as a 
+            GROUP BY a.circleFriendsId, a.circleOfFriendsName
+            
+            UNION 
+            SELECT DISTINCT b.circleOfFriendsName, b.circleFriendsId, b.date FROM (SELECT c.circleOfFriendsName, c.circleFriendsId, str_to_date(\'01,01,2000\',\'%d,%m,%Y\') as date FROM circleoffriends c 
+            INNER JOIN usercirclerelationships u ON c.circleFriendsId = u.circleFriendsId 
+            WHERE u.email =? AND c.circleFriendsId NOT IN 
+
+            (SELECT c.circleFriendsId FROM circleoffriends c 
+            INNER JOIN usercirclerelationships u ON c.circleFriendsId = u.circleFriendsId 
+            INNER JOIN messages m ON m.emailTo=c.circleFriendsId WHERE u.email = ? AND (m.emailTo REGEXP \'^[0-9]+$\' OR m.emailFrom REGEXP \'^[0-9]+$\'))) as b
+            ORDER BY date DESC;';
+
+         $q1 = $pdo->prepare($sql);
+         $q1->execute(array($email,$email,$email));
+         return $q1;
+    }
+
+    function getFriendsWithoutMessages($email)
+    {
+        $pdo = Database::connect();
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $sql = 'SELECT DISTINCT email, firstName, lastName, profileImage FROM users JOIN friendships ON users.email = friendships.emailFrom OR users.email=friendships.emailTo WHERE (friendships.emailFrom=? OR friendships.emailTo=?) AND users.email!=? AND status=\'accepted\' AND email NOT IN (SELECT DISTINCT emailTo AS email FROM messages WHERE emailFrom = ? AND emailTo NOT REGEXP \'^[0-9]+$\' UNION SELECT DISTINCT emailFrom AS email FROM messages WHERE emailTo = ? AND emailFrom NOT REGEXP \'^[0-9]+$\');';
+        $q1 = $pdo->prepare($sql);
+        $q1->execute(array($email,$email,$email,$email,$email));
+        return $q1;
+    }
+
+    function countMembersInCircle($id)
+    {
+        $pdo = Database::connect();
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $countMembers = "SELECT COUNT(email) FROM MyDB.circleOfFriends INNER JOIN MyDB.userCircleRelationships ON MyDB.circleOfFriends.circleFriendsId=MyDB.userCircleRelationships.circleFriendsId WHERE MyDB.circleOfFriends.circleFriendsId=" . $id;
+        $y = $pdo->query($countMembers);
+        $value = $y->fetch(PDO::FETCH_ASSOC);
+        return $value;
+    }
+
+    function getMembersNames($id)
+    {
+        $pdo = Database::connect();
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $sql = "SELECT firstName, lastName, users.email FROM MyDB.users INNER JOIN MyDB.userCircleRelationships ON MyDB.users.email=MyDB.userCircleRelationships.email WHERE MyDB.userCircleRelationships.circleFriendsId=" . $id;
+        $q1 = $pdo->prepare($sql);
+        $q1->execute(array($id));        
+        return $q1;
     }
 
     function date_difference($date_1, $date_2)
@@ -82,51 +146,29 @@
             $ok=1;
         }
         if ($ok==0) {
-            $output .= $second." seconds ";
+            $output .= "";
         }
         return $output;
     }
 ?>
 
-<div class="paddingTop container">
-    <div class="row">
+<div class="container-fluid">
+    <div class="row content">
     <!-- Left Pannel -->
-    <div class="col-md-3">
+    <div class="col-sm-3 sidenav">
         <div class="panel panel-primary">
             <div class="panel-heading">
                 <span class="glyphicon glyphicon-user"></span> People
-                <div class="btn-group pull-right">
-                    <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
-                        <span class="glyphicon glyphicon-chevron-down"></span>
-                    </button>
-                        <ul class="dropdown-menu slidedown">
-                            <li><a href="http://www.jquery2dotnet.com"><span class="glyphicon glyphicon-refresh">
-                            </span>Refresh</a></li>
-                            <li><a href="http://www.jquery2dotnet.com"><span class="glyphicon glyphicon-ok-sign">
-                            </span>Available</a></li>
-                            <li><a href="http://www.jquery2dotnet.com"><span class="glyphicon glyphicon-remove">
-                            </span>Busy</a></li>
-                            <li><a href="http://www.jquery2dotnet.com"><span class="glyphicon glyphicon-time"></span>
-                                Away</a></li>
-                            <li class="divider"></li>
-                            <li><a href="http://www.jquery2dotnet.com"><span class="glyphicon glyphicon-off"></span>
-                                Sign Out</a></li>
-                        </ul>
-                    </div>
                 </div>
                 <div class="panel-body">
                     <ul id="left-panel" class="chat">
                       <?php
-                      $pdo = Database::connect();
-                      $sql = 'SELECT DISTINCT emailTo AS email FROM messages WHERE emailFrom = ? AND emailTo NOT REGEXP \'^[0-9]+$\' UNION SELECT DISTINCT emailFrom AS email FROM messages WHERE emailTo = ? AND emailFrom NOT REGEXP \'^[0-9]+$\';';
-                      $q1 = $pdo->prepare($sql);
-                      $q1->execute(array($email,$email));
-                      foreach ($q1->fetchAll() as $row) {
+                      foreach (getFriendsMessages($email) as $row) {
                           $profileImage = getProfilePicture($row['email'])['profileImage'];
                           date_default_timezone_set('Europe/London');
                           $date1 = date('m/d/Y h:i:s a', time());
                           $date2 = getMessageDate($row['email'])['dateCreated'];
-                          echo '<li onclick="getMessagesUser(\''.$row['email'].'\',\''.$email.'\')" class="left clearfix"><span class="chat-img pull-left">
+                          echo '<li style="cursor:pointer;" id="'.$email.'" onclick="getMessagesUser(\''.$row['email'].'\',\''.$email.'\')" class="left clearfix"><span class="chat-img pull-left">
                          <img width=50 src=' . $profileImage . ' alt="User Avatar" class="img-circle" />
                          </span>
                             <div class="chat-body clearfix">
@@ -137,14 +179,31 @@
                             </div>
                         </li>';
                       }
-                      $sql = 'SELECT circleOfFriendsName, circleFriendsId  FROM circleoffriends WHERE circleFriendsId IN (SELECT DISTINCT emailTo AS email FROM messages WHERE emailFrom = ? AND emailTo REGEXP \'^[0-9]+$\' UNION SELECT DISTINCT emailFrom AS email FROM messages WHERE emailTo = ? AND emailFrom REGEXP \'^[0-9]+$\');';
-                      $q1 = $pdo->prepare($sql);
-                      $q1->execute(array($email,$email));
-                      foreach ($q1->fetchAll() as $row) {
+
+                      foreach (getCircleMessages($email) as $row) {
                           date_default_timezone_set('Europe/London');
+                          $id = $row['circleFriendsId'];
                           $date1 = date('m/d/Y h:i:s a', time());
-                          $date2 = getMessageDate($row['circleFriendsId'])['dateCreated'];
-                          echo '<li onclick="getMessagesCircle('.$row['circleFriendsId'].')" class="left clearfix"><span class="chat-img pull-left">
+                          $date2 = getMessageDate($id)['dateCreated'];
+
+                        //QUERIES FOR TOOLTIPS:  
+                        $countResults = countMembersInCircle($id);
+                        //get members names in circle
+                        $memberList = array();
+                        $currentMember = 0;
+                        foreach (getMembersNames($id) as $eachMember){
+                            //we know how many members there are in the circle already with the variable $countResults
+                            $currentMember++;
+                            $memberList[] = $eachMember["firstName"] . " " . $eachMember["lastName"];
+                            if($eachMember["email"]==$email){
+                                $memberList[] .= " (You)";
+                            }
+                            if($currentMember!=$countResults["COUNT(email)"]){ //non-final member in member list, need to append comma
+                                $memberList[] .= ", ";
+                            }
+                        }
+                        //END QUERIES FOR TOOLTIPS
+                         echo '<li style="cursor:pointer;" data-toggle="tooltip" data-placement="right" title="' . implode($memberList) . '" onclick="getMessagesCircle('.$row['circleFriendsId'].')" class="left clearfix"><span class="chat-img pull-left">
                          <img src="http://placehold.it/50/55C1E7/fff&text=U" alt="User Avatar" class="img-circle" />
                          </span>
                             <div class="chat-body clearfix">
@@ -155,44 +214,39 @@
                             </div>
                         </li>';
                       }
-                                 ?>
+                      
+                      foreach (getFriendsWithoutMessages($email) as $row) {
+                          $profileImage = getProfilePicture($row['email'])['profileImage'];
+                          date_default_timezone_set('Europe/London');
+                          $date1 = date('m/d/Y h:i:s a', time());
+                          $date2 = getMessageDate($row['email'])['dateCreated'];
+                          echo '<li style="cursor:pointer;" onclick="getMessagesUser(\''.$row['email'].'\',\''.$email.'\')" class="left clearfix"><span class="chat-img pull-left">
+                         <img width=50 src=' . $profileImage . ' alt="User Avatar" class="img-circle" />
+                         </span>
+                            <div class="chat-body clearfix">
+                                <div class="header">
+                                    <strong class="primary-font">'.$row['email'].'</strong> <small class="pull-right text-muted">
+                                        <span class="glyphicon glyphicon-time"></span>'.date_difference($date1, $date2).'</small>
+                                </div>
+                            </div>
+                        </li>';
+                      }
+                    ?>
                     </ul>
                 </div>
                 <div class="panel-footer">
                     <div class="input-group">
-                        <input id="btn-input" type="text" class="form-control input-sm" placeholder="Search messages here..." />
-                        <span class="input-group-btn">
-                            <button class="btn btn-warning btn-sm" id="btn-chat">
-                                Search</button>
-                        </span>
+                    <p><br></p>
                     </div>
                 </div>
             </div>
     </div>
 
     <!--Right Pannel -->
-        <div class="col-md-8">
+        <div class="col-sm-9">
             <div class="panel panel-primary">
                 <div class="panel-heading">
                     <span class="glyphicon glyphicon-comment"></span> Chat
-                    <div class="btn-group pull-right">
-                        <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
-                            <span class="glyphicon glyphicon-chevron-down"></span>
-                        </button>
-                        <ul class="dropdown-menu slidedown">
-                            <li><a href="http://www.jquery2dotnet.com"><span class="glyphicon glyphicon-refresh">
-                            </span>Refresh</a></li>
-                            <li><a href="http://www.jquery2dotnet.com"><span class="glyphicon glyphicon-ok-sign">
-                            </span>Available</a></li>
-                            <li><a href="http://www.jquery2dotnet.com"><span class="glyphicon glyphicon-remove">
-                            </span>Busy</a></li>
-                            <li><a href="http://www.jquery2dotnet.com"><span class="glyphicon glyphicon-time"></span>
-                                Away</a></li>
-                            <li class="divider"></li>
-                            <li><a href="http://www.jquery2dotnet.com"><span class="glyphicon glyphicon-off"></span>
-                                Sign Out</a></li>
-                        </ul>
-                    </div>
                 </div>
                 <div class="panel-body">
                     <ul class="chat">
@@ -201,10 +255,12 @@
                 </div>
                 <div class="panel-footer">
                     <div class="input-group">
-                        <input id="btn-input" type="text" class="form-control input-sm" placeholder="Type your message here..." />
+                        <input id="myMessage" type="text" class="form-control input-sm" placeholder="Type your message here..." />
                         <span class="input-group-btn">
-                            <button class="btn btn-warning btn-sm" id="btn-chat">
-                                Send</button>
+                          <?php
+                            echo '<button onclick="sendMessage(\''.$email.'\')" class="btn btn-warning btn-sm" id="btn-chat">
+                                Send</button>'
+                          ?>
                         </span>
                     </div>
                 </div>
@@ -214,32 +270,62 @@
 </div>
 
 <script>
+
+var clicked = null;
+var inWhich = null; 
+function sendMessage($email) {
+    console.log("here");
+    $(this).addClass('active');
+
+    var loggedInUser = $email;
+    var messageText = document.getElementById('myMessage').value;
+    if (messageText == '' || clicked==null)
+     alert('Input message is empty or you have not selected any circle or friend.');
+    else {
+      $.post( "sendMessage.php", "emailTo=" + clicked + "&emailFrom=" + $email + "&messageText=" + messageText,  function( data ) {
+      });
+      if (inWhich == 0)
+        getMessagesUser(clicked,$email);
+      if (inWhich == 1)
+        getMessagesCircle(clicked,$email);
+    }
+}
+
 function getMessagesUser(id, email){
-  console.log("id: ", id);
+
+  inWhich = 0;
   var postData =  $(this).serializeArray();
   var loggedInUser = email;
-
+  clicked = id;
   $.post( "readcomments.php", "user=" + id + "&loggedInUser=" + loggedInUser,  function( data ) {
     $('#messageList li').html(data.lists);
   }, "json");
+
 }
 
 function getMessagesCircle(id, email){
-  console.log("id: ", id);
+  inWhich = 1;
   var postData =  $(this).serializeArray();
   var loggedInUser = email;
-
+  clicked = id;
   $.post( "readcirclecomments.php", "id=" + id + "&loggedInUser=" + loggedInUser,  function( data ) {
     $('#messageList li').html(data.lists);
   }, "json");
 }
 
-function getMessages(id) {
-  console.log("id: ", id);
-}
+$(document).ready(function () { //for tooltips
+  $('[data-toggle="tooltip"]').tooltip()
+})
 </script>
 
 <style type="text/css">
+.active {
+  background-color: green !important;
+}
+.padding
+{
+    padding-left: 10px;
+}
 .paddingTop
 {
 	padding-top: 30px;

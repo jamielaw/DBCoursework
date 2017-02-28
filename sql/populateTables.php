@@ -16,7 +16,7 @@ $insertRightsTable = "INSERT INTO MyDB.rights (roleID,rightTitle,rightDescriptio
 (1, \"Edit User's Annotations\", \"The user has the right to edit other user's annotations\"),
 (1, \"Edit User's Blog Posts\", \"The user has the right to edit other user's blog posts\"),
 (1, \"Edit User's Blog\", \"The user has the right to edit other user's blog\")";
-$insertUsersTable = "INSERT INTO MyDB.users (email,roleID,password,firstName,lastName,profileImage) VALUES
+$insertUsersTable = "INSERT INTO MyDB.users (email,roleID,user_password,firstName,lastName,profileImage) VALUES
 (\"alan@ucl.ac.uk\",2,\"test\",\"Alan\",\"Turing\",\"/images/profile/alan@ucl.ac.uk.jpg\"),
 (\"ada@ucl.ac.uk\",2,\"test\",\"Ada\",\"Lovelace\",\"/images/profile/ada@ucl.ac.uk.jpg\"),
 (\"grace@ucl.ac.uk\",2,\"test\",\"Grace\",\"Hopper\",\"/images/profile/grace@ucl.ac.uk.jpg\"),
@@ -34,6 +34,8 @@ $insertFriendshipTable = "INSERT INTO MyDB.friendships (emailFrom,emailTo,status
 (\"charles@ucl.ac.uk\",\"alan@ucl.ac.uk\",\"pending\"),
 (\"charles@ucl.ac.uk\",\"john@ucl.ac.uk\",\"denied\"),
 (\"vicky@ucl.ac.uk\",\"charles@ucl.ac.uk\",\"accepted\"),
+(\"vicky@ucl.ac.uk\",\"ada@ucl.ac.uk\",\"accepted\"),
+(\"vicky@ucl.ac.uk\",\"alan@ucl.ac.uk\",\"accepted\"),
 (\"grace@ucl.ac.uk\",\"ada@ucl.ac.uk\",\"accepted\"),
 (\"grace@ucl.ac.uk\",\"alan@ucl.ac.uk\",\"accepted\"),
 (\"grace@ucl.ac.uk\",\"john@ucl.ac.uk\",\"accepted\"),
@@ -97,18 +99,26 @@ $insertPhotosTable = "INSERT INTO MyDB.photos (photoCollectionId,imageReference)
 (2, \"/images/photoCollection/25.jpg\")";
 
 
-$insertCircleOfFriendsTable = "INSERT INTO MyDB.circleOfFriends (circleOfFriendsName) VALUES
-(\"lmao\"),
-(\"lol\"),
-(\"rofl\")";
+$insertCircleOfFriendsTable = "INSERT INTO MyDB.circleOfFriends (circleFriendsId, circleOfFriendsName) VALUES
+(1,\"lmao\"),
+(2,\"lol\"),
+(3,\"The CS Friends\"),
+(4,\"The Science Club\")";
+
 
 $insertUserCircleRelationshipsTable = "INSERT INTO MyDB.userCircleRelationships (email, circleFriendsId) VALUES
+(\"ada@ucl.ac.uk\",1),
+(\"ada@ucl.ac.uk\",2),
+(\"ada@ucl.ac.uk\",3),
+(\"alan@ucl.ac.uk\",1),
 (\"charles@ucl.ac.uk\",1),
+(\"charles@ucl.ac.uk\",3),
+(\"charles@ucl.ac.uk\",4),
+(\"tim@ucl.ac.uk\",1),
 (\"vicky@ucl.ac.uk\",1),
 (\"vicky@ucl.ac.uk\",3),
 (\"larry@ucl.ac.uk\",1),
 (\"charles@ucl.ac.uk\",2)";
-
 
 
 $insertCommentsTable = "INSERT INTO MyDB.comments (photoId,email,commentText) VALUES
@@ -127,6 +137,19 @@ VALUES
 ('4', '4', 'charles@ucl.ac.uk', '20', '10', 'Annotations!'),
 ('5', '5', 'charles@ucl.ac.uk', '11', '1', 'Annotations!')";
 
+$insertMessages = "INSERT INTO MyDB.messages (emailTo, emailFrom, messageText) VALUES
+(\"ada@ucl.ac.uk\",\"charles@ucl.ac.uk\",\"Dear Ada, How are you? Haven't seen you in a while\"),
+(\"charles@ucl.ac.uk\",\"ada@ucl.ac.uk\",\"Hello, Charles. We haven't talked for quite a while. How have you been?\"),
+(\"ada@ucl.ac.uk\",\"charles@ucl.ac.uk\",\"I wanted to ask you if you have seen the last paper I published?\"),
+(\"charles@ucl.ac.uk\",\"ada@ucl.ac.uk\",\"I don't think so. What is it about and where did you publish it?\"),
+(\"3\",\"charles@ucl.ac.uk\",\"Hello World\"),
+(\"4\",\"ada@ucl.ac.uk\",\"Invitation\")";
+
+$insertPrivacySettings = "INSERT INTO MyDB.privacySettings (email, privacySettingsTitle, privacySettingsDescription, status) VALUES
+(\"charles@ucl.ac.uk\", \"Photo/Blog privacy\", \"Restrict audience of your future photos/blog posts to friends only\", TRUE),
+(\"charles@ucl.ac.uk\", \"Friend request privacy\", \"Restrict friend requests to only people who you share mutual friends with\", TRUE);
+";
+
 $populatingTables = [
     $insertRolesTable,
     $insertRightsTable,
@@ -139,20 +162,22 @@ $populatingTables = [
     $insertCircleOfFriendsTable,
     $insertUserCircleRelationshipsTable,
     $insertCommentsTable,
-    $insertAnnotationsTable
+    $insertAnnotationsTable,
+    $insertMessages,
+    $insertPrivacySettings
+
 ];
 
-foreach ($populatingTables as $sqlquery){
-  echo nl2br("\n"); //Line break in HTML conversion
+foreach ($populatingTables as $sqlquery) {
+    echo nl2br("\n"); //Line break in HTML conversion
   echo "<b>Executing SQL statement: </b>";
-  echo $sqlquery; //Dispay statement being executed
+    echo $sqlquery; //Dispay statement being executed
   echo nl2br("\n");
-  $q= $pdo->prepare($sqlquery);
-  if ($q->execute() === TRUE) {
-      echo "<b><font color='green'>SQL statement performed correctly</b></font>";
-  } else {
-      echo "<b><font color='red'>Error executing statement: </b></font>" . $pdo->error;
-  }
+    $q= $pdo->prepare($sqlquery);
+    if ($q->execute() === true) {
+        echo "<b><font color='green'>SQL statement performed correctly</b></font>";
+    } else {
+        echo "<b><font color='red'>Error executing statement: </b></font>" . $pdo->error;
+    }
 }
   Database::disconnect();
-?>

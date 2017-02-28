@@ -11,7 +11,7 @@
   }
 
   // Get PK of Table
-  $argument1 = $_GET['blogId'];
+  $argument1 = $htmlspecialchars($_GET['blogId']);
   // sql to delete a record
   $sql = "DELETE FROM blogs WHERE blogId=". $argument1 ;
   #echo $sql;
@@ -25,7 +25,7 @@
 
   //Redirect to /sn/admin page to create "refresh "
   // URL TO BE MADE RELATIVE LATER
-  redirect('http://localhost:8888/sn/blog/');
+  redirect('sn/blog/');
 
 
 ?>

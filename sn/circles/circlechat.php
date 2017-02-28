@@ -66,4 +66,5 @@ include("../inc/nav-trn.php");
     </div>
     </div>
   </body>
+    <?php include '../inc/footer.php'; ?>
 </html>

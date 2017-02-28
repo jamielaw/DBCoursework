@@ -15,6 +15,10 @@
   <!--  Custom stylesheet -->
   <link href="/sn/css/custom.css" rel="stylesheet">
 
+
+  <!-- MD -> HTML Library -->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.6.3/showdown.min.js"></script>
+
   <script type ="text/javascript">
     jQuery(document).ready(function($) {
       $('input.submit').typeahead({

@@ -10,7 +10,7 @@
     $pdo = Database::connect();
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    $argument1 = $_GET['annotationsId'];
+    $argument1 = htmlspecialchars($_GET['annotationsId']);
     $sql = "SELECT * FROM annotations WHERE annotationsId=" . $argument1;
 
     $q= $pdo->prepare($sql);

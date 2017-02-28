@@ -15,11 +15,43 @@
 				$sql = "SELECT * FROM MyDB.privacySettings WHERE email='" . $loggedInUser . "'";
 				foreach($pdo->query($sql) as $row){
 					echo "<h3>" . $row["privacySettingsTitle"] . "</h3>";
-					if($row["status"]==True){ //check the box if it's already true
-						echo "<input type='checkbox' class='form' name='setting[]' value = '" . $row["privacySettingsId"] . "' checked>" . $row["privacySettingsDescription"] . "</input>";
+					if($row["privacySettingsIndex"]==1){ //photos
+						$selected = $row["privacySettingsDescription"];
+						echo '<div class="form-group">
+						<select class="form-control" name="setting1" value="'.$row["PrivacySettingsId"].'">';
+						if($selected=="Only me"){
+							echo '<option selected>Only me</option>
+						<option>Friends</option>
+						<option>Anybody</option>';
+						}else if($selected=="Friends"){
+							echo '<option>Only me</option>
+						<option selected>Friends</option>
+						<option>Anybody</option>';
+						}else{ //anybody
+							echo '<option>Only me</option>
+						<option>Friends</option>
+						<option selected>Anybody</option>';
+						}
+						echo '</select>';
 					}
-					else{
-						echo "<input type='checkbox' class='form' name='setting[]' value = '" . $row["privacySettingsId"] . "'>" . $row["privacySettingsDescription"] . "</input>";
+					else if($row["privacySettingsIndex"]==2){ //friend requests
+						$selected = $row["privacySettingsDescription"];
+						echo '<div class="form-group">
+						<select class="form-control" name="setting2" value="'.$row["PrivacySettingsId"].'">';
+						if($selected=="Noone"){
+							echo '<option selected>Noone</option>
+						<option>Friends of friends</option>
+						<option>Anybody</option>';
+						}else if($selected=="Friends of friends"){
+							echo '<option>Noone</option>
+						<option selected>Friends of friends</option>
+						<option>Anybody</option>';
+						}else{ //anybody
+							echo '<option>Noone</option>
+						<option>Friends of friends</option>
+						<option selected>Anybody</option>';
+						}
+						echo '</select>';
 					}
 					echo "<br>";
 				}

@@ -213,7 +213,9 @@
                             $sql = 'SELECT photoCollectionId, dateCreated, title, description FROM photocollection WHERE createdBy = ?;';
                             $q1 = $pdo->prepare($sql);
                             $q1->execute(array($email));
+                            $numberofresults = 0;
                             foreach ($q1->fetchAll() as $row) {
+                                $numberofresults+=1;
                                 $imageReference = getPhoto($row['photoCollectionId'])['imageReference'];
                                 if($imageReference==null)
                                     $imageReference="http://www.plantauthority.gov.in/images/pg1.png";
@@ -238,6 +240,9 @@
 										</div>
 									</li>
 								</ul>';
+                            }
+                            if($numberofresults==0){
+                                echo '<ul class="ace-thumbnails">No photos found</ul>';
                             }
                         ?>
 				</div><!-- /#pictures -->

@@ -10,21 +10,16 @@
 	die();
 	}
 
-	//make everything false to begin with, then make the ones that were checked true
-	$falsify = "UPDATE MyDB.privacySettings Set Status=FALSE WHERE(email='" . $loggedInUser . "')";
-	// echo $falsify;
-	// echo "<br>";
 	$pdo = Database::connect();
 	$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-	$pdo->exec($falsify);
 
-	foreach($_GET['setting'] as $setting){
-		$sql = "UPDATE MyDB.privacySettings SET Status=TRUE WHERE(privacySettingsId=" . $setting . " AND email='" . $loggedInUser . "')";
-	    // echo $sql;
-	    // echo "<br>";
-		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-		$pdo->exec($sql);
-	}
+	$photosetting = $_GET['setting1'];
+	$friendsetting = $_GET['setting2'];
+
+	$sql1 = "UPDATE MyDB.privacySettings SET privacySettingsDescription='".$photosetting."' WHERE(privacySettingsIndex=1 AND email='" . $loggedInUser. "')";
+	$sql2 = "UPDATE MyDB.privacySettings SET privacySettingsDescription='".$friendsetting."' WHERE(privacySettingsIndex=2 AND email='" . $loggedInUser. "')";
+	$pdo->exec($sql1);
+	$pdo->exec($sql2);
 
 	Database::disconnect();
 	redirect('/sn/profile/settings.php');

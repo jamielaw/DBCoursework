@@ -210,33 +210,13 @@
 
 					<?php
                             //$pdo = Database::connect();
-                            $sql = 'SELECT photoCollectionId, dateCreated, title, description, privacy FROM photocollection WHERE createdBy = ?;';
+                            $sql = 'SELECT photoCollectionId, dateCreated, title, description FROM photocollection WHERE createdBy = ?;';
                             $q1 = $pdo->prepare($sql);
                             $q1->execute(array($email));
                             $numberofresults = 0;
                             foreach ($q1->fetchAll() as $row) {
                                 $numberofresults+=1;
                                 $imageReference = getPhoto($row['photoCollectionId'])['imageReference'];
-                                $privacy = $row['privacy'];
-                                if($privacy=='Only me'){
-                                    if($loggedInUser==$email){
-                                        //this is logged in user's album so it's fine
-                                    }else{
-                                        continue;
-                                    }
-                                }elseif($privacy=='Friends'){
-                                    $sql2 = "SELECT COUNT(emailTo) FROM MyDB.friendships WHERE((emailTo='".$loggedInUser."' AND emailFrom='".$email."' AND status='accepted') OR (emailFrom='".$loggedInUser."' AND emailTo='".$email."' AND status='accepted'))"; //query to check if this photo collection album's owner is a friend of the logged in user
-                                    $y = $pdo->query($sql2);
-                                    $countResults = $y->fetch(PDO::FETCH_ASSOC);
-                                    $count = $countResults["COUNT(emailTo)"];
-                                    if($count>0 OR $loggedInUser==$email){ //also need to check if owner is logged in user (because obviously the logged in user can see his own albums in any privacy setting)
-                                        //allowed to see this album
-                                    }else{
-                                        continue;
-                                    }
-                                }else{//anybody
-                                    //anybody can see this photo collection, don't need to filter it
-                                }
                                 if($imageReference==null)
                                     $imageReference="http://www.plantauthority.gov.in/images/pg1.png";
                                 echo '

@@ -15,29 +15,29 @@
 				$sql = "SELECT * FROM MyDB.privacySettings WHERE email='" . $loggedInUser . "'";
 				foreach($pdo->query($sql) as $row){
 					echo "<h3>" . $row["privacySettingsTitle"] . "</h3>";
-					if($row["privacySettingsIndex"]==1){ //photos
+					// if($row["privacySettingsIndex"]==1){ //photos
+					// 	$selected = $row["privacySettingsDescription"];
+					// 	echo '<div class="form-group">
+					// 	<select class="form-control" name="setting1" value="'.$row["PrivacySettingsId"].'">';
+					// 	if($selected=="Only me"){
+					// 		echo '<option selected>Only me</option>
+					// 	<option>Friends</option>
+					// 	<option>Anybody</option>';
+					// 	}else if($selected=="Friends"){
+					// 		echo '<option>Only me</option>
+					// 	<option selected>Friends</option>
+					// 	<option>Anybody</option>';
+					// 	}else{ //anybody
+					// 		echo '<option>Only me</option>
+					// 	<option>Friends</option>
+					// 	<option selected>Anybody</option>';
+					// 	}
+					// 	echo '</select>';
+					// }
+					if($row["privacySettingsTitle"]=="Who can send me friend requests?"){ //friend requests
 						$selected = $row["privacySettingsDescription"];
 						echo '<div class="form-group">
 						<select class="form-control" name="setting1" value="'.$row["PrivacySettingsId"].'">';
-						if($selected=="Only me"){
-							echo '<option selected>Only me</option>
-						<option>Friends</option>
-						<option>Anybody</option>';
-						}else if($selected=="Friends"){
-							echo '<option>Only me</option>
-						<option selected>Friends</option>
-						<option>Anybody</option>';
-						}else{ //anybody
-							echo '<option>Only me</option>
-						<option>Friends</option>
-						<option selected>Anybody</option>';
-						}
-						echo '</select>';
-					}
-					else if($row["privacySettingsIndex"]==2){ //friend requests
-						$selected = $row["privacySettingsDescription"];
-						echo '<div class="form-group">
-						<select class="form-control" name="setting2" value="'.$row["PrivacySettingsId"].'">';
 						if($selected=="Noone"){
 							echo '<option selected>Noone</option>
 						<option>Friends of friends</option>

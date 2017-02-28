@@ -79,10 +79,9 @@ Ten of these lives had dropped, and the eleventh was in a consumption, when Rich
 The last only of the eleven lives existed when he embarked, and that life expired within twelve months after Richard Babbage sailed. The estates remained in possession of the representatives of the eleventh in the entail. If it could have been proved that Richard Babbage had survived twelve months after his voyage to America, these estates would have remained in my own branch of the family.
 I possess a letter from Richard Babbage, dated on board the ship in which he sailed for America.
 In the year 1773 it became necessary to sell a portion of this property, for the purpose of building a church at Ashbrenton. A private Act of Parliament was passed for that purpose, in which the rights of the true heir were reserved.\");";
-$insertPhotoCollectionTable = "INSERT INTO MyDB.photocollection (photoCollectionId,title,createdBy,privacy) VALUES
-(1,\"Conferences\",\"charles@ucl.ac.uk\",\"Only me\"),
-(2,\"Difference Engine\", \"charles@ucl.ac.uk\",\"Friends\")";
-//valid privacy settings for photo collections include: only me, friends, friend of friends, everyone
+$insertPhotoCollectionTable = "INSERT INTO MyDB.photocollection (photoCollectionId,title,createdBy) VALUES
+(1,\"Conferences\",\"charles@ucl.ac.uk\"),
+(2,\"Difference Engine\", \"charles@ucl.ac.uk\")";
 $insertPhotosTable = "INSERT INTO MyDB.photos (photoCollectionId,imageReference) VALUES
 (1, \"/images/photoCollection/12.jpg\"),
 (1, \"/images/photoCollection/13.jpg\"),
@@ -146,11 +145,9 @@ $insertMessages = "INSERT INTO MyDB.messages (emailTo, emailFrom, messageText) V
 (\"3\",\"charles@ucl.ac.uk\",\"Hello World\"),
 (\"4\",\"ada@ucl.ac.uk\",\"Invitation\")";
 
-$insertPrivacySettings = "INSERT INTO MyDB.privacySettings (email, privacySettingsIndex, privacySettingsTitle, privacySettingsDescription) VALUES
-(\"charles@ucl.ac.uk\", 1, \"Who can access my (future) photo collections?\", \"Only me\"),
-(\"charles@ucl.ac.uk\", 2, \"Who can send me friend requests?\", \"Anyone\");
+$insertPrivacySettings = "INSERT INTO MyDB.privacySettings (email, privacySettingsTitle, privacySettingsDescription) VALUES
+(\"charles@ucl.ac.uk\", \"Who can send me friend requests?\", \"Anyone\");
 ";
-//index 1 for photo collections privacy setting, 2 for friend request privacy setting
 $populatingTables = [
     $insertRolesTable,
     $insertRightsTable,

@@ -111,7 +111,6 @@ $createPhotoCollectionsTable = "CREATE TABLE IF NOT EXISTS myDB.photoCollection(
   title VARCHAR(100),
   description VARCHAR(255) ,
   createdBy VARCHAR(255) NOT NULL,
-  privacy VARCHAR(100),
   FOREIGN KEY(createdBy) REFERENCES myDB.users(email),
   PRIMARY KEY(photoCollectionId)
 )";
@@ -143,7 +142,6 @@ $createMessagesTable = "CREATE TABLE IF NOT EXISTS MyDB.messages(
 $createPrivacySettingsTable = "CREATE TABLE IF NOT EXISTS MyDB.privacySettings(
   privacySettingsId INT NOT NULL AUTO_INCREMENT,
   email VARCHAR(50) NOT NULL,
-  privacySettingsIndex INT NOT NULL,
   privacySettingsTitle VARCHAR(255) ,
   privacySettingsDescription VARCHAR(255) ,
   PRIMARY KEY(privacySettingsId),

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
-@media (max-width: 1260px) {
+@media (max-width: 1190px) {
   .navbar-header {
       float: none;
   }
@@ -87,18 +87,17 @@
                   $row = $q->fetchColumn();
 
                   if($row == 0 || $row == NULL){
-                    echo '<li><a href="/sn/profile/myfriends.php"><i class="fa fa-users"></i></a></li>';
+                    echo '<li><a href="/sn/profile/myfriends.php"><i class="fa fa-users" data-toggle="tooltip" data-placement="bottom" title="Friend requests"></i></a></li>';
                   }else{
                     // you have a friend request!
-                    echo '<li><a href="/sn/profile/myfriends.php"><i style="color: #ff304d;" class="fa fa-users"></i></a></li>';
+                    echo '<li><a href="/sn/profile/myfriends.php"><i style="color: #ff304d;" class="fa fa-users" data-toggle="tooltip" data-placement="bottom" title="You have new friend requests!"></i></a></li>';
                   }
 
-                  echo "<li><a href=\"/sn/profile/messages.php\"><i class=\"fa fa-comments\"></i></a></li>
-                  <li><a href=\"/sn/profile/index.php#4\"><i class=\"fa fa-picture-o\"></i></a></li>
-                  <li><a href=\"/sn/photos/index.php\">Photos</a></li>
+                  echo "<li><a href=\"/sn/profile/messages.php\"><i class=\"fa fa-comments\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Your messages\"></i></a></li>
+                  
                   <li><a href=\"/sn/circles/index.php\">Circles</a></li>
                   <li><a href=\"/sn/blog/index.php\">Blog</a></li>
-                  <li><a href=\"/sn/explore/index.php\">Explore</a></li>";
+                  <li><a href=\"/sn/explore/index.php\">Explore</a></li>"; //<li><a href=\"/sn/profile/readprofile.php?email=".$loggedInUser."#pictures\"><i class=\"fa fa-picture-o\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Your photos\"></i></a></li>
 
                   //Check if logged in user is administrator
                   $sql = "SELECT roleTitle FROM MyDB.roles INNER JOIN MyDB.users ON MyDB.users.roleID=MyDB.roles.roleID WHERE(users.email='" . $loggedInUser . "')";
@@ -130,3 +129,8 @@
       </ul>
 
 </nav>
+<script>
+$(document).ready(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
+</script>

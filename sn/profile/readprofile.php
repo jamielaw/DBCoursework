@@ -326,7 +326,7 @@
                     </div>
                     <form class="" action="uploadphoto.php?id=<?php echo $loggedInUser ?>" method="post" enctype="multipart/form-data">
                     <div class="modal-body">
-                        <p style="visibility: <?php echo $userAccess ?>">You don't have access to change oher users'profile picture.<p>
+                        <p style="visibility: <?php echo $userAccess ?>">You don't have access to change other users' profile pictures.<p>
                         <p style="visibility: <?php echo $adminAccess ?>">Once a new picture is submitted, the old one will be removed.</p>
                             <p style="visibility: <?php echo $adminAccess ?>" class=""> Select image to upload: </p>
                             <input style="visibility: <?php echo $adminAccess ?>" class="" type="file" name="fileToUpload" id="fileToUpload"> <br>

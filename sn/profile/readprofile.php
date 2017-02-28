@@ -100,16 +100,83 @@
 
 
 							<div class="space space-4"></div>
+                            <?php //check friend request privacy of user!
+                                if($email!=$loggedInUser){ //only show add as friend or send message button if the profile that is being viewed is not the currently logged in user
+                                    
+                                    //TODO: check if user is already a friend, if so, change the button to show unfriend option? otherwise execute below code
 
-							<a href="#" class="btn btn-sm btn-block btn-success">
-								<i class="ace-icon fa fa-plus-circle bigger-120"></i>
-								<span class="bigger-110" >Add as a friend</span>
-							</a>
+                                    $getFriendshipPrivacy = "SELECT privacySettingsDescription FROM MyDB.privacySettings WHERE(email='".$email."' AND privacySettingsTitle='Who can send me friend requests?')";
+                                    $pdo = Database::connect();
+                                    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                                    $stmt = $pdo->prepare($getFriendshipPrivacy); 
+                                    $stmt->execute(); 
+                                    $row = $stmt->fetch();
+                                    $privacy = $row['privacySettingsDescription'];
+                                    if ($privacy=='Anyone'){
+                                        echo '<a href="#" class="btn btn-sm btn-block btn-success">
+                                            <i class="ace-icon fa fa-plus-circle bigger-120"></i>
+                                            <span class="bigger-110" >Add as a friend</span>
+                                        </a>';
+                                    }elseif($privacy=='Friends of friends'){
+                                        //*******BEGIN LOTS OF QUERYING CODE TO FIND FRIENDS OF FRIENDS*******
+                                        //firstly, we get the friends of the logged-in user and prepare it for use in the main sql search query
+                                        $getFriends="SELECT email FROM MyDB.users WHERE(email IN (SELECT emailTo FROM MyDB.friendships WHERE (emailFrom='" . $loggedInUser . "' AND status='accepted')) OR email IN (SELECT emailFrom FROM MyDB.friendships WHERE ( emailTo='". $loggedInUser . "' AND status='accepted')))";
 
-							<a href="messages.php" class="btn btn-sm btn-block btn-primary">
-								<i class="ace-icon fa fa-envelope-o bigger-110"></i>
-								<span class="bigger-110">Send a message</span>
-							</a>
+                                        $countFriends="SELECT COUNT(email) FROM MyDB.users WHERE(email IN (SELECT emailTo FROM MyDB.friendships WHERE (emailFrom='" . $loggedInUser . "' AND status='accepted')) OR email IN (SELECT emailFrom FROM MyDB.friendships WHERE ( emailTo='". $loggedInUser . "' AND status='accepted')))";
+
+                                        $q = $pdo->query($countFriends);
+                                        $countFriendsResult = $q->fetch(PDO::FETCH_ASSOC);
+                                        $countF = $countFriendsResult["COUNT(email)"];
+
+                                        $currentFriend = 0; //keep track of how many friends there are to keep the correct formatting
+                                        $friends[] .= "("; //this friends array stores the list of friends to the logged-in-user in a format which is easy to use in the sql query
+
+                                        foreach($pdo->query($getFriends) as $row){
+                                          $currentFriend += 1;
+                                          if($currentFriend==$countF){ //last friend
+                                            $friends[] .= "'" . $row["email"] . "'";
+                                          }else{
+                                            $friends[] .= "'" . $row["email"] . "',";
+                                          }
+                                        }
+                                        $friends[] .= ")";
+
+                                        $friendStr = implode($friends);
+
+                                        $getFriendsOfFriends="SELECT email FROM MyDB.users WHERE ((email IN (SELECT emailTo FROM MyDB.friendships WHERE (emailFrom='" . $email . "' AND status='accepted')) OR email IN (SELECT emailFrom FROM MyDB.friendships WHERE ( emailTo='". $email . "' AND status='accepted')) OR email IN (SELECT emailTo FROM MyDB.friendships WHERE (emailFrom IN " .$friendStr . " AND status='accepted') OR email IN (SELECT emailFrom FROM MyDB.friendships WHERE(emailTo IN " . $friendStr . " AND status='accepted')))) AND email!='" . $email . "')"; //get friends/friends of friends of the profile we're looking at
+                                        $sharedMutualFriends=false;
+                                        foreach($pdo->query($getFriendsOfFriends) as $row){
+                                            if($row["email"]==$loggedInUser){
+                                                $sharedMutualFriends=true;
+                                            }
+                                        }
+                                        //*******END LOTS OF QUERYING CODE TO FIND FRIENDS OF     FRIENDS*******                                        
+
+                                        if($sharedMutualFriends){
+                                            echo '<a href="#" class="btn btn-sm btn-block btn-success">
+                                                <i class="ace-icon fa fa-plus-circle bigger-120"></i>
+                                                <span class="bigger-110" >Add as a friend</span>
+                                            </a>';
+                                        }else{
+                                            echo '<a href="#" class="btn btn-sm btn-block btn-success disabled">
+                                                <i class="ace-icon fa fa-plus-circle bigger-120"></i>
+                                                <span class="bigger-110" >Can\'t add this person as a friend</span>
+                                            </a>';
+                                        }
+                                    }elseif($privacy=='Noone'){
+                                        echo '<a href="#" class="btn btn-sm btn-block btn-success disabled">
+                                            <i class="ace-icon fa fa-plus-circle bigger-120"></i>
+                                            <span class="bigger-110" >Can\'t add this person as a friend</span>
+                                        </a>';
+                                    }
+
+                               
+                                    echo '<a href="messages.php" class="btn btn-sm btn-block btn-primary">
+                                        <i class="ace-icon fa fa-envelope-o bigger-110"></i>
+                                        <span class="bigger-110">Send a message</span>
+                                        </a>';
+                                }
+                            ?>
 
                             <a style="visibility: <?php echo $adminAccess ?>" data-toggle="modal" data-target="#export_dialog" class="btn btn-sm btn-block btn-primary">
                                 <i class="ace-icon fa fa-download bigger-110"></i>

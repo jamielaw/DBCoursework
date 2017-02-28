@@ -12,10 +12,9 @@
   //(email,roleID,user_password,firstName,lastName,profileImage) - Jamie
 
   $defaultPrivacy = "INSERT INTO MyDB.privacySettings (email, privacySettingsTitle, privacySettingsDescription) VALUES
-(\"".$email."\", \"Photo/Blog privacy\", \"Restrict audience of your future photos/blog posts to friends only\"),
-(\"".$email."\", \"Friend request privacy\", \"Restrict friend requests to only people who you share mutual friends with\")";
+(\"".$email."\", \"Who can send me friend requests?\", \"Anyone\")";
 //execute this above statement too please (I'm not sure how to execute it without using PDO)
-echo $defaultPrivacy;
+//echo $defaultPrivacy;
 
   //$result = mysqli_query($conn, $sql);
 

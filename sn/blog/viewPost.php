@@ -18,11 +18,9 @@
 
     $usersEmail = $postQueryResult["email"];
     $userDetails = "SELECT * FROM users WHERE email='$usersEmail'";
-    //echo $usersEmail;
     $d = $pdo->prepare($userDetails);
     $d->execute();
     $userDetailsResult = $d->fetch();
-    //echo $userDetailsResult[0]["firstName"];
   ?>
   <div class="container">
     <div class="blog-container">

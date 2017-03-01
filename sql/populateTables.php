@@ -155,7 +155,7 @@ $populatingTables = [
     $insertUsersTable,
     $insertFriendshipTable,
     $insertBlogsTable,
-    $insertPostsTable,
+    //$insertPostsTable,
     $insertPhotoCollectionTable,
     $insertPhotosTable,
     $insertCircleOfFriendsTable,

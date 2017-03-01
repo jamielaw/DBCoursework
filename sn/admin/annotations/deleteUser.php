@@ -19,9 +19,9 @@
   $pdo->exec($sql);
   Database::disconnect();
 
-  //Redirect to /sn/admin page to create "refresh "
-  // URL TO BE MADE RELATIVE LATER
-  redirect('sn/admin/');
+
+  redirect('../../admin/');
+
 
 
 ?>

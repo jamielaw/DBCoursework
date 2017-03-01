@@ -40,7 +40,8 @@
   Database::disconnect();
 
   // Direct back to sn/admin
-  redirect('sn/admin/');
+  redirect('../../admin/');
+
 
 
 

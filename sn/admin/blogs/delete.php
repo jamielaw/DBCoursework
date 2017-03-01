@@ -13,7 +13,8 @@
   // Get PK of Table
 
   // sql to delete a record
-  $sql = "DELETE FROM users WHERE email=". "'" . $_GET['blogId']. "'";
+  $sql = "DELETE FROM blogs WHERE blogId=".   $_GET['blogId'];
+  //echo $sql;
   $pdo = Database::connect();
   $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
   $pdo->exec($sql);

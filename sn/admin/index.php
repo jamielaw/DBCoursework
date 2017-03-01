@@ -98,7 +98,7 @@
             echo "</tr>";
     }
 
-    echo "</table";
+    echo "</table>";
 
     Database::disconnect();
 

@@ -1,6 +1,6 @@
 <?php
   // DB Auth Script
-  require '../database.php';
+  require '../session.php';
 
   // Given "string", returns "'string'" - useful for SQL queries
   function wrapArgument($arg){
@@ -27,7 +27,9 @@
   $sql = "INSERT INTO blogs (blogTitle, blogDescription, email) VALUES ("
   . wrapArgument($_POST['blogTitle']) .  ","
   . wrapArgument($_POST['blogDescription']) . ","
-  . "'ada@ucl.ac.uk')";
+  . "'$loggedInUser')";
+
+  //echo $sql;
 
   #echo $sql;
   $pdo->exec($sql);
@@ -36,7 +38,7 @@
   Database::disconnect();
 
   // Direct back to sn/admin
-  redirect('../sn/blog/');
+  redirect('../../sn/blog/');
 
 
 

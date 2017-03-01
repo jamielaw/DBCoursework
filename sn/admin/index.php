@@ -100,6 +100,36 @@
 
     echo "</table>";
 
+
+    $blogsInfo = "SELECT * FROM friendships";
+    echo "<h2> Friendships </h2>";
+    echo "<table class='table table-stripped table-bordered'>
+       <tr>
+        <th> From </th>
+        <th> To </th>
+        <th> Status </th>
+        <th> Action </th> ";
+
+    foreach ($pdo->query($blogsInfo) as $row)  {
+
+            $userQuery = "SELECT * FROM users where email='". $row["email"] . "'";
+
+            $y = $pdo->prepare($userQuery);
+            $y->execute();
+            $userQueryResult = $y->fetch(PDO::FETCH_ASSOC);
+
+            echo "<tr>";
+            echo "<td>" . $row['emailFrom'] . "</td>";
+            echo "<td>" . $row['emailTo'] . "</td>";
+            echo "<td>" . $row['status'] .  "</td>";
+            echo "<td> <a class='table-btn btn btn-success' href='friendships/editFriendship.php?friendshipId=".$row["friendshipID"]."&action=accepted'><i class='fa fa-check' aria-hidden='true'></i> Accept </a><br>";
+            echo " <a class='table-btn btn btn-warning' href='blogs/editView.php?blogId=".$row["blogId"]."&action='accept'><i class='fa fa-times' aria-hidden='true'></i> Decline </a><br>";
+            echo "<a class='table-btn btn btn-danger' href='blogs/delete.php?blogId=".$row["blogId"]."'> <i class='fa fa-trash' aria-hidden='true'></i> Delete </td> </a>";
+            echo "</tr>";
+    }
+
+    echo "</table>";
+
     Database::disconnect();
 
   ?>

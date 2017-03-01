@@ -9,8 +9,6 @@
   $title = "Blog";
   $description = "";
 
-  // CHANGED THIS TO BE AUTHENTICATED LATER
-  $loggedInUser = "ada@ucl.ac.uk";
   $pdo = Database::connect();
   $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 

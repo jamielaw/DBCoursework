@@ -16,13 +16,21 @@
     $y->execute();
     $postQueryResult = $y->fetch(PDO::FETCH_ASSOC);
 
-
+    $usersEmail = $postQueryResult["email"];
+    $userDetails = "SELECT * FROM users WHERE email='$usersEmail'";
+    //echo $usersEmail;
+    $d = $pdo->prepare($userDetails);
+    $d->execute();
+    $userDetailsResult = $d->fetch();
+    //echo $userDetailsResult[0]["firstName"];
   ?>
   <div class="container">
     <div class="blog-container">
       <div class="row">
         <font size="10"> <?php echo $postQueryResult["blogTitle"]; ?> </font> <br>
-
+        <font size="3"> Written by
+        <?php  echo '<a href="/sn/profile/readprofile.php?email=' .  $usersEmail . '">' . $userDetailsResult['firstName'] . "  " . $userDetailsResult["lastName"] . "</a>"; ?>
+        </font>
       <?php if( $loggedInUser == $postQueryResult["email"]){ ?>
       <div class="blog-edit-options">
         <a class='btn btn-success' href="editPostView.php?blogId=<?php echo  $postQueryResult["blogId"]; ?>"> <i class="fa fa-pencil" aria-hidden='true'> Edit</i>  </a>

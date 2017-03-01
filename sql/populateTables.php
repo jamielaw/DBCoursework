@@ -145,6 +145,10 @@ $insertMessages = "INSERT INTO MyDB.messages (emailTo, emailFrom, messageText) V
 (\"3\",\"charles@ucl.ac.uk\",\"Hello World\"),
 (\"4\",\"ada@ucl.ac.uk\",\"Invitation\")";
 
+$insertPrivacySettings = "INSERT INTO MyDB.privacySettings (email, privacySettingsTitle, privacySettingsDescription) VALUES
+(\"charles@ucl.ac.uk\", \"Who can send me friend requests?\", \"Anyone\"),
+(\"vicky@ucl.ac.uk\", \"Who can send me friend requests?\", \"Friends of friends\");
+";
 $populatingTables = [
     $insertRolesTable,
     $insertRightsTable,
@@ -158,7 +162,8 @@ $populatingTables = [
     $insertUserCircleRelationshipsTable,
     $insertCommentsTable,
     $insertAnnotationsTable,
-    $insertMessages
+    $insertMessages,
+    $insertPrivacySettings
 
 ];
 

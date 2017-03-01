@@ -144,7 +144,6 @@ $createPrivacySettingsTable = "CREATE TABLE IF NOT EXISTS MyDB.privacySettings(
   email VARCHAR(50) NOT NULL,
   privacySettingsTitle VARCHAR(255) ,
   privacySettingsDescription VARCHAR(255) ,
-  status BOOLEAN DEFAULT false,
   PRIMARY KEY(privacySettingsId),
   FOREIGN KEY(email) REFERENCES MyDB.users(email)
 )";

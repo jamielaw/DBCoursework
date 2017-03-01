@@ -205,9 +205,9 @@
               <div class="profile-icons">';
 
               if($row['mutualFriends'] != 0){
-                echo $row['mutualFriends'] . " mutal friends";
+                echo $row['mutualFriends'] . " mutual friends";
               }else{
-                echo "also goes to $uni" ;
+                echo "also goes to ". $uni; 
 
               }
 

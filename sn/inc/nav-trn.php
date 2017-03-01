@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
-@media (max-width: 1260px) {
+@media (max-width: 1190px) {
   .navbar-header {
       float: none;
   }
@@ -49,14 +49,16 @@
       <a class="navbar-brand">BookFace</a>
     </div>
           <?php
+          session_start();
           require("$root/sn/session.php");
           $pdo = Database::connect();
           $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-          $count="SELECT COUNT(firstName)FROM MyDB.users WHERE email='" . $loggedInUser . "'"; //count results, to check if user is logged in
-          $countq = $pdo->query($count);
-          $isLoggedInExec = $countq->fetch(PDO::FETCH_ASSOC);
-          $isLoggedIn = $isLoggedInExec["COUNT(firstName)"];
-          //$isLoggedIn=0;
+          if (isset($_SESSION['id'])) {
+            $isLoggedIn=1;
+          }else{
+            $isLoggedIn=0;
+          }
+          $isLoggedIn=1;
           if($isLoggedIn){ //if user is logged in, display relevant navbar
                     echo "<div class=\"collapse navbar-collapse\">
                     <ul class=\"nav navbar-nav\">
@@ -72,7 +74,7 @@
                   <ul class=\"dropdown-menu\">
                     <li><a href=\"/sn/profile/readprofile.php?email=" . $loggedInUser . "\"><i class=\"fa fa-user\"></i> My Profile</a></li>
                     <li><a href=\"/sn/profile/settings.php\"><i class=\"fa fa-cog\"></i> Settings</a></li>
-                    <li><a href=\"/sn/logout.php\"><i class=\"fa fa-sign-out\"></i> Logout</a></li>
+                    <li><a href=\"/loginTest/logout.php\"><i class=\"fa fa-sign-out\"></i> Logout</a></li>
                   </ul>";
                     echo "</li>";
 
@@ -85,18 +87,17 @@
                   $row = $q->fetchColumn();
 
                   if($row == 0 || $row == NULL){
-                    echo '<li><a href="/sn/profile/myfriends.php"><i class="fa fa-users"></i></a></li>';
+                    echo '<li><a href="/sn/profile/myfriends.php"><i class="fa fa-users" data-toggle="tooltip" data-placement="bottom" title="Friend requests"></i></a></li>';
                   }else{
                     // you have a friend request!
-                    echo '<li><a href="/sn/profile/myfriends.php"><i style="color: #ff304d;" class="fa fa-users"></i></a></li>';
+                    echo '<li><a href="/sn/profile/myfriends.php"><i style="color: #ff304d;" class="fa fa-users" data-toggle="tooltip" data-placement="bottom" title="You have new friend requests!"></i></a></li>';
                   }
 
-                  echo "<li><a href=\"/sn/profile/messages.php\"><i class=\"fa fa-comments\"></i></a></li>
-                  <li><a href=\"/sn/profile/index.php#4\"><i class=\"fa fa-picture-o\"></i></a></li>
-                  <li><a href=\"/sn/photos/index.php\">Photos</a></li>
+                  echo "<li><a href=\"/sn/profile/messages.php\"><i class=\"fa fa-comments\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Your messages\"></i></a></li>
+                  
                   <li><a href=\"/sn/circles/index.php\">Circles</a></li>
                   <li><a href=\"/sn/blog/index.php\">Blog</a></li>
-                  <li><a href=\"/sn/explore/index.php\">Explore</a></li>";
+                  <li><a href=\"/sn/explore/index.php\">Explore</a></li>"; //<li><a href=\"/sn/profile/readprofile.php?email=".$loggedInUser."#pictures\"><i class=\"fa fa-picture-o\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Your photos\"></i></a></li>
 
                   //Check if logged in user is administrator
                   $sql = "SELECT roleTitle FROM MyDB.roles INNER JOIN MyDB.users ON MyDB.users.roleID=MyDB.roles.roleID WHERE(users.email='" . $loggedInUser . "')";
@@ -128,3 +129,8 @@
       </ul>
 
 </nav>
+<script>
+$(document).ready(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
+</script>

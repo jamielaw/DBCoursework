@@ -122,9 +122,15 @@
             echo "<td>" . $row['emailFrom'] . "</td>";
             echo "<td>" . $row['emailTo'] . "</td>";
             echo "<td>" . $row['status'] .  "</td>";
-            echo "<td> <a class='table-btn btn btn-success' href='friendships/editFriendship.php?friendshipId=".$row["friendshipID"]."&action=accepted'><i class='fa fa-check' aria-hidden='true'></i> Accept </a><br>";
-            echo " <a class='table-btn btn btn-warning' href='blogs/editView.php?blogId=".$row["blogId"]."&action='accept'><i class='fa fa-times' aria-hidden='true'></i> Decline </a><br>";
-            echo "<a class='table-btn btn btn-danger' href='blogs/delete.php?blogId=".$row["blogId"]."'> <i class='fa fa-trash' aria-hidden='true'></i> Delete </td> </a>";
+            echo "<td>";
+            if($row['status'] == "denied"){
+              echo "<a class='table-btn btn btn-success' href='friendships/editFriendship.php?friendshipId=".$row["friendshipID"]."&action=accepted'><i class='fa fa-check' aria-hidden='true'></i> Accept </a><br>";
+
+            }else{
+              echo " <a class='table-btn btn btn-warning' href='friendships/editFriendship.php?friendshipId=".$row["friendshipID"]."&action=denied'><i class='fa fa-times' aria-hidden='true'></i> Decline </a><br>";
+
+            }
+            echo "<a class='table-btn btn btn-danger' href='friendships/delete.php?friendshipId=".$row["friendshipID"]."'> <i class='fa fa-trash' aria-hidden='true'></i> Delete </td> </a>";
             echo "</tr>";
     }
 

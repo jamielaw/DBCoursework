@@ -20,6 +20,7 @@
   $pdo = Database::connect();
   $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
   $userInfo = "SELECT * FROM users";
+  echo "<h2> User accounts </h2>";
   echo "<table class='table table-stripped table-bordered'>
      <tr>
       <th> Email </th>
@@ -39,6 +40,7 @@
 
 
     $annotationsInfo = "SELECT * FROM annotations";
+    echo "<h2> Annotations </h2>";
     echo "<table class='table table-stripped table-bordered'>
        <tr>
         <th> Photo </th>
@@ -70,8 +72,33 @@
             echo "</tr>";
     }
 
-    echo "</table";
+    echo "</table>";
 
+    $blogsInfo = "SELECT * FROM blogs";
+    echo "<h2> Blogs </h2>";
+    echo "<table class='table table-stripped table-bordered'>
+       <tr>
+        <th> Author </th>
+        <th> Title </th>
+        <th> Action </th> ";
+
+    foreach ($pdo->query($blogsInfo) as $row)  {
+
+            $userQuery = "SELECT * FROM users where email='". $row["email"] . "'";
+
+            $y = $pdo->prepare($userQuery);
+            $y->execute();
+            $userQueryResult = $y->fetch(PDO::FETCH_ASSOC);
+
+            echo "<tr>";
+            echo "<td>" . $userQueryResult["firstName"] . " " . $userQueryResult["lastName"]  . "</td>";
+            echo "<td>" . $row['blogTitle'] .  "</td>";
+            echo "<td> <a class='table-btn btn btn-success' href='blogs/update.php?blogId=".$row["blogId"]."'><i class='fa fa-pencil' aria-hidden='true'></i> Edit </a><br>";
+            echo "<a class='table-btn btn btn-danger' href='blogs/delete.php?blogId=".$row["blogId"]."'> <i class='fa fa-trash' aria-hidden='true'></i> Delete </td> </a>";
+            echo "</tr>";
+    }
+
+    echo "</table";
 
     Database::disconnect();
 

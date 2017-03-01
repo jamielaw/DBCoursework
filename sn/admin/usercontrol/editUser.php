@@ -42,9 +42,4 @@
   // Direct back to sn/admin
   redirect('../../admin/');
 
-
-
-
-
-
 ?>

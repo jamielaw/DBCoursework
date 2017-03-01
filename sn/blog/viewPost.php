@@ -30,7 +30,7 @@
         <?php  echo '<a href="/sn/profile/readprofile.php?email=' .  $usersEmail . '">' . $userDetailsResult['firstName'] . "  " . $userDetailsResult["lastName"] . "</a>"; ?>
         </font>
       <?php if( $loggedInUser == $postQueryResult["email"]){ ?>
-      <div class="blog-edit-options">
+      <div style="margin-top:8px;"class="blog-edit-options">
         <a class='btn btn-success' href="editPostView.php?blogId=<?php echo  $postQueryResult["blogId"]; ?>"> <i class="fa fa-pencil" aria-hidden='true'> Edit</i>  </a>
         <a class='btn btn-danger' href="deleteBlog.php?blogId=<?php echo  $postQueryResult["blogId"]; ?>"> <i class="fa fa-trash" aria-hidden='true'> Delete</i>  </a>
       </div>

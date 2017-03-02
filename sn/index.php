@@ -31,13 +31,13 @@ include ("inc/nav-trn.php");
       <!--  SIGNUP -->
       <form action="signup.php" method="post">
         <br>
-        <input type="text" name="first" placeholder="first">
+        <input type="text" name="first" placeholder="first"/>
         <br>
-        <input type="text" name="last" placeholder="last">
+        <input type="text" name="last" placeholder="last"/>
         <br>
-        <input type="text" name="uid" placeholder="username">
+        <input type="text" name="email" placeholder="email" />
         <br>
-        <input type="password" name="pwd" placeholder="password">
+        <input type="password" name="pwd" placeholder="password"/>
         <br>
         <button type="submit">SIGN UP</button>
       </form>

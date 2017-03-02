@@ -43,18 +43,20 @@
     {
         $pdo = Database::connect();
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $sql = 'SELECT * FROM (SELECT c.circleOfFriendsName, c.circleFriendsId, m.dateCreated as date FROM circleoffriends c 
+        $sql = 'SELECT DISTINCT a.circleOfFriendsName, a.circleFriendsId, MAX(a.date) as date FROM (SELECT DISTINCT c.circleOfFriendsName, c.circleFriendsId, m.dateCreated as date FROM circleoffriends c 
             INNER JOIN usercirclerelationships u ON c.circleFriendsId = u.circleFriendsId 
-            INNER JOIN messages m ON m.emailTo=c.circleFriendsId WHERE u.email = ? AND (m.emailTo REGEXP \'^[0-9]+$\' OR m.emailFrom REGEXP \'^[0-9]+$\')) as a
+            INNER JOIN messages m ON m.emailTo=c.circleFriendsId WHERE u.email = ? AND (m.emailTo REGEXP \'^[0-9]+$\' OR m.emailFrom REGEXP \'^[0-9]+$\')) as a 
+            GROUP BY a.circleFriendsId, a.circleOfFriendsName
+            
             UNION 
-            SELECT * FROM (SELECT c.circleOfFriendsName, c.circleFriendsId, str_to_date(\'01,01,2000\',\'%d,%m,%Y\') as date FROM circleoffriends c 
+            SELECT DISTINCT b.circleOfFriendsName, b.circleFriendsId, b.date FROM (SELECT c.circleOfFriendsName, c.circleFriendsId, str_to_date(\'01,01,2000\',\'%d,%m,%Y\') as date FROM circleoffriends c 
             INNER JOIN usercirclerelationships u ON c.circleFriendsId = u.circleFriendsId 
-            WHERE u.email = ? AND c.circleFriendsId NOT IN 
+            WHERE u.email =? AND c.circleFriendsId NOT IN 
 
             (SELECT c.circleFriendsId FROM circleoffriends c 
             INNER JOIN usercirclerelationships u ON c.circleFriendsId = u.circleFriendsId 
             INNER JOIN messages m ON m.emailTo=c.circleFriendsId WHERE u.email = ? AND (m.emailTo REGEXP \'^[0-9]+$\' OR m.emailFrom REGEXP \'^[0-9]+$\'))) as b
-            ORDER BY date DESC';
+            ORDER BY date DESC;';
 
          $q1 = $pdo->prepare($sql);
          $q1->execute(array($email,$email,$email));

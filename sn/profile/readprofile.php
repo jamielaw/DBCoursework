@@ -10,6 +10,10 @@
         $email = $_REQUEST['email'];
     }
 
+    //Access Rights - changing view
+    $showEmail='true';
+    if(strcmp($loggedInUser, $email)==0) {$userAccess='hidden'; $adminAccess='true';}else{$userAccess='true'; $adminAccess='hidden';}
+
     if (null==$email) {
         header("Location: index.php");
     } else {
@@ -96,16 +100,94 @@
 
 
 							<div class="space space-4"></div>
+                            <?php //check friend request privacy of user!
+                                if($email!=$loggedInUser){ //only show add as friend or send message button if the profile that is being viewed is not the currently logged in user
+                                    
+                                    //TODO: check if user is already a friend, if so, change the button to show unfriend option? otherwise execute below code
 
-							<a href="#" class="btn btn-sm btn-block btn-success">
-								<i class="ace-icon fa fa-plus-circle bigger-120"></i>
-								<span class="bigger-110" >Add as a friend</span>
-							</a>
+                                    $getFriendshipPrivacy = "SELECT privacySettingsDescription FROM MyDB.privacySettings WHERE(email='".$email."' AND privacySettingsTitle='Who can send me friend requests?')";
+                                    $pdo = Database::connect();
+                                    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                                    $stmt = $pdo->prepare($getFriendshipPrivacy); 
+                                    $stmt->execute(); 
+                                    $row = $stmt->fetch();
+                                    $privacy = $row['privacySettingsDescription'];
+                                    if ($privacy=='Anyone'){
+                                        echo '<a href="#" class="btn btn-sm btn-block btn-success">
+                                            <i class="ace-icon fa fa-plus-circle bigger-120"></i>
+                                            <span class="bigger-110" >Add as a friend</span>
+                                        </a>';
+                                    }elseif($privacy=='Friends of friends'){
+                                        //*******BEGIN LOTS OF QUERYING CODE TO FIND FRIENDS OF FRIENDS*******
+                                        //firstly, we get the friends of the logged-in user and prepare it for use in the main sql search query
+                                        $getFriends="SELECT email FROM MyDB.users WHERE(email IN (SELECT emailTo FROM MyDB.friendships WHERE (emailFrom='" . $loggedInUser . "' AND status='accepted')) OR email IN (SELECT emailFrom FROM MyDB.friendships WHERE ( emailTo='". $loggedInUser . "' AND status='accepted')))";
 
-							<a href="messages.php" class="btn btn-sm btn-block btn-primary">
-								<i class="ace-icon fa fa-envelope-o bigger-110"></i>
-								<span class="bigger-110">Send a message</span>
-							</a>
+                                        $countFriends="SELECT COUNT(email) FROM MyDB.users WHERE(email IN (SELECT emailTo FROM MyDB.friendships WHERE (emailFrom='" . $loggedInUser . "' AND status='accepted')) OR email IN (SELECT emailFrom FROM MyDB.friendships WHERE ( emailTo='". $loggedInUser . "' AND status='accepted')))";
+
+                                        $q = $pdo->query($countFriends);
+                                        $countFriendsResult = $q->fetch(PDO::FETCH_ASSOC);
+                                        $countF = $countFriendsResult["COUNT(email)"];
+
+                                        $currentFriend = 0; //keep track of how many friends there are to keep the correct formatting
+                                        $friends[] .= "("; //this friends array stores the list of friends to the logged-in-user in a format which is easy to use in the sql query
+
+                                        foreach($pdo->query($getFriends) as $row){
+                                          $currentFriend += 1;
+                                          if($currentFriend==$countF){ //last friend
+                                            $friends[] .= "'" . $row["email"] . "'";
+                                          }else{
+                                            $friends[] .= "'" . $row["email"] . "',";
+                                          }
+                                        }
+                                        $friends[] .= ")";
+
+                                        $friendStr = implode($friends);
+
+                                        $getFriendsOfFriends="SELECT email FROM MyDB.users WHERE ((email IN (SELECT emailTo FROM MyDB.friendships WHERE (emailFrom='" . $email . "' AND status='accepted')) OR email IN (SELECT emailFrom FROM MyDB.friendships WHERE ( emailTo='". $email . "' AND status='accepted')) OR email IN (SELECT emailTo FROM MyDB.friendships WHERE (emailFrom IN " .$friendStr . " AND status='accepted') OR email IN (SELECT emailFrom FROM MyDB.friendships WHERE(emailTo IN " . $friendStr . " AND status='accepted')))) AND email!='" . $email . "')"; //get friends/friends of friends of the profile we're looking at
+                                        $sharedMutualFriends=false;
+                                        foreach($pdo->query($getFriendsOfFriends) as $row){
+                                            if($row["email"]==$loggedInUser){
+                                                $sharedMutualFriends=true;
+                                            }
+                                        }
+                                        //*******END LOTS OF QUERYING CODE TO FIND FRIENDS OF     FRIENDS*******                                        
+
+                                        if($sharedMutualFriends){
+                                            echo '<a href="#" class="btn btn-sm btn-block btn-success">
+                                                <i class="ace-icon fa fa-plus-circle bigger-120"></i>
+                                                <span class="bigger-110" >Add as a friend</span>
+                                            </a>';
+                                        }else{
+                                            echo '<a href="#" class="btn btn-sm btn-block btn-success disabled">
+                                                <i class="ace-icon fa fa-plus-circle bigger-120"></i>
+                                                <span class="bigger-110" >Can\'t add this person as a friend</span>
+                                            </a>';
+                                        }
+                                    }elseif($privacy=='Noone'){
+                                        echo '<a href="#" class="btn btn-sm btn-block btn-success disabled">
+                                            <i class="ace-icon fa fa-plus-circle bigger-120"></i>
+                                            <span class="bigger-110" >Can\'t add this person as a friend</span>
+                                        </a>';
+                                    }
+
+                               
+                                    echo '<a href="messages.php" class="btn btn-sm btn-block btn-primary">
+                                        <i class="ace-icon fa fa-envelope-o bigger-110"></i>
+                                        <span class="bigger-110">Send a message</span>
+                                        </a>';
+                                }
+                            ?>
+
+                            <a style="visibility: <?php echo $adminAccess ?>" data-toggle="modal" data-target="#export_dialog" class="btn btn-sm btn-block btn-primary">
+                                <i class="ace-icon fa fa-download bigger-110"></i>
+                                <span class="bigger-110">Export Profile</span>
+                            </a>
+
+                            <a style="visibility: <?php echo $adminAccess ?>" data-toggle="modal" data-target="#import_dialog" class="btn btn-sm btn-block btn-primary">
+                                <i class="ace-icon fa fa-upload bigger-110"></i>
+                                <span class="bigger-110">Import Profile</span>
+                            </a>
+
 						</div><!-- /.col -->
 
 						<div class="col-xs-12 col-sm-9">
@@ -120,9 +202,9 @@
 
 							<div class="profile-user-info">
 								<div class="profile-info-row">
-									<div class="profile-info-name"> Email </div>
+									<div style="visibility: <?php echo $showEmail ?>" class="profile-info-name"> Email </div>
 
-									<div class="profile-info-value">
+									<div style="visibility: <?php echo $showEmail ?>" class="profile-info-value">
 										<span> <?php echo $data['email'];?> </span>
 									</div>
 								</div>
@@ -191,14 +273,16 @@
 
 				<div id="pictures" class="tab-pane">
 
-                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#collection_dialog">Create Collection</button>
+                    <button style="visibility: <?php echo $adminAccess ?>" type="button" class="btn btn-info" data-toggle="modal" data-target="#collection_dialog">Create Collection</button>
 
 					<?php
                             //$pdo = Database::connect();
                             $sql = 'SELECT photoCollectionId, dateCreated, title, description FROM photocollection WHERE createdBy = ?;';
                             $q1 = $pdo->prepare($sql);
                             $q1->execute(array($email));
+                            $numberofresults = 0;
                             foreach ($q1->fetchAll() as $row) {
+                                $numberofresults+=1;
                                 $imageReference = getPhoto($row['photoCollectionId'])['imageReference'];
                                 if($imageReference==null)
                                     $imageReference="http://www.plantauthority.gov.in/images/pg1.png";
@@ -212,7 +296,7 @@
 											</div>
 										</a>
 
-										<div class="tools tools-bottom">
+										<div style="visibility: '.$adminAccess.'" class="tools tools-bottom">
 											<a data-title="'.$row['title'].'" data-description="'.$row['description'].'" data-id="'.$row['photoCollectionId'].'" class="open-update_dialog" data-toggle="modal" href="#update_dialog">
 												<i class="ace-icon fa fa-pencil"></i>
 											</a>
@@ -223,6 +307,9 @@
 										</div>
 									</li>
 								</ul>';
+                            }
+                            if($numberofresults==0){
+                                echo '<ul class="ace-thumbnails">No photos found</ul>';
                             }
                         ?>
 				</div><!-- /#pictures -->
@@ -239,15 +326,67 @@
                     </div>
                     <form class="" action="uploadphoto.php?id=<?php echo $loggedInUser ?>" method="post" enctype="multipart/form-data">
                     <div class="modal-body">
-                        <p>Once a new picture is submitted, the old one will be removed.</p>
-                            <p class=""> Select image to upload: </p>
-                            <input class="" type="file" name="fileToUpload" id="fileToUpload"> <br>
+                        <p style="visibility: <?php echo $userAccess ?>">You don't have access to change other users' profile pictures.<p>
+                        <p style="visibility: <?php echo $adminAccess ?>">Once a new picture is submitted, the old one will be removed.</p>
+                            <p style="visibility: <?php echo $adminAccess ?>" class=""> Select image to upload: </p>
+                            <input style="visibility: <?php echo $adminAccess ?>" class="" type="file" name="fileToUpload" id="fileToUpload"> <br>
                     </div>
-                    <div class="modal-footer">
+                    <div style="visibility: <?php echo $adminAccess ?>" class="modal-footer">
                     <input class= "btn btn-primary" type="submit" value="Upload Image" name="submit">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     </div>
                     </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- modal to export user profile -->
+        <div class="modal fade" id="export_dialog" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Export your profile to XML format</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form data-title=<?php echo $loggedInUser ?> id="export_form" action="../XML/exportProfile.php" method="POST">
+                            <p> Are you sure you want to export your profile? We appreciate your patience as it may take a while.</p>
+                            <div id="myProgress">
+                              <div id="myBar">
+                                <div id="label">0%</div>
+                              </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" id="submitForm4" class="btn btn-success">Export</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- modal to import user profile -->
+        <div class="modal fade" id="import_dialog" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Import your profile to XML format</h4>
+                    </div>
+                    <div class="modal-body">
+                       <form  data-title=<?php echo $loggedInUser ?> action="../XML/importProfile.php?" method="post" enctype="multipart/form-data">
+                            <div class="modal-body">
+                                <p> Upload your XML file! All your current data will be lost! </p>
+                                <p class=""> Select XML file to upload: </p>
+                                <input class="" type="file" name="fileToUpload" id="fileToUpload"> <br>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                <input class= "btn btn-primary" type="submit" value="Import" name="submit">
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -360,6 +499,81 @@ $(document).ready(function () {
     });
 });
 
+
+$(document).ready(function () {
+
+    // Export Collection Button
+    $("#export_form").on("submit", function(e) {
+
+      var elem = document.getElementById("myBar");   
+      var width = 10;
+      var id = setInterval(frame, 300);
+      function frame() {
+        if (width >= 100) {
+          clearInterval(id);
+        } else {
+          width++; 
+          elem.style.width = width + '%'; 
+          document.getElementById("label").innerHTML = width * 1  + '%';
+        }
+      }
+        var postData = $(this).serializeArray();
+        var email = $(this).data('title');
+        postData.push({name: "email", value: email});
+        var formURL = $(this).attr("action");
+        $.ajax({
+            url: formURL,
+            type: "POST",
+            data: postData,
+            success: function(data, textStatus, jqXHR) {
+                $('#export_dialog .modal-header .modal-title').html("Result");
+                $('#export_dialog .modal-body').html(data);
+                $("#submitForm4").remove();
+
+                //location.reload();
+            },
+            error: function(jqXHR, status, error) {
+                console.log(status + ": " + error);
+            }
+        });
+        e.preventDefault();
+    });
+
+    $("#submitForm4").on('click', function() {
+        $("#export_form").submit();
+    });
+});
+
+$(document).ready(function () {
+
+    // Import Collection Button
+    $("#import_form").on("submit", function(e) {
+
+        var formURL = $(this).attr("action");
+        $.ajax({
+            url: formURL,
+            type: "POST",
+            data: postData,
+            success: function(data, textStatus, jqXHR) {
+                $('#import_dialog .modal-header .modal-title').html("Result");
+                $('#import_dialog .modal-body').html(data);
+                $("#submitForm5").remove();
+
+                //location.reload();
+            },
+            error: function(jqXHR, status, error) {
+                console.log(status + ": " + error);
+            }
+        });
+        e.preventDefault();
+    });
+
+    $("#submitForm5").on('click', function() {
+        $("#import_form").submit();
+    });
+});
+
+
 // Update Collection
 var albumName = null;
 var albumDescription = null;
@@ -454,6 +668,22 @@ $(document).on("click", ".open-update_photo", function () {
 <style type="text/css">
 /*body{margin-top:20px;}*/
 
+#myProgress {
+  width: 100%;
+  background-color: #ddd;
+}
+
+#myBar {
+  width: 1%;
+  height: 30px;
+  background-color: #4CAF50;
+}
+
+#label {
+  text-align: center;
+  line-height: 30px;
+  color: white;
+}
 .align-center, .center {
     text-align: center!important;
 }

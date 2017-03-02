@@ -1,6 +1,6 @@
 <?php
   // Import DB Auth Script
-  require '../database.php';
+  require '../session.php';
 
   //function to redirect - to be moved into a utils.php file later?
   function redirect($url) {
@@ -10,11 +10,15 @@
     die();
   }
 
+  //echo $_GET['blogId'];
+
   // Get PK of Table
-  $argument1 = $htmlspecialchars($_GET['blogId']);
+  // $argument1 = $htmlspecialchars($_GET['blogId']);
   // sql to delete a record
-  $sql = "DELETE FROM blogs WHERE blogId=". $argument1 ;
-  #echo $sql;
+  $argument1 = $_GET['blogId'];
+
+  $sql = "DELETE FROM blogs WHERE blogId= $argument1" ;
+  //echo $sql;
   $pdo = Database::connect();
   $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
@@ -23,9 +27,7 @@
 
   Database::disconnect();
 
-  //Redirect to /sn/admin page to create "refresh "
-  // URL TO BE MADE RELATIVE LATER
-  redirect('sn/blog/');
+  redirect('../../sn/blog/');
 
 
 ?>

@@ -102,9 +102,7 @@ $createAccessRightsTable = "CREATE TABLE IF NOT EXISTS MyDB.accessRights(
   email VARCHAR(50) NULL,
   circleFriendsId INT NULL,
   PRIMARY KEY(accessRightsId),
-  FOREIGN KEY(photoCollectionId) REFERENCES myDB.photoCollection(photoCollectionId),
-  FOREIGN KEY(email) REFERENCES myDB.users(email),
-  FOREIGN KEY(circleFriendsId) REFERENCES myDB.circleOfFriends(circleFriendsId)
+  FOREIGN KEY(photoCollectionId) REFERENCES myDB.photoCollection(photoCollectionId)
 )";
 // Create table for Photo Collections
 $createPhotoCollectionsTable = "CREATE TABLE IF NOT EXISTS myDB.photoCollection(
@@ -113,6 +111,7 @@ $createPhotoCollectionsTable = "CREATE TABLE IF NOT EXISTS myDB.photoCollection(
   title VARCHAR(100),
   description VARCHAR(255) ,
   createdBy VARCHAR(255) NOT NULL,
+  FOREIGN KEY(createdBy) REFERENCES myDB.users(email),
   PRIMARY KEY(photoCollectionId)
 )";
 // Create table for user circle relationships
@@ -145,7 +144,6 @@ $createPrivacySettingsTable = "CREATE TABLE IF NOT EXISTS MyDB.privacySettings(
   email VARCHAR(50) NOT NULL,
   privacySettingsTitle VARCHAR(255) ,
   privacySettingsDescription VARCHAR(255) ,
-  status BOOLEAN DEFAULT false,
   PRIMARY KEY(privacySettingsId),
   FOREIGN KEY(email) REFERENCES MyDB.users(email)
 )";

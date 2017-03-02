@@ -3,8 +3,15 @@ $host = 'localhost';
 $user = 'root';
 $pass = 'root';
 $name = 'mydb';
+$email = null;
 
 require("../database.php");
+
+if ( !empty($_POST['email'])) {
+  $email = $_POST['email'];
+}
+
+
 function getConstraints($table, $columnName)
 {
     $getConstraints = 'SELECT cols.TABLE_NAME AS INITIAL_TABLE_NAME, cols.COLUMN_NAME AS INITIAL_COLUMN_NAME, cols.ORDINAL_POSITION,
@@ -72,25 +79,27 @@ $query = 'SHOW TABLES FROM '.$name;
 $result = mysqli_query($link, $query) or die('cannot show tables');
 if (mysqli_num_rows($result)) {
     //prep output
-    $tab = "\t";
+    $tab = "\t"; 
     $br = "\n";
     $xml = '<?xml version="1.0" encoding="UTF-8"?>'.$br;
     $xml.= '<database name="'.$name.'">'.$br;
+    $xml.= '<user name="'.$email.'">'.$br;
 
     //for every table...
     while ($table = mysqli_fetch_row($result)) {
         //prep table out
         $xml.= $tab.'<table name="'.$table[0].'">'.$br;
-        echo 'TABLE NAME:'.$table[0].'<br/>';
+        //echo 'TABLE NAME:'.$table[0].'<br/>';
 
-        //get the rows
-        $query3 = 'SELECT * FROM '.$table[0];
-        $records = mysqli_query($link, $query3) or die('cannot select from table: '.$table[0]);
 
-        //table attributes
+        // getting columns
+        // table attributes
         $attributes = array('name','orgname','max_length','length','charsetnr','flags','type','decimals');
         $xml.= $tab.$tab.'<columns>'.$br;
         $x = 0;
+        //get the rows
+        $query = 'SELECT * FROM '.$table[0];
+        $records = mysqli_query($link, $query) or die('cannot select from table: '.$table[0]);
         while ($x < mysqli_num_fields($records)) {
             $meta = mysqli_fetch_field($records);
             $xml.= $tab.$tab.$tab.'<column ';
@@ -98,19 +107,20 @@ if (mysqli_num_rows($result)) {
             foreach ($attributes as $attribute) {
                 if ($attribute=='name') {
                     $columnName = $meta->$attribute;
-                    echo 'COLUMN NAME:'.$columnName.'<br/>';
+                    //echo 'COLUMN NAME:'.$columnName.'<br/>';
                 }
                 $xml.= $attribute.'="'.$meta->$attribute.'" ';
             }
             $constraints = getConstraints($table[0], $columnName);
             if ($constraints) {
+              /*
                 echo 'IS_NULLABLE: '.$constraints[0].'<br/>';
                 echo 'COLUMN_TYPE: '.$constraints[1].'<br/>';
                 echo 'COLUMN_KEY: '.$constraints[2].'<br/>';
                 echo 'EXTRA: '.$constraints[3].'<br/>';
                 echo 'REFERENCED_TABLE_NAME: '.$constraints[4].'<br/>';
                 echo 'REFERENCED_COLUMN_NAME: '.$constraints[5].'<br/>';
-
+                */
                 $xml.= 'is_nullable="'.$constraints[0].'" ';
                 $xml.= 'column_type="'.$constraints[1].'" ';
                 if ($constraints[2]) {
@@ -130,27 +140,97 @@ if (mysqli_num_rows($result)) {
             $xml.= '/>'.$br;
             $x++;
         }
-        echo '<br/><br/>';
+       // echo '<br/><br/>';
         $xml.= $tab.$tab.'</columns>'.$br;
 
-        //stick the records
-        $xml.= $tab.$tab.'<records>'.$br;
-        while ($record = mysqli_fetch_assoc($records)) {
-            $xml.= $tab.$tab.$tab.'<record>'.$br;
-            foreach ($record as $key=>$value) {
-                $xml.= $tab.$tab.$tab.$tab.'<'.$key.'>'.htmlspecialchars(stripslashes($value)).'</'.$key.'>'.$br;
-            }
-            $xml.= $tab.$tab.$tab.'</record>'.$br;
+        // getting rows (records)
+        if(strcmp($table[0],"accessrights")==0)
+        {
+          // 1. get the user's access rights
+          // 2. get the access rights of the user's photo collection 
+          // 3. get the access rights of the circles the user belongs to
+          $query = 'SELECT * FROM accessrights WHERE email=\''.$email.'\' OR (circleFriendsId IN (SELECT circleFriendsId FROM usercirclerelationships WHERE email=\''.$email.'\')) OR (photoCollectionId IN (SELECT photoCollectionId FROM photocollection WHERE createdBy=\''.$email.'\'))';
         }
-        $xml.= $tab.$tab.'</records>'.$br;
-        $xml.= $tab.'</table>'.$br;
+        if(strcmp($table[0], 'annotations')==0)
+        {
+          // 1. get the annotations made by the user
+          // 2. get the annotations made on user's photos
+          $query = 'SELECT * FROM annotations WHERE email=\''.$email.'\' OR (photoId IN (SELECT photoId FROM photos WHERE photoCollectionId IN (SELECT photoCollectionId FROM photocollection WHERE createdBy=\''.$email.'\')))';
+        }
+        if(strcmp($table[0], 'blogs')==0)
+        {
+          $query = 'SELECT * FROM blogs WHERE email=\''.$email.'\'';
+        } 
+        if(strcmp($table[0], 'circleoffriends')==0)
+        {
+          $qury = 'SELECT * FROM circleoffriends WHERE circleFriendsId IN (SELECT circleFriendsId FROM usercirclerelationships WHERE email = \''.$email.'\')';
+        }
+        if(strcmp($table[0], 'comments')==0)
+        {
+          // 1. get user's comments
+          // 2. get other users' comments to the user's pictures
+          $query = 'SELECT * FROM comments WHERE email=\''.$email.'\' OR photoId IN (SELECT photoId FROM photos WHERE photoCollectionId IN (SELECT photoCollectionId FROM photocollection WHERE createdBy=\''.$email.'\'))';
+        }
+        if(strcmp($table[0], 'friendships')==0)
+        {
+          $query = 'SELECT * FROM friendships WHERE emailFrom=\''.$email.'\' OR emailTo=\''.$email.'\'';
+        }
+        if(strcmp($table[0], 'messages')==0)
+        {
+          $query = 'SELECT * FROM messages WHERE (emailTo=\''.$email.'\' OR emailFrom=\''.$email.'\')';
+        }
+        if(strcmp($table[0], 'photocollection')==0)
+        {
+          $query = 'SELECT * FROM photocollection WHERE createdBy=\''.$email.'\'';
+        }
+        if(strcmp($table[0], 'photos')==0)
+        {
+          $query = 'SELECT * FROM photos WHERE photoCollectionId IN (SELECT photoCollectionId FROM photocollection WHERE createdBy=\''.$email.'\')';
+        }
+        if(strcmp($table[0], 'posts')==0)
+        {
+          $query = 'SELECT * FROM posts WHERE blogId IN (SELECT blogId FROM blogs WHERE email=\''.$email.'\')';
+        }
+        if(strcmp($table[0], 'privacysettings')==0)
+        {
+          $query = 'SELECT * FROM privacysettings WHERE email=\''.$email.'\'';
+        }
+        if(strcmp($table[0], 'usercirclerelationships')==0)
+        {
+          $query = 'SELECT * FROM usercirclerelationships WHERE email=\''.$email.'\'';
+        }
+        if(strcmp($table[0], 'users')==0)
+        {
+          $query = 'SELECT * FROM users WHERE email=\''.$email.'\'';
+        }
+
+
+          $records = mysqli_query($link, $query) or die('cannot select from table: '.$table[0]);
+
+          //echo $query;
+
+          //stick the records
+          $xml.= $tab.$tab.'<records>'.$br;
+          while ($record = mysqli_fetch_assoc($records)) {
+              $xml.= $tab.$tab.$tab.'<record>'.$br;
+              foreach ($record as $key=>$value) {
+                  $xml.= $tab.$tab.$tab.$tab.'<'.$key.'>'.htmlspecialchars(stripslashes($value)).'</'.$key.'>'.$br;
+              }
+              $xml.= $tab.$tab.$tab.'</record>'.$br;
+          }
+          $xml.= $tab.$tab.'</records>'.$br;
+          $xml.= $tab.'</table>'.$br;
+
     }
+    $xml.= '</user>';
     $xml.= '</database>';
 
-    echo 'Imported Successfully! Check your XML folder.';
+    echo 'Exported Successfully! Check your XML folder.';
 
     //save file
-    $handle = fopen($name.'-backup-'.time().'.xml', 'w+');
+    $fileName = $name.'-backup-'.time().'.xml';
+    $handle = fopen($fileName, 'w+');
     fwrite($handle, $xml);
     fclose($handle);
+
 }

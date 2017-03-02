@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
-@media (max-width: 1260px) {
+@media (max-width: 1190px) {
   .navbar-header {
       float: none;
   }
@@ -48,70 +48,89 @@
       </button>
       <a class="navbar-brand">BookFace</a>
     </div>
-    <div class="collapse navbar-collapse">
-      <ul class="nav navbar-nav">
-        <li class="dropdown">
-          <a class="dropdown-toggle" data-toggle="dropdown" href="#">
           <?php
+          session_start();
           require("$root/sn/session.php");
           $pdo = Database::connect();
           $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-          $sql="SELECT firstName, lastName, profileImage FROM MyDB.users WHERE email='" . $loggedInUser . "'"; //change this to be for logged-in user
-          foreach ($pdo->query($sql) as $row) {
-              echo "<img style='height:20px;width:20px;border-radius:2px;' src='" . $row["profileImage"] . "'> ";
-              echo $row["firstName"] . " " . $row["lastName"];
+          if (isset($_SESSION['id'])) {
+            $isLoggedIn=1;
+          }else{
+            $isLoggedIn=0;
           }
-          Database::disconnect();
-          ?>
-          <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="/sn/profile/readprofile.php?email=<?php echo $loggedInUser ?>"><i class="fa fa-user"></i> My Profile</a></li>
-            <li><a href="/sn/profile/settings.php"><i class="fa fa-cog"></i> Settings</a></li>
-            <li><a href="/sn/logout.php"><i class="fa fa-sign-out"></i> Logout</a></li>
-          </ul>
-        </li>
-        <!--  Check for new friend requests! -->
-        <?php
-        $friendRequestCount = 'SELECT COUNT( DISTINCT email, firstName, lastName, profileImage )FROM users JOIN friendships ON users.email = friendships.emailFrom OR users.email=friendships.emailTo WHERE (friendships.emailTo=\'charles@ucl.ac.uk\') AND users.email!=\'charles@ucl.ac.uk\' AND status=\'pending\';';
-        $q = $pdo->prepare($friendRequestCount);
-        $q->execute();
+          $isLoggedIn=1;
+          if($isLoggedIn){ //if user is logged in, display relevant navbar
+                    echo "<div class=\"collapse navbar-collapse\">
+                    <ul class=\"nav navbar-nav\">
+                    <li class=\"dropdown\">
+                    <a class=\"dropdown-toggle\" data-toggle=\"dropdown\" href=\"#\">";
+                    //get user details for sprite in navbar
+                    $sql="SELECT firstName, lastName, profileImage FROM MyDB.users WHERE email='" . $loggedInUser . "'";
+                    $userq = $pdo->query($sql);
+                    $row = $userq->fetch(PDO::FETCH_ASSOC);
+                    echo "<img style='height:20px;width:20px;border-radius:2px;' src='" . $row["profileImage"] . "'> ";
+                    echo $row["firstName"] . " " . $row["lastName"];
+                    echo "<span class=\"caret\"></span></a>
+                  <ul class=\"dropdown-menu\">
+                    <li><a href=\"/sn/profile/readprofile.php?email=" . $loggedInUser . "\"><i class=\"fa fa-user\"></i> My Profile</a></li>
+                    <li><a href=\"/sn/profile/settings.php\"><i class=\"fa fa-cog\"></i> Settings</a></li>
+                    <li><a href=\"/loginTest/logout.php\"><i class=\"fa fa-sign-out\"></i> Logout</a></li>
+                  </ul>";
+                    echo "</li>";
 
-        $row = $q->fetchColumn();
+                //Check for new friend requests!
+                  $friendRequestCount = "SELECT COUNT( * )FROM users JOIN friendships ON users.email = friendships.emailFrom OR users.email=friendships.emailTo WHERE (friendships.emailTo='$loggedInUser' OR friendships.emailFrom='$loggedInUser' ) AND users.email!= '$loggedInUser' AND status='pending';";
+                  //echo $friendRequestCount;
+                  $q = $pdo->prepare($friendRequestCount);
+                  $q->execute();
 
-        if($row == 0 || $row == NULL){
-          echo '<li><a href="/sn/profile/myfriends.php"><i class="fa fa-users"></i></a></li>';
-        }else{
-          // you have a friend request!
-          echo '<li><a href="/sn/profile/myfriends.php"><i style="color: #ff304d;" class="fa fa-users"></i></a></li>';
+                  $row = $q->fetchColumn();
+
+                  if($row == 0 || $row == NULL){
+                    echo '<li><a href="/sn/profile/myfriends.php"><i class="fa fa-users" data-toggle="tooltip" data-placement="bottom" title="Friend requests"></i></a></li>';
+                  }else{
+                    // you have a friend request!
+                    echo '<li><a href="/sn/profile/myfriends.php"><i style="color: #ff304d;" class="fa fa-users" data-toggle="tooltip" data-placement="bottom" title="You have new friend requests!"></i></a></li>';
+                  }
+
+                  echo "<li><a href=\"/sn/profile/messages.php\"><i class=\"fa fa-comments\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Your messages\"></i></a></li>
+                  
+                  <li><a href=\"/sn/circles/index.php\">Circles</a></li>
+                  <li><a href=\"/sn/blog/index.php\">Blog</a></li>
+                  <li><a href=\"/sn/explore/index.php\">Explore</a></li>"; //<li><a href=\"/sn/profile/readprofile.php?email=".$loggedInUser."#pictures\"><i class=\"fa fa-picture-o\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Your photos\"></i></a></li>
+
+                  //Check if logged in user is administrator
+                  $sql = "SELECT roleTitle FROM MyDB.roles INNER JOIN MyDB.users ON MyDB.users.roleID=MyDB.roles.roleID WHERE(users.email='" . $loggedInUser . "')";
+                  //echo $sql;
+                  $res=$pdo->query($sql);
+                  $row = $res->fetch(PDO::FETCH_ASSOC);
+                  if ($row["roleTitle"]=="administrator") {
+                      echo "<li><a href=\"../admin/index.php\">Admin</a></li>";
+                  }
+
+
+                  //search bar
+                  echo "<form class=\"navbar-form navbar-left\" action=\"/sn/search/searchresult.php?go\" method=\"get\" id=\"searchform\" style=\"padding-top:2px;\">
+                      <input type=\"text\" class=\"submit\" placeholder=\"Search for friends\" name=\"submit\" id=\"submit\" autocomplete=\"off\" style=\"vertical-align:none;\">
+                    <button type=\"submit\" class=\"btn btn-default\" style=\"padding:3px 5px; vertical-align:top;\"><i class=\"glyphicon glyphicon-search\"></i></button>
+                  </form>
+                  </div>
+                </div>";
         }
-        ?>
-        <!--  -->
-        <li><a href="/sn/profile/messages.php"><i class="fa fa-comments"></i></a></li>
-        <li><a href="/sn/profile/index.php#4"><i class="fa fa-picture-o"></i></a></li>
-        <li><a href="/sn/photos/index.php">Photos</a></li>
-        <li><a href="/sn/circles/index.php">Circles</a></li>
-        <li><a href="/sn/blog/index.php">Blog</a></li>
-        <li><a href="/sn/explore/index.php">Explore</a></li>
-        <?php
-        //Check if logged in user is administrator
-        $pdo = Database::connect();
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $sql = "SELECT roleTitle FROM MyDB.roles INNER JOIN MyDB.users ON MyDB.users.roleID=MyDB.roles.roleID WHERE(users.email='" . $loggedInUser . "')";
-        //echo $sql;
-        $res=$pdo->query($sql);
-        $row = $res->fetch(PDO::FETCH_ASSOC);
-        if ($row["roleTitle"]=="administrator") {
-            echo "<li><a href=\"../admin/index.php\">Admin</a></li>";
+        else{
+          echo "<div class=\"collapse navbar-collapse\">
+                    <ul class=\"nav navbar-nav\">
+                    <li><a href=\"/loginTest/login.php\">Log In</a></li>
+                    <li><a href=\"/loginTest/signup.php\">Sign Up</a></li>
+                </div>";
         }
         Database::disconnect();
         ?>
       </ul>
 
-      <!--search bar-->
-      <form class="navbar-form navbar-left" action="/sn/search/searchresult.php?go" method="get" id="searchform" style="padding-top:2px;">
-          <input type="text" class="submit" placeholder="Search for friends" name="submit" id="submit" autocomplete="off" style="vertical-align:none;">
-        <button type="submit" class="btn btn-default" style="padding:3px 5px; vertical-align:top;"><i class="glyphicon glyphicon-search"></i></button>
-      </form>
-      </div>
-    </div>
 </nav>
+<script>
+$(document).ready(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
+</script>

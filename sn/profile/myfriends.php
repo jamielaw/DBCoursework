@@ -49,21 +49,21 @@
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     $getLoggedInUserFriends = "SELECT * FROM ( SELECT * FROM users JOIN
-      friendships ON users.email = friendships.emailFrom OR
-      users.email=friendships.emailTo WHERE(
-        (friendships.emailFrom='$loggedInUser' OR
-        friendships.emailTo='$loggedInUser' ) AND
-         users.email!= '$loggedInUser' AND
-         friendships.status = 'accepted')) AS
-         T1 JOIN ( SELECT * FROM users JOIN
-         friendships ON users.email =
-          friendships.emailFrom OR
-          users.email=friendships.emailTo
-          WHERE( (friendships.emailFrom='$nonFriendedUser'
-          OR friendships.emailTo='$nonFriendedUser' )
-          AND users.email!= '$nonFriendedUser' AND
-          friendships.status = 'accepted')) AS T2 ON T1.email
-          = T2.email";
+       friendships ON users.email = friendships.emailFrom OR
+       users.email=friendships.emailTo WHERE(
+         (friendships.emailFrom='$loggedInUser' OR
+         friendships.emailTo='$loggedInUser' ) AND
+          users.email!= '$loggedInUser' AND
+          friendships.status = 'accepted')) AS
+          T1 JOIN ( SELECT * FROM users JOIN
+          friendships ON users.email =
+           friendships.emailFrom OR
+           users.email=friendships.emailTo
+           WHERE( (friendships.emailFrom='$nonFriendedUser'
+           OR friendships.emailTo='$nonFriendedUser' )
+           AND users.email!= '$nonFriendedUser' AND
+           friendships.status = 'accepted')) AS T2 ON T1.email
+           = T2.email";
 
     //echo $getLoggedInUserFriends;
 
@@ -73,6 +73,19 @@
       $count = $count + 1;
     }
     return $count;
+  }
+
+  function getUsersUniversity($loggedInUser){
+    $matches = array();
+    $uni = preg_match("@(.)$", $loggedInUser, $matches, PREG_OFFSET_CAPTURE);
+    //echo $matches[0][0];
+    return $matches[0][0];
+  }
+  function getDomainFromEmail($email) {
+  // Get the data after the @ sign
+  $domain = substr(strrchr($email, "@"), 1);
+  $uni = strtok($domain,".");
+  return strtoupper($uni);
   }
 ?>
 
@@ -100,9 +113,10 @@
       </li>
       <?php
       $pdo = Database::connect();
-      $sql = 'SELECT DISTINCT email, firstName, lastName, profileImage FROM users JOIN friendships ON users.email = friendships.emailFrom OR users.email=friendships.emailTo WHERE (friendships.emailTo=?) AND users.email!=? AND status=\'pending\';';
+      $sql = "SELECT DISTINCT email, firstName, lastName, profileImage FROM users JOIN friendships ON users.email = friendships.emailFrom OR users.email=friendships.emailTo WHERE (friendships.emailTo= '$loggedInUser' OR friendships.emailFrom = '$loggedInUser') AND users.email!= '$loggedInUser'  AND status='pending';";
       $q = $pdo->prepare($sql);
-      $q->execute(array($loggedInUser,$loggedInUser));
+      $q->execute();
+      //echo $sql;
       foreach ($q as $row) {
       $nrFriends = nrOfFriends($row['email'])['COUNT(*)'];
       $nrPhotos = nrOfPhotos($row['email'])['COUNT(*)'];
@@ -145,13 +159,14 @@
   </div>
 
   <div class="jumbotron list-content">
+
     <ul class="list-group">
       <li href="#" class="list-group-item title">
         Suggestions...
       </li>
       <?php
       $sql = "SELECT DISTINCT * FROM users WHERE users.email !='$loggedInUser'
-       AND (users.email NOT IN
+       AND ( users.email NOT IN
          ( SELECT users.email
            FROM users
            JOIN friendships ON
@@ -160,10 +175,12 @@
            OR users.email=friendships.emailTo
            WHERE(
               (friendships.emailFrom= '$loggedInUser'
-              OR friendships.emailTo= '$loggedInUser' )
+              OR friendships.emailTo= '$loggedInUser'
+              OR users.email LIKE '@ucl.ac.uk')
               AND
-               users.email != '$loggedInUser' )));";
+              users.email != '$loggedInUser'  ) ));";
 
+      //echo $sql;
       $recommendations = array();
       foreach ($pdo->query($sql) as $row) {
         $row["mutualFriends"] = nrOfMutualFriends($loggedInUser,$row['email']);
@@ -174,6 +191,8 @@
       usort($recommendations, 'compareOrder');
 
       foreach ($recommendations as $row) {
+        $uni = getDomainFromEmail($row['email']);
+        if($uni != getDomainFromEmail($loggedInUser) && $row['mutualFriends'] == 0) continue;
 
         echo '<li href="#" class="list-group-item text-left">
           <div class="panel-heading">
@@ -183,9 +202,16 @@
             </div>
             <div class="media-body">
               <h4 class="media-heading margin-v-5"><a href="readprofile.php?email='.$row['email'].'">'.$row['firstName'].' '.$row['lastName'].'</a></h4>
-              <div class="profile-icons">'. $row['mutualFriends'] . ' mutal friends
+              <div class="profile-icons">';
 
-            </div>
+              if($row['mutualFriends'] != 0){
+                echo $row['mutualFriends'] . " mutual friends";
+              }else{
+                echo "also goes to ". $uni; 
+
+              }
+
+         echo '</div>
           </div>
           <label class="pull-right">
             <a  class="btn btn-success btn-xs glyphicon glyphicon-plus" href="createFriendRequest.php?email='.$row['email'].'" title="Add as friend"></a>
@@ -195,6 +221,9 @@
         </div>
       </div>
       </li>';
+
+
+
       }
       ?>
     </ul>

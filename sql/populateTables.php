@@ -34,8 +34,6 @@ $insertFriendshipTable = "INSERT INTO MyDB.friendships (emailFrom,emailTo,status
 (\"charles@ucl.ac.uk\",\"alan@ucl.ac.uk\",\"pending\"),
 (\"charles@ucl.ac.uk\",\"john@ucl.ac.uk\",\"denied\"),
 (\"vicky@ucl.ac.uk\",\"charles@ucl.ac.uk\",\"accepted\"),
-(\"vicky@ucl.ac.uk\",\"ada@ucl.ac.uk\",\"accepted\"),
-(\"vicky@ucl.ac.uk\",\"alan@ucl.ac.uk\",\"accepted\"),
 (\"grace@ucl.ac.uk\",\"ada@ucl.ac.uk\",\"accepted\"),
 (\"grace@ucl.ac.uk\",\"alan@ucl.ac.uk\",\"accepted\"),
 (\"grace@ucl.ac.uk\",\"john@ucl.ac.uk\",\"accepted\"),
@@ -145,17 +143,27 @@ $insertMessages = "INSERT INTO MyDB.messages (emailTo, emailFrom, messageText) V
 (\"3\",\"charles@ucl.ac.uk\",\"Hello World\"),
 (\"4\",\"ada@ucl.ac.uk\",\"Invitation\")";
 
-$insertPrivacySettings = "INSERT INTO MyDB.privacySettings (email, privacySettingsTitle, privacySettingsDescription) VALUES
-(\"charles@ucl.ac.uk\", \"Who can send me friend requests?\", \"Anyone\"),
-(\"vicky@ucl.ac.uk\", \"Who can send me friend requests?\", \"Friends of friends\");
-";
+$insertPrivacyTitles = "INSERT INTO MyDB.privacyTitles (privacyTitleId,privacySettingsDescription) VALUES
+(1,\"Who can send me friend requests?\"),
+(2,\"Who can search me?\"),
+(3,\"Who can view my blogs?\"),
+(4,\"Who can see my photo collections\"),
+(5,\"Who can send me messages?\");";
+
+$insertPrivacySettings = "INSERT INTO MyDB.privacySettings (privacyTitleId, email, privacyType) VALUES
+(1, \"charles@ucl.ac.uk\", \"Anyone\"),
+(2, \"charles@ucl.ac.uk\", \"Anyone\"),
+(3, \"charles@ucl.ac.uk\", \"Anyone\"),
+(4, \"charles@ucl.ac.uk\", \"Anyone\"),
+(5, \"charles@ucl.ac.uk\", \"Anyone\");";
+
 $populatingTables = [
     $insertRolesTable,
     $insertRightsTable,
     $insertUsersTable,
     $insertFriendshipTable,
     $insertBlogsTable,
-    //$insertPostsTable,
+    $insertPostsTable,
     $insertPhotoCollectionTable,
     $insertPhotosTable,
     $insertCircleOfFriendsTable,
@@ -163,6 +171,7 @@ $populatingTables = [
     $insertCommentsTable,
     $insertAnnotationsTable,
     $insertMessages,
+    $insertPrivacyTitles,
     $insertPrivacySettings
 
 ];

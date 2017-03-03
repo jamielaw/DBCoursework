@@ -166,15 +166,14 @@
     echo "</table>";
 
     $photoQuery = "SELECT * FROM photos";
-    echo "<h2> Photo Collections </h2>";
+    echo "<h2> Photo  </h2>";
     echo "<table class='table table-stripped table-bordered'>
        <tr>
-        <th> Title  </th>
-        <th> Description </th>
-        <th> Owner </th>
+        <th> Image </th>
+
         <th> Action </th> ";
 
-    foreach ($pdo->query($photoCollectionQuery) as $row)  {
+    foreach ($pdo->query($photoQuery) as $row)  {
 
             $userQuery = "SELECT * FROM users where email='". $row["createdBy"] . "'";
 
@@ -183,10 +182,44 @@
             $userQueryResult = $y->fetch(PDO::FETCH_ASSOC);
 
             echo "<tr>";
-            echo "<td>" . $row['title'] .  "</td>";
-            echo "<td>" . $row['description'] .  "</td>";
-            echo "<td>" . $userQueryResultName["firstName"] . " " . $userQueryResult["lastName"]  . "</td>";
+            echo "<td><img style='width:100px;' src='" . $row['imageReference'] .  "'</td>";
 
+            echo "<td> <a class='table-btn btn btn-success' href='blogs/editView.php?blogId=".$row["blogId"]."'><i class='fa fa-pencil' aria-hidden='true'></i> Edit </a><br>";
+            echo "<a class='table-btn btn btn-danger' href='blogs/delete.php?blogId=".$row["blogId"]."'> <i class='fa fa-trash' aria-hidden='true'></i> Delete </td> </a>";
+            echo "</tr>";
+    }
+
+    echo "</table>";
+
+    $circlesQuery = "SELECT * FROM circleOfFriends";
+    echo "<h2> Circles </h2>";
+    echo "<table class='table table-stripped table-bordered'>
+       <tr>
+        <th> Name </th>
+        <th> Members </th>
+        <th> Action </th> ";
+
+    foreach ($pdo->query($circlesQuery) as $row)  {
+
+            echo "<tr>";
+            echo "<td>" . $row['circleOfFriendsName'] .  "</td>";
+
+            // start loop to find members
+
+            echo "<td>";
+            $circleRelations = "SELECT * FROM userCircleRelationships where circleFriendsId =". $row['circleFriendsId'];
+            foreach ($pdo->query($circleRelations) as $members) {
+              $userQuery = "SELECT * FROM users where email='". $members["email"] . "'";
+
+              $y = $pdo->prepare($userQuery);
+              $y->execute();
+              $userQueryResult = $y->fetch(PDO::FETCH_ASSOC);
+
+              echo "<a href='/sn/profile/readprofile.php?email=". $userQueryResult ['email'] . "'>" . $userQueryResult['firstName'] . "  " . $userQueryResult['lastName'] . "</a><br>";
+
+            }
+
+            echo "</td>";
             echo "<td> <a class='table-btn btn btn-success' href='blogs/editView.php?blogId=".$row["blogId"]."'><i class='fa fa-pencil' aria-hidden='true'></i> Edit </a><br>";
             echo "<a class='table-btn btn btn-danger' href='blogs/delete.php?blogId=".$row["blogId"]."'> <i class='fa fa-trash' aria-hidden='true'></i> Delete </td> </a>";
             echo "</tr>";

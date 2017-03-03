@@ -46,6 +46,86 @@
 						}
 						echo '</select>';
 					}
+
+					if($description=="Who can search me?"){ 
+						$selected = $row["privacyType"];
+						echo '<div class="form-group">
+						<select class="form-control" name="setting2" value="'.$row["privacySettingsId"].'">';
+						if($selected=="None"){
+							echo '<option selected>None</option>
+						<option>Friends of friends</option>
+						<option>Anybody</option>';
+						}else if($selected=="Friends of friends"){
+							echo '<option>None</option>
+						<option selected>Friends of friends</option>
+						<option>Anybody</option>';
+						}else{ //anybody
+							echo '<option>None</option>
+						<option>Friends of friends</option>
+						<option selected>Anybody</option>';
+						}
+						echo '</select>';
+					}
+
+					if($description=="Who can view my blogs?"){
+						$selected = $row["privacyType"];
+						echo '<div class="form-group">
+						<select class="form-control" name="setting3" value="'.$row["privacySettingsId"].'">';
+						if($selected=="None"){
+							echo '<option selected>None</option>
+						<option>Friends of friends</option>
+						<option>Anybody</option>';
+						}else if($selected=="Friends of friends"){
+							echo '<option>None</option>
+						<option selected>Friends of friends</option>
+						<option>Anybody</option>';
+						}else{ //anybody
+							echo '<option>None</option>
+						<option>Friends of friends</option>
+						<option selected>Anybody</option>';
+						}
+						echo '</select>';
+					}
+
+					if($description=="Who can see my photo collections?"){ 
+						$selected = $row["privacyType"];
+						echo '<div class="form-group">
+						<select class="form-control" name="setting4" value="'.$row["privacySettingsId"].'">';
+						if($selected=="None"){
+							echo '<option selected>None</option>
+						<option>Friends of friends</option>
+						<option>Anybody</option>';
+						}else if($selected=="Friends of friends"){
+							echo '<option>None</option>
+						<option selected>Friends of friends</option>
+						<option>Anybody</option>';
+						}else{ //anybody
+							echo '<option>None</option>
+						<option>Friends of friends</option>
+						<option selected>Anybody</option>';
+						}
+						echo '</select>';
+					}
+
+					if($description=="Who can send me messages?"){ 
+						$selected = $row["privacyType"];
+						echo '<div class="form-group">
+						<select class="form-control" name="setting5" value="'.$row["privacySettingsId"].'">';
+						if($selected=="None"){
+							echo '<option selected>None</option>
+						<option>Friends of friends</option>
+						<option>Anybody</option>';
+						}else if($selected=="Friends of friends"){
+							echo '<option>None</option>
+						<option selected>Friends of friends</option>
+						<option>Anybody</option>';
+						}else{ //anybody
+							echo '<option>None</option>
+						<option>Friends of friends</option>
+						<option selected>Anybody</option>';
+						}
+						echo '</select>';
+					}
 					echo "<br>";
 				}
 			?>

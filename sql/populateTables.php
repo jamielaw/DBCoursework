@@ -150,7 +150,7 @@ $insertPrivacyTitles = "INSERT INTO MyDB.privacyTitles (privacyTitleId,privacySe
 (1,\"Who can send me friend requests?\"),
 (2,\"Who can search me?\"),
 (3,\"Who can view my blogs?\"),
-(4,\"Who can see my photo collections\"),
+(4,\"Who can see my photo collections?\"),
 (5,\"Who can send me messages?\");";
 
 $insertPrivacySettings = "INSERT INTO MyDB.privacySettings (privacyTitleId, email, privacyType) VALUES

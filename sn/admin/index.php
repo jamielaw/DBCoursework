@@ -165,6 +165,34 @@
 
     echo "</table>";
 
+    $photoQuery = "SELECT * FROM photos";
+    echo "<h2> Photo Collections </h2>";
+    echo "<table class='table table-stripped table-bordered'>
+       <tr>
+        <th> Title  </th>
+        <th> Description </th>
+        <th> Owner </th>
+        <th> Action </th> ";
+
+    foreach ($pdo->query($photoCollectionQuery) as $row)  {
+
+            $userQuery = "SELECT * FROM users where email='". $row["createdBy"] . "'";
+
+            $y = $pdo->prepare($userQuery);
+            $y->execute();
+            $userQueryResult = $y->fetch(PDO::FETCH_ASSOC);
+
+            echo "<tr>";
+            echo "<td>" . $row['title'] .  "</td>";
+            echo "<td>" . $row['description'] .  "</td>";
+            echo "<td>" . $userQueryResultName["firstName"] . " " . $userQueryResult["lastName"]  . "</td>";
+
+            echo "<td> <a class='table-btn btn btn-success' href='blogs/editView.php?blogId=".$row["blogId"]."'><i class='fa fa-pencil' aria-hidden='true'></i> Edit </a><br>";
+            echo "<a class='table-btn btn btn-danger' href='blogs/delete.php?blogId=".$row["blogId"]."'> <i class='fa fa-trash' aria-hidden='true'></i> Delete </td> </a>";
+            echo "</tr>";
+    }
+
+    echo "</table>";
     Database::disconnect();
 
   ?>

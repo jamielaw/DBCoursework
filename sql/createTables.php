@@ -71,6 +71,7 @@ $createAnnotationsTable = "CREATE TABLE IF NOT EXISTS MyDB.annotations(
   coordinateX INT,
   coordinateY INT,
   annotationText VARCHAR(255) ,
+  dateCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY(annotationsId),
   FOREIGN KEY(photoId) REFERENCES MyDB.photos(photoId),
   FOREIGN KEY(email) REFERENCES MyDB.users(email)

@@ -190,7 +190,7 @@
     }
 
     echo "</table>";
-
+/// REEMBER TO DELETE STUFF FIRST
     $circlesQuery = "SELECT * FROM circleOfFriends";
     echo "<h2> Circles </h2>";
     echo "<table class='table table-stripped table-bordered'>

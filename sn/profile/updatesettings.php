@@ -12,7 +12,7 @@
 
 	$pdo = Database::connect();
 	$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
+ 
 	$friendsettingtype = $_GET['setting1'];
 	$searchsettingtype = $_GET['setting2'];
 	$blogsettingtype = $_GET['setting3'];

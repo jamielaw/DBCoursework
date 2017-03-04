@@ -44,6 +44,53 @@
         return $description;
     }
 
+    function checkUserIsFriendOfFriend($loggedInUser,$email)
+    {
+        $pdo = Database::connect();
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $sql = 'SELECT IF 
+        ((SELECT COUNT(*) as total FROM users JOIN friendships ON users.email = friendships.emailFrom OR users.email=friendships.emailTo WHERE 
+        users.email = ? AND 
+        (friendships.emailFrom IN
+            (SELECT DISTINCT email FROM users JOIN friendships ON users.email = friendships.emailFrom OR users.email=friendships.emailTo WHERE (friendships.emailFrom= ? OR friendships.emailTo= ?) AND users.email!=? AND status=\'accepted\') 
+        OR friendships.emailTo IN
+            (SELECT DISTINCT email FROM users JOIN friendships ON users.email = friendships.emailFrom OR users.email=friendships.emailTo WHERE (friendships.emailFrom= ? OR friendships.emailTo= ?) AND users.email!=? AND status=\'accepted\')) 
+        AND users.email NOT IN 
+            (SELECT DISTINCT email FROM users JOIN friendships ON users.email = friendships.emailFrom OR users.email=friendships.emailTo WHERE (friendships.emailFrom= ? OR friendships.emailTo= ?) AND users.email!=? AND status=\'accepted\')
+        AND users.email!=?),true,false) AS value';        
+        $q = $pdo->prepare($sql);
+        $q->execute(array($loggedInUser,$email,$email,$email,$email,$email,$email,$email,$email,$email,$email));        
+        $data = $q->fetch(PDO::FETCH_ASSOC);
+        return $data;
+    }
+
+    function checkUserIsFriend($loggedInUser,$email)
+    {
+        $pdo = Database::connect();
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $sql = 'SELECT IF 
+            ((SELECT COUNT(*) as total FROM users 
+            JOIN friendships ON users.email = friendships.emailFrom OR users.email=friendships.emailTo 
+            WHERE (friendships.emailFrom= ? OR friendships.emailTo= ?) 
+            AND users.email!=? AND status=\'accepted\' AND users.email=?
+            )>0,true,false) AS value';
+        $q = $pdo->prepare($sql);
+        $q->execute(array($email,$email,$email,$loggedInUser));
+        $data = $q->fetch(PDO::FETCH_ASSOC);
+        return $data;
+    }
+
+    function checkCollectionPrivacySettings($email)
+    {
+        $pdo = Database::connect();
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $sql = 'SELECT * FROM privacysettings WHERE email = ? AND privacyTitleId=4;';
+        $q = $pdo->prepare($sql);
+        $q->execute(array($email));
+        $data = $q->fetch(PDO::FETCH_ASSOC);
+        return $data;
+    }
+
 
 ?>
 
@@ -111,7 +158,7 @@
                                     $stmt = $pdo->prepare($getFriendshipPrivacy); 
                                     $stmt->execute(); 
                                     $row = $stmt->fetch();
-                                    $privacy = $row['privacySettingsDescription'];
+                                    $privacy = $row['privacyType'];
                                     if ($privacy=='Anyone'){
                                         echo '<a href="#" class="btn btn-sm btn-block btn-success">
                                             <i class="ace-icon fa fa-plus-circle bigger-120"></i>
@@ -276,6 +323,22 @@
                     <button style="visibility: <?php echo $adminAccess ?>" type="button" class="btn btn-info" data-toggle="modal" data-target="#collection_dialog">Create Collection</button>
 
                     <?php
+                        // Check the user's privacy settings for photo collections
+                        $value=checkCollectionPrivacySettings($email)['privacyType'];
+                        checkUserIsFriendOfFriend($loggedInUser,$email)['value'];
+
+                        $allowAccess=0; //default to allow access
+                        if($value=='Friends of friends' && checkUserIsFriendOfFriend($loggedInUser,$email)['value'])
+                           $allowAccess=1;
+                        if($value=='Anyone')
+                            $allowAccess=1;
+                        if(checkUserIsFriend($loggedInUser,$email)['value'] && $value!='None')
+                            $allowAccess=1;
+                        if($loggedInUser==$email)
+                            $allowAccess=1;
+                        
+                        if($allowAccess)
+                        {
                             //$pdo = Database::connect();
                             $sql = 'SELECT photoCollectionId, dateCreated, title, description FROM photocollection WHERE createdBy = ?;';
                             $q1 = $pdo->prepare($sql);
@@ -311,6 +374,10 @@
                             if($numberofresults==0){
                                 echo '<ul class="ace-thumbnails">No photos found</ul>';
                             }
+                        } else
+                        {
+                            echo '<p> You don\'t have access to see the user\'s photo collections. </p>';
+                        }
                         ?>
                 </div><!-- /#pictures -->
             </div>

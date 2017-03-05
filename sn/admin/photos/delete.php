@@ -12,12 +12,16 @@
 
   // Get PK of Table
   $argument1 = htmlspecialchars($_GET['photoId']);
-
-  // sql to delete a record
-  $sql = "DELETE FROM photos WHERE photoId=".  $argument1;
   $pdo = Database::connect();
+  // sql to delete a record
+  $comments = "DELETE FROM comments WHERE photoId=".  $argument1;
+  $annotations = "DELETE FROM annotations WHERE photoId=".  $argument1;
+  $sql = "DELETE FROM photos WHERE photoId=".  $argument1;
+
 
   $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+  $pdo->exec($comments);
+  $pdo->exec($annotations);
   $pdo->exec($sql);
 
   Database::disconnect();

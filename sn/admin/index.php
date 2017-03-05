@@ -235,7 +235,7 @@
         <th> To </th>
         <th> Message </th>
 
-        <th> Action </th></tr> ";
+        <th> Action </th>";
 
     $messagesQuery = "SELECT * FROM messages";
     foreach ($pdo->query($messagesQuery) as $row)  {

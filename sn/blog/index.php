@@ -33,6 +33,20 @@
   $y->execute();
   $friendPostsResults = $y->fetch(PDO::FETCH_ASSOC);
 
+  $friendsArray = array();
+  $friends = "SELECT * FROM users JOIN friendships ON
+  users.email = friendships.emailFrom OR
+  users.email=friendships.emailTo WHERE
+  (friendships.emailFrom='". $loggedInUser.
+  "' OR friendships.emailTo='". $loggedInUser .
+   "' ) AND users.email!= '". $loggedInUser.
+   "' AND status='accepted'";
+
+   foreach($pdo->query($friends) as $row){
+     $friendsArray[$row['email']] = 1;
+     //echo $row['email'];
+   }
+
 ?>
   <div class="container">
     <div class="blog-container">
@@ -81,6 +95,40 @@
                 <?php echo $friendPostsResults['blogTitle']; ?>
               </div>
             </a>
+          <?php } ?>
+
+        </div>
+
+        <p>
+          Public blog posts from around the world
+        </p>
+
+        <div class="blog-section">
+
+          <?php
+            $allOpenBlogAccounts = "SELECT email FROM privacySettings WHERE privacySettings.privacyTitleId=3 AND privacySettings.privacyType = 'Anyone'";
+            foreach($pdo->query($allOpenBlogAccounts) as $openBlog){
+              //echo $openBlog['email'];
+              if($openBlog['email'] == $loggedInUser) continue;
+
+              if($friendsArray[$openBlog['email']] == 1 ) continue;
+
+              $blog= "SELECT * FROM users JOIN blogs ON users.email = blogs.email WHERE blogs.email = '" . $openBlog['email'] ."'" ; //. "' AND privacyTitleId = 3";
+              //echo $blog;
+              $y = $pdo->prepare($blog );
+              $y->execute();
+              $blogData =$y->fetch(PDO::FETCH_ASSOC);
+              //echo $blogData['email'];
+
+          ?>
+          <a href="viewPost.php?blogId=<?php echo $blogData["blogId"]; ?>" class="col-md-6 col-sm-12 col-lg-3 blog-section friend-post-container">
+            <div class="author-box">
+              <img class="author-picture" src="<?php echo $blogData['profileImage']; ?>"> <?php echo $blogData['firstName'];  ?> wrote
+            </div>
+            <div class="blog-title">
+              <?php echo $blogData['blogTitle']; ?>
+            </div>
+          </a>
           <?php } ?>
         </div>
 

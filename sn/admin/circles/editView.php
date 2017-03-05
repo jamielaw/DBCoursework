@@ -117,8 +117,8 @@
             echo "<td>";
             echo "<a href='/sn/profile/readprofile.php?email=". $userQueryResult ['email'] . "'>" . $userQueryResult['firstName'] . "  " . $userQueryResult['lastName'] . "</a><br>";
             echo "</td>";
-            echo "<td> <a class='table-btn btn btn-warning' href='addMember.php?circleId=".$row["circleFriendsId"]. "&email=" . $userQueryResult['email'] ."'> <i class='fa fa-pencil' aria-hidden='true'></i> Edit  </a>";
-            echo "<a class='table-btn btn btn-danger' href='../messages/delete.php?messageId=".$row["circleFriendsId"]. "&email=" . $userQueryResult['email'] ."'> <i class='fa fa-trash' aria-hidden='true'></i> Delete </a>";
+            echo "<td> <a class='table-btn btn btn-warning' href='addMember.php?messageId=".$message["messageId"]. "&email=" . $userQueryResult['email'] ."'> <i class='fa fa-pencil' aria-hidden='true'></i> Edit  </a>";
+            echo "<a class='table-btn btn btn-danger' href='../messages/delete.php?messageId=".$message["messageId"]. "&email=" . $userQueryResult['email'] ."'> <i class='fa fa-trash' aria-hidden='true'></i> Delete </a>";
             echo "</td></tr>";
           }
 ?>

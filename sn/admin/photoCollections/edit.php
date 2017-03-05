@@ -23,7 +23,7 @@
         $albumDescription = $_POST['albumDescription'];
     }
 
-    echo $photoCollectionId . " " . $albumName . " " . $albumDescription;
+    // echo $photoCollectionId . " " . $albumName . " " . $albumDescription;
 
     if (true) {
 
@@ -37,5 +37,5 @@
         // echo "The album name has been changed to: " . $albumName . " and the album description to: " . $albumDescription;
     }
 
-    //redirect("../../admin");
+    redirect("../../admin");
 ?>

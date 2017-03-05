@@ -160,6 +160,18 @@ $insertPrivacySettings = "INSERT INTO MyDB.privacySettings (privacyTitleId, emai
 (4, \"charles@ucl.ac.uk\", \"Anyone\"),
 (5, \"charles@ucl.ac.uk\", \"Anyone\");";
 
+$insertAccessRights = "INSERT INTO MyDB.accessRights (photoCollectionId, email, circleFriendsId) VALUES
+(1, \"ken@ucl.ac.uk\", NULL),
+(1, \"vicky@ucl.ac.uk\", NULL),
+(1, NULL, 2),
+(1, NULL, 4),
+(1, \"grace@ucl.ac.uk\", NULL),
+(2, \"ken@ucl.ac.uk\", NULL),
+(2, \"vicky@ucl.ac.uk\", NULL),
+(2, NULL, 2),
+(2, NULL, 4),
+(2, \"grace@ucl.ac.uk\", NULL);";
+
 $populatingTables = [
     $insertRolesTable,
     $insertRightsTable,
@@ -175,7 +187,8 @@ $populatingTables = [
     $insertAnnotationsTable,
     $insertMessages,
     $insertPrivacyTitles,
-    $insertPrivacySettings
+    $insertPrivacySettings,
+    $insertAccessRights
 
 ];
 

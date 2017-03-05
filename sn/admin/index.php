@@ -220,8 +220,8 @@
             }
 
             echo "</td>";
-            echo "<td> <a class='table-btn btn btn-success' href='blogs/editView.php?blogId=".$row["blogId"]."'><i class='fa fa-pencil' aria-hidden='true'></i> Edit </a><br>";
-            echo "<a class='table-btn btn btn-danger' href='blogs/delete.php?blogId=".$row["blogId"]."'> <i class='fa fa-trash' aria-hidden='true'></i> Delete </td> </a>";
+            echo "<td> <a class='table-btn btn btn-success' href='circles/editView.php?circleId=".$row["circleFriendsId"]."'><i class='fa fa-pencil' aria-hidden='true'></i> Edit </a><br>";
+            echo "<a class='table-btn btn btn-danger' href='circles/delete.php?circleId=".$row["circleFriendsId"]."'> <i class='fa fa-trash' aria-hidden='true'></i> Delete </td> </a>";
             echo "</tr>";
     }
 

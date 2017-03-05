@@ -184,8 +184,8 @@
             echo "<tr>";
             echo "<td><img style='width:100px;' src='" . $row['imageReference'] .  "'</td>";
 
-            echo "<td> <a class='table-btn btn btn-success' href='blogs/editView.php?blogId=".$row["blogId"]."'><i class='fa fa-pencil' aria-hidden='true'></i> Edit </a><br>";
-            echo "<a class='table-btn btn btn-danger' href='blogs/delete.php?blogId=".$row["blogId"]."'> <i class='fa fa-trash' aria-hidden='true'></i> Delete </td> </a>";
+            echo "<td> <a class='table-btn btn btn-success' href='photos/editView.php?photoId=".$row["photoId"]."'><i class='fa fa-pencil' aria-hidden='true'></i> Edit </a><br>";
+            echo "<a class='table-btn btn btn-danger' href='photos/delete.php?photoId=".$row["photoId"]."'> <i class='fa fa-trash' aria-hidden='true'></i> Delete </td> </a>";
             echo "</tr>";
     }
 

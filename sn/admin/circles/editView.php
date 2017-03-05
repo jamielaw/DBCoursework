@@ -62,7 +62,7 @@
 ?>
           </table>
 
-          <label class="control-label">Members of this circle:</label>
+          <label class="control-label">Members not in this circle:</label>
           <br>
           <table style="width=100%;">
           <tr>
@@ -90,6 +90,41 @@
           }
 ?>
           </table>
+
+          <label class="control-label">Messages</label>
+
+          <table style="width:100%;">
+            <tr>
+
+              <th> Text </th>
+              <th> From  </th>
+              <th> Action </th>
+            </tr>
+<?php
+          // echo $argument1;
+          //$circleRelations = "SELECT * FROM userCircleRelationships where circleFriendsId =". $argument1;
+          $messages = "SELECT * FROM messages WHERE emailTo=$argument1 ";
+
+          foreach ($pdo->query($messages) as $message) {
+            $userQuery = "SELECT * FROM users where email='". $message["emailFrom"] . "'";
+
+            $y = $pdo->prepare($userQuery);
+            $y->execute();
+            $userQueryResult = $y->fetch(PDO::FETCH_ASSOC);
+
+            echo "<tr><td>" . $message['messageText'] . "</td>";
+
+            echo "<td>";
+            echo "<a href='/sn/profile/readprofile.php?email=". $userQueryResult ['email'] . "'>" . $userQueryResult['firstName'] . "  " . $userQueryResult['lastName'] . "</a><br>";
+            echo "</td>";
+            echo "<td> <a class='table-btn btn btn-warning' href='addMember.php?circleId=".$row["circleFriendsId"]. "&email=" . $userQueryResult['email'] ."'> <i class='fa fa-pencil' aria-hidden='true'></i> Edit  </a>";
+            echo "<a class='table-btn btn btn-danger' href='../messages/delete.php?messageId=".$row["circleFriendsId"]. "&email=" . $userQueryResult['email'] ."'> <i class='fa fa-trash' aria-hidden='true'></i> Delete </a>";
+            echo "</td></tr>";
+          }
+?>
+
+          </table>
+
 
         </div>
         <button style="margin-top:10px;" class="btn btn-success" type="submit">Save</button>

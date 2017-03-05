@@ -34,8 +34,6 @@ $insertFriendshipTable = "INSERT INTO MyDB.friendships (emailFrom,emailTo,status
 (\"charles@ucl.ac.uk\",\"alan@ucl.ac.uk\",\"pending\"),
 (\"charles@ucl.ac.uk\",\"john@ucl.ac.uk\",\"denied\"),
 (\"vicky@ucl.ac.uk\",\"charles@ucl.ac.uk\",\"accepted\"),
-(\"vicky@ucl.ac.uk\",\"ada@ucl.ac.uk\",\"accepted\"),
-(\"vicky@ucl.ac.uk\",\"alan@ucl.ac.uk\",\"accepted\"),
 (\"grace@ucl.ac.uk\",\"ada@ucl.ac.uk\",\"accepted\"),
 (\"grace@ucl.ac.uk\",\"alan@ucl.ac.uk\",\"accepted\"),
 (\"grace@ucl.ac.uk\",\"john@ucl.ac.uk\",\"accepted\"),
@@ -81,7 +79,8 @@ I possess a letter from Richard Babbage, dated on board the ship in which he sai
 In the year 1773 it became necessary to sell a portion of this property, for the purpose of building a church at Ashbrenton. A private Act of Parliament was passed for that purpose, in which the rights of the true heir were reserved.\");";
 $insertPhotoCollectionTable = "INSERT INTO MyDB.photocollection (photoCollectionId,title,createdBy) VALUES
 (1,\"Conferences\",\"charles@ucl.ac.uk\"),
-(2,\"Difference Engine\", \"charles@ucl.ac.uk\")";
+(2,\"Difference Engine\", \"charles@ucl.ac.uk\"),
+(3,\"Various Things\", \"ada@ucl.ac.uk\")";
 $insertPhotosTable = "INSERT INTO MyDB.photos (photoCollectionId,imageReference) VALUES
 (1, \"/images/photoCollection/12.jpg\"),
 (1, \"/images/photoCollection/13.jpg\"),
@@ -96,7 +95,9 @@ $insertPhotosTable = "INSERT INTO MyDB.photos (photoCollectionId,imageReference)
 (2, \"/images/photoCollection/22.jpg\"),
 (2, \"/images/photoCollection/23.jpg\"),
 (2, \"/images/photoCollection/24.jpg\"),
-(2, \"/images/photoCollection/25.jpg\")";
+(2, \"/images/photoCollection/25.jpg\"),
+(3, \"/images/photoCollection/24.jpg\"),
+(3, \"/images/photoCollection/25.jpg\")";
 
 
 $insertCircleOfFriendsTable = "INSERT INTO MyDB.circleOfFriends (circleFriendsId, circleOfFriendsName) VALUES
@@ -131,9 +132,9 @@ $insertCommentsTable = "INSERT INTO MyDB.comments (photoId,email,commentText) VA
 $insertAnnotationsTable = "INSERT INTO MyDB.annotations
 (`annotationsId`, `photoId`, `email`, `coordinateX`, `coordinateY`, `annotationText`)
 VALUES
-('1', '1', 'charles@ucl.ac.uk', '10', '11', 'Annotations!'),
-('2', '2', 'charles@ucl.ac.uk', '20', '30', 'Annotations!'),
-('3', '3', 'charles@ucl.ac.uk', '40', '40', 'Annotations!'),
+('1', '1', 'ada@ucl.ac.uk', '10', '11', 'Annotations!'),
+('2', '2', 'ken@ucl.ac.uk', '20', '30', 'Annotations!'),
+('3', '3', 'grace@ucl.ac.uk', '40', '40', 'Annotations!'),
 ('4', '4', 'charles@ucl.ac.uk', '20', '10', 'Annotations!'),
 ('5', '5', 'charles@ucl.ac.uk', '11', '1', 'Annotations!')";
 
@@ -145,17 +146,27 @@ $insertMessages = "INSERT INTO MyDB.messages (emailTo, emailFrom, messageText) V
 (\"3\",\"charles@ucl.ac.uk\",\"Hello World\"),
 (\"4\",\"ada@ucl.ac.uk\",\"Invitation\")";
 
-$insertPrivacySettings = "INSERT INTO MyDB.privacySettings (email, privacySettingsTitle, privacySettingsDescription) VALUES
-(\"charles@ucl.ac.uk\", \"Who can send me friend requests?\", \"Anyone\"),
-(\"vicky@ucl.ac.uk\", \"Who can send me friend requests?\", \"Friends of friends\");
-";
+$insertPrivacyTitles = "INSERT INTO MyDB.privacyTitles (privacyTitleId,privacySettingsDescription) VALUES
+(1,\"Who can send me friend requests?\"),
+(2,\"Who can search me?\"),
+(3,\"Who can view my blogs?\"),
+(4,\"Who can see my photo collections?\"),
+(5,\"Who can send me messages?\");";
+
+$insertPrivacySettings = "INSERT INTO MyDB.privacySettings (privacyTitleId, email, privacyType) VALUES
+(1, \"charles@ucl.ac.uk\", \"Anyone\"),
+(2, \"charles@ucl.ac.uk\", \"Anyone\"),
+(3, \"charles@ucl.ac.uk\", \"Anyone\"),
+(4, \"charles@ucl.ac.uk\", \"Anyone\"),
+(5, \"charles@ucl.ac.uk\", \"Anyone\");";
+
 $populatingTables = [
     $insertRolesTable,
     $insertRightsTable,
     $insertUsersTable,
     $insertFriendshipTable,
     $insertBlogsTable,
-    //$insertPostsTable,
+    $insertPostsTable,
     $insertPhotoCollectionTable,
     $insertPhotosTable,
     $insertCircleOfFriendsTable,
@@ -163,6 +174,7 @@ $populatingTables = [
     $insertCommentsTable,
     $insertAnnotationsTable,
     $insertMessages,
+    $insertPrivacyTitles,
     $insertPrivacySettings
 
 ];

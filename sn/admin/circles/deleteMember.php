@@ -11,16 +11,19 @@
   }
 
   // Get PK of Table
-  $argument1 = htmlspecialchars($_GET['email']);
+  $argument1 = htmlspecialchars($_GET['circleId']);
+  $argument2 = htmlspecialchars($_GET['email']);
+
+
   // sql to delete a record
-  $sql = "DELETE FROM users WHERE email=". "'" . $argument1 . "'";
+  $sql = "DELETE FROM userCircleRelationships WHERE circleFriendsId=". $argument1 . " AND email='" . $argument2 ."'" ;
+  // echo $sql;
   $pdo = Database::connect();
   $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
   $pdo->exec($sql);
   Database::disconnect();
 
-
-  redirect('../../admin/');
+  redirect('../../admin');
 
 
 

@@ -11,14 +11,20 @@
   }
 
   // Get PK of Table
-  $argument1 = htmlspecialchars($_GET['email']);
-  // sql to delete a record
-  $sql = "DELETE FROM users WHERE email=". "'" . $argument1 . "'";
+  $argument1 = htmlspecialchars($_GET['photoId']);
   $pdo = Database::connect();
-  $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-  $pdo->exec($sql);
-  Database::disconnect();
+  // sql to delete a record
+  $comments = "DELETE FROM comments WHERE photoId=".  $argument1;
+  $annotations = "DELETE FROM annotations WHERE photoId=".  $argument1;
+  $sql = "DELETE FROM photos WHERE photoId=".  $argument1;
 
+
+  $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+  $pdo->exec($comments);
+  $pdo->exec($annotations);
+  $pdo->exec($sql);
+
+  Database::disconnect();
 
   redirect('../../admin/');
 

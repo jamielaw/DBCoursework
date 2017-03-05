@@ -23,9 +23,9 @@
         $albumDescription = $_POST['albumDescription'];
     }
 
-    echo $photoCollectionId;
-    
-    if (null!=$albumName && null!=$albumDescription) {
+    echo $photoCollectionId . " " . $albumName . " " . $albumDescription;
+
+    if (true) {
 
         $pdo = Database::connect();
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

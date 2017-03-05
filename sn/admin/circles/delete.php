@@ -15,6 +15,7 @@
 
   // sql to delete a record
   $sql = "DELETE FROM circleOfFriends WHERE circleFriendsId=". $argument1 ;
+  echo $sql;
   $pdo = Database::connect();
   $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
   $pdo->exec($sql);

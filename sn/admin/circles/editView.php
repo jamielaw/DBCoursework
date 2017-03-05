@@ -62,6 +62,35 @@
 ?>
           </table>
 
+          <label class="control-label">Members of this circle:</label>
+          <br>
+          <table style="width=100%;">
+          <tr>
+            <th> Name </th>
+            <th> Add </th>
+          </tr>
+<?php
+          // echo $argument1;
+          //$circleRelations = "SELECT * FROM userCircleRelationships where circleFriendsId =". $argument1;
+          $nonMembers = "SELECT * FROM USERS WHERE email NOT IN ( SELECT email from userCircleRelationships WHERE userCircleRelationships.circleFriendsId = $argument1) ";
+          //echo $nonMembers;
+          foreach ($pdo->query($nonMembers) as $members) {
+            $userQuery = "SELECT * FROM users where email='". $members["email"] . "'";
+
+            $y = $pdo->prepare($userQuery);
+            $y->execute();
+            $userQueryResult = $y->fetch(PDO::FETCH_ASSOC);
+
+            echo "<tr>";
+            echo "<td>";
+            echo "<a href='/sn/profile/readprofile.php?email=". $userQueryResult ['email'] . "'>" . $userQueryResult['firstName'] . "  " . $userQueryResult['lastName'] . "</a><br>";
+            echo "</td>";
+            echo "<td> <a class='table-btn btn btn-info' href='addMember.php?circleId=".$row["circleFriendsId"]. "&email=" . $userQueryResult['email'] ."'> <i class='fa fa-trash' aria-hidden='true'></i> Add  </a></td>";
+            echo "</tr>";
+          }
+?>
+          </table>
+
         </div>
         <button style="margin-top:10px;" class="btn btn-success" type="submit">Save</button>
       </form>

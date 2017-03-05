@@ -65,7 +65,14 @@
         </p>
 
         <div class="blog-section">
-          <?php foreach($pdo->query($friendPostsQuery) as $friendPostsResults){ ?>
+          <?php foreach($pdo->query($friendPostsQuery) as $friendPostsResults){
+            //echo $friendPostsResults['email'];
+            $checkPrivacy = "SELECT privacyType FROM privacySettings WHERE email = '" . $friendPostsResults['email'] . "' AND privacyTitleId = 3";
+            $y = $pdo->prepare($checkPrivacy );
+            $y->execute();
+            $privacyResults =$y->fetch(PDO::FETCH_ASSOC);
+            if( $privacyResults['privacyType'] == "None") continue;
+          ?>
             <a href="viewPost.php?blogId=<?php echo $friendPostsResults["blogId"]; ?>" class="col-md-6 col-sm-12 col-lg-3 blog-section friend-post-container">
               <div class="author-box">
                 <img class="author-picture" src="<?php echo $friendPostsResults['profileImage']; ?>"> <?php echo $friendPostsResults['firstName'];  ?> wrote

@@ -25,12 +25,12 @@
         <h1 style="margin-bottom: 15px;"> Update Circle Friends </h1>
 
       <form class="form-horizontal" method="POST" action="edit.php">
-        <input type="hidden" name="photoCollectionId" value="<?php echo $argument1;?>">
+        <input type="hidden" name="circleFriendsId" value="<?php echo $argument1;?>">
         <div id="blogTitleBar">
           <div class="control-group">
             <label class="control-label">Circle Name:</label>
             <div class="controls">
-              <input type="text" name="circleOfFriends" style="width: 30vw;"value="<?php echo $row['circleOfFriendsName'];?>"> <br>
+              <input type="text" name="circleOfFriendsName" style="width: 30vw;"value="<?php echo $row['circleOfFriendsName'];?>"> <br>
             </div>
           </div>
         </div>

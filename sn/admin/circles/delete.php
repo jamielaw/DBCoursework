@@ -12,7 +12,6 @@
 
   // Get PK of Table
   $argument1 = htmlspecialchars($_GET['circleId']);
-  $argument2 = htmlspecialchars($_GET['email']);
 
   // sql to delete a record
   $sql = "DELETE FROM circleOfFriends WHERE circleFriendsId=". $argument1 ;

@@ -158,8 +158,8 @@
             echo "<td>" . $row['description'] .  "</td>";
             echo "<td>" . $userQueryResultName["firstName"] . " " . $userQueryResult["lastName"]  . "</td>";
 
-            echo "<td> <a class='table-btn btn btn-success' href='blogs/editView.php?blogId=".$row["blogId"]."'><i class='fa fa-pencil' aria-hidden='true'></i> Edit </a><br>";
-            echo "<a class='table-btn btn btn-danger' href='blogs/delete.php?blogId=".$row["blogId"]."'> <i class='fa fa-trash' aria-hidden='true'></i> Delete </td> </a>";
+            echo "<td> <a class='table-btn btn btn-success' href='photoCollections/editView.php?pcId=".$row["photoCollectionId"]."'><i class='fa fa-pencil' aria-hidden='true'></i> Edit </a><br>";
+            echo "<a class='table-btn btn btn-danger' href='photoCollections/delete.php?pcId=".$row["photoCollectionId"]."'> <i class='fa fa-trash' aria-hidden='true'></i> Delete </td> </a>";
             echo "</tr>";
     }
 

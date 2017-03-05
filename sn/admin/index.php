@@ -197,7 +197,7 @@
        <tr>
         <th> Name </th>
         <th> Members </th>
-        <th> Action </th> ";
+        <th> Action </th> </tr>";
 
     foreach ($pdo->query($circlesQuery) as $row)  {
 
@@ -222,6 +222,44 @@
             echo "</td>";
             echo "<td> <a class='table-btn btn btn-success' href='circles/editView.php?circleId=".$row["circleFriendsId"]."'><i class='fa fa-pencil' aria-hidden='true'></i> Edit </a><br>";
             echo "<a class='table-btn btn btn-danger' href='circles/delete.php?circleId=".$row["circleFriendsId"]."'> <i class='fa fa-trash' aria-hidden='true'></i> Delete </td> </a>";
+            echo "</tr>";
+    }
+
+    echo "</table>";
+
+
+    echo "<h2> Messages </h2>";
+    echo "<table class='table table-stripped table-bordered'>
+       <tr>
+        <th> From  </th>
+        <th> To </th>
+        <th> Message </th>
+
+        <th> Action </th></tr> ";
+
+    $messagesQuery = "SELECT * FROM messages";
+    foreach ($pdo->query($messagesQuery) as $row)  {
+            if(strlen($row['emailTo']) < 3 ) continue;
+            $userTo= "SELECT * FROM users where email='". $row["emailTo"] . "'";
+
+            $y = $pdo->prepare($userTo);
+            $y->execute();
+            $userToQueryResult = $y->fetch(PDO::FETCH_ASSOC);
+
+            $userFrom= "SELECT * FROM users where email='". $row["emailFrom"] . "'";
+
+            $y = $pdo->prepare($userFrom);
+            $y->execute();
+            $userFromQueryResult = $y->fetch(PDO::FETCH_ASSOC);
+
+
+            echo "<tr>";
+            echo "<td><a href='/sn/profile/readprofile.php?email=". $userFromQueryResult['email'] . "'>" .$userFromQueryResult['firstName'] . "  " . $userFromQueryResult['lastName'] . "</a></td><br>";
+            echo "<td><a href='/sn/profile/readprofile.php?email=". $userToQueryResult['email'] . "'>" . $userToQueryResult['firstName'] . "  " .$userToQueryResult['lastName'] . "</a></td><br>";
+
+            echo "<td>" . $row['messageText'] .  "</td>";
+            echo "<td> ";
+            echo "<a class='table-btn btn btn-danger' href='messages/delete.php?messageId=".$row["messageId"]."'> <i class='fa fa-trash' aria-hidden='true'></i> Delete </td> </a>";
             echo "</tr>";
     }
 

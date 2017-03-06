@@ -12,7 +12,7 @@
   <?php include '../inc/nav-trn.php'; ?>
   <div class="container">
     <ul class="nav nav-tabs">
-      <li class="active"><a data-toggle="tab" href="#users">users</a></li>
+      <li class="active"><a data-toggle="tab" href="#users">Users</a></li>
       <li><a data-toggle="tab" href="#friendships">Friendships</a></li>
       <li><a data-toggle="tab" href="#circles">Circles</a></li>
       <li><a data-toggle="tab" href="#photoCollections">Photo Collections</a></li>
@@ -25,7 +25,7 @@
     </ul>
 
     <div class="tab-content">
-      <div id="home" class="tab-pane fade in active">
+      <div id="users" class="tab-pane fade in active">
         <?php
         $pdo = Database::connect();
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

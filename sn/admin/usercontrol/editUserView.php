@@ -79,13 +79,13 @@
       <form class="" action="../privacySettings/updateSettings.php" method="get" id="updateform">
   			<?php //we want to get the privacy settings of the user here and echo it accordingly
   				$sql = "SELECT * FROM MyDB.privacySettings WHERE email='" .$argument1. "'";
-  				foreach($pdo->query($sql) as $row){
-  					$description=getPrivacyDescription($row['privacyTitleId'])['privacySettingsDescription'];
+  				foreach($pdo->query($sql) as $settings){
+  					$description=getPrivacyDescription($settings['privacyTitleId'])['privacySettingsDescription'];
   					echo "<label class='control-label'>" . $description . "</label>";
   					if($description=="Who can send me friend requests?"){ //friend requests
-  						$selected = $row["privacyType"];
+  						$selected = $settings["privacyType"];
   						echo '<div class="form-group">
-  						<select class="form-control" name="setting1" value="'.$row["privacySettingsId"].'">';
+  						<select class="form-control" name="setting1" value="'.$settings["privacySettingsId"].'">';
   						if($selected=="None"){
   							echo '<option selected>None</option>
   						<option>Friends of friends</option>
@@ -103,9 +103,9 @@
   					}
 
   					if($description=="Who can search me?"){
-  						$selected = $row["privacyType"];
+  						$selected = $settings["privacyType"];
   						echo '<div class="form-group">
-  						<select class="form-control" name="setting2" value="'.$row["privacySettingsId"].'">';
+  						<select class="form-control" name="setting2" value="'.$settings["privacySettingsId"].'">';
   						if($selected=="None"){
   							echo '<option selected>None</option>
   						<option>Friends of friends</option>
@@ -123,9 +123,9 @@
   					}
 
   					if($description=="Who can view my blogs?"){
-  						$selected = $row["privacyType"];
+  						$selected = $settings["privacyType"];
   						echo '<div class="form-group">
-  						<select class="form-control" name="setting3" value="'.$row["privacySettingsId"].'">';
+  						<select class="form-control" name="setting3" value="'.$settings["privacySettingsId"].'">';
   						if($selected=="None"){
   							echo '<option selected>None</option>
   						<option>Friends of friends</option>
@@ -143,9 +143,9 @@
   					}
 
   					if($description=="Who can see my photo collections?"){
-  						$selected = $row["privacyType"];
+  						$selected = $settings["privacyType"];
   						echo '<div class="form-group">
-  						<select class="form-control" name="setting4" value="'.$row["privacySettingsId"].'">';
+  						<select class="form-control" name="setting4" value="'.$settings["privacySettingsId"].'">';
   						if($selected=="None"){
   							echo '<option selected>None</option>
   						<option>Friends of friends</option>
@@ -163,9 +163,9 @@
   					}
 
   					if($description=="Who can send me messages?"){
-  						$selected = $row["privacyType"];
+  						$selected = $settings["privacyType"];
   						echo '<div class="form-group">
-  						<select class="form-control" name="setting5" value="'.$row["privacySettingsId"].'">';
+  						<select class="form-control" name="setting5" value="'.$settings["privacySettingsId"].'">';
   						if($selected=="None"){
   							echo '<option selected>None</option>
   						<option>Friends of friends</option>
@@ -186,6 +186,18 @@
   			?>
   			<button type="submit">Update Settings</button>
   		</form>
+      <div class="row">
+        <font size="5">Change Admin Access</font>
+      </div>
+      <?php
+      if($row['roleID'] == 1 ){
+        echo "<p> This user is an admin. </p>";
+        echo "<button id='revoke' class='btn btn-danger'>Revoke</button>";
+      }else if($row['roleID'] == 2){
+        echo "<p> This user is not an admin. </p> ";
+        echo "<button id='empower' class='btn btn-danger'>Make Admin</button>";
+      }
+      ?>
     </div>
     </div>
 
@@ -193,3 +205,17 @@
 
 
 </body>
+<script>
+  $("#revoke").click(function(){
+    $.get("../meta/changeAdmin.php?adminStatus=2&email=<?php echo  $row['email']; ?>", function(data){
+      //console.log(data);
+      location.reload();
+    });
+  });
+
+  $("#empower").click(function(){
+    $.get("../meta/changeAdmin.php?adminStatus=1&email=<?php echo $row['email']; ?>", function(){
+      location.reload();
+    });
+  });
+</script>

@@ -79,15 +79,16 @@
           </tr>
 
         <?php
-        $accessRightsQuery = "SELECT * FROM circleOfFriends JOIN accessRights ON circleOfFriends.circleFriendsId != accessRights.circleFriendsId WHERE photoCollectionId =" .$argument1;
-          // echo $accessRightsQuery;
+        $accessRightsQuery = "SELECT * FROM circleOfFriends WHERE circleFriendsId NOT IN (SELECT circleOfFriends.circleFriendsId FROM circleOfFriends JOIN accessRights ON circleOfFriends.circleFriendsId = accessRights.circleFriendsId WHERE photoCollectionId =" .$argument1 . ")";
+  // echo $accessRightsQuery;
           $count = 0;
           foreach($pdo->query($accessRightsQuery) as $circlesJoined){
 
+            $circleId = $circlesJoined['circleFriendsId'];
 
             echo "<tr>";
             echo "<td>" .$circlesJoined['circleOfFriendsName'] . "</td>";
-            echo "<td style='text-align:right;'> <a class='table-btn btn btn-info' href='../accessRights/disassociate.php?circleId=".$circlesJoined["circleFriendsId"]. "&email=" . $userQueryResult['email'] ."'> <i class='fa fa-pencil' aria-hidden='true'></i> Associate </a> </td>";
+            echo "<td style='text-align:right;'> <a class='table-btn btn btn-info' href='../accessRights/associateCircle.php?pcId=$argument1&circleId=$circleId'> <i class='fa fa-pencil' aria-hidden='true'></i> Associate </a> </td>";
             echo "</tr>";
 
             $count++;

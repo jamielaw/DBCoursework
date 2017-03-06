@@ -11,7 +11,7 @@
   }
 
   // Get PK of Table
-  $argument1 = htmlspecialchars($_GET['circle']);
+  $argument1 = htmlspecialchars($_GET['circleId']);
   $pc = htmlspecialchars($_GET['pcId']);
 
     $pdo = Database::connect();
@@ -21,5 +21,6 @@
     $pdo->exec($sql);
     Database::disconnect();
 
+  redirect("../../admin");
 
 ?>

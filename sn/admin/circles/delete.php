@@ -53,7 +53,6 @@
 
   $sql = "DELETE FROM circleOfFriends WHERE circleFriendsId=". $argument1 ;
   $pdo->exec($sql);
-  //echo $sql;
 
 
   Database::disconnect();

@@ -16,8 +16,9 @@
 
     $pdo = Database::connect();
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $sql = "DELETE FROM accessRights WHERE email='". $email . "' AND photoCollectionId=" $argument1;
+    $sql = "DELETE FROM accessRights WHERE email='". $email . "' AND photoCollectionId=".$argument1;
     $pdo->exec($sql);
     Database::disconnect();
 
+  redirect("../../admin");
 ?>

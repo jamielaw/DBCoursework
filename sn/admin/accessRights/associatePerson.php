@@ -16,10 +16,10 @@
 
     $pdo = Database::connect();
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $sql = "INSERT INTO `accessRights` ( `photoCollectionId`, `email`) VALUES ($pc, $email)";
-
+    $sql = "INSERT INTO accessRights ( photoCollectionId, email) VALUES ($pc, '$email')";
+    //echo $sql;
     $pdo->exec($sql);
     Database::disconnect();
 
-
+    redirect("../../admin");
 ?>

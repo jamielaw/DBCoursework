@@ -114,10 +114,10 @@
             $y->execute();
             $userQueryResult = $y->fetch(PDO::FETCH_ASSOC);
 
-
+            $email = $userQueryResult['email'];
             echo "<tr>";
             echo "<td>" .$userQueryResult['firstName'] . " " . $userQueryResult['lastName'] . "</td>";
-            echo "<td style='text-align:right;' > <a class='table-btn btn btn-danger'  > <i class='fa fa-pencil' aria-hidden='true'></i> Deassociate   </a> </td>";
+            echo "<td style='text-align:right;' > <a class='table-btn btn btn-danger' href='../accessRights/deassociatePerson.php?pcId=$argument1&email=$email' > <i class='fa fa-pencil' aria-hidden='true'></i> Deassociate   </a> </td>";
             echo "</tr>";
 
             $count++;
@@ -145,7 +145,7 @@
 
             echo "<tr>";
             echo "<td>" .$userQueryResult['firstName'] . " " . $userQueryResult['lastName'] . "</td>";
-            echo "<td style='text-align:right;' > <a class='table-btn btn btn-info' href='../accessRights/disassociate.php?circleId=".$circlesJoined["circleFriendsId"]. "&email=" . $userQueryResult['email'] ."'> <i class='fa fa-pencil' aria-hidden='true'></i> Associate </a> </td>";
+            echo "<td style='text-align:right;' > <a class='table-btn btn btn-info' href='../accessRights/associatePerson.php?pcId=".$argument1. "&email=" . $userQueryResult['email'] ."'> <i class='fa fa-pencil' aria-hidden='true'></i> Associate </a> </td>";
             echo "</tr>";
 
             $count++;

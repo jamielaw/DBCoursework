@@ -22,7 +22,7 @@
 
 <body>
   <div class="container">
-    <div class="">
+
       <div class="row">
       <h1 style="margin-bottom: 15px;"> Update Photo Collections</h1>
       <h2> General </h2>
@@ -46,11 +46,11 @@
 
     <h2> Privacy Settings </h2>
       <label class="control-label"> belongs to .. </label><br>
-      <div class="control-group">
-        <table style="width:100%;">
+
+        <table class="table table-stripped table-bordered">
           <tr>
             <th>Circle</th>
-            <th>Action</th>
+            <th style="text-align:right;">Action</th>
           </tr>
 
         <?php
@@ -58,23 +58,24 @@
           // echo $accessRightsQuery;
           $count = 0;
           foreach($pdo->query($accessRightsQuery) as $circlesJoined){
+            $circleId = $circlesJoined['circleFriendsId'];
 
             echo "<tr>";
             echo "<td>" .$circlesJoined['circleOfFriendsName'] . "</td>";
-            echo "<td> <a class='table-btn btn btn-danger' href='../accessRights/disassociate.php?circleId=".$circlesJoined["circleFriendsId"]. "&email=" . $userQueryResult['email'] ."'> <i class='fa fa-pencil' aria-hidden='true'></i> Deassociate   </a> </td>";
+            echo "<td style='text-align:right;'> <a class='table-btn btn btn-danger' href='../accessRights/deassociateCircle.php?pcId=$argument1&circleId=$circleId' > <i class='fa fa-pencil' aria-hidden='true'></i> Deassociate   </a> </td>";
             echo "</tr>";
 
             $count++;
           }
         ?>
         </table>
-      </div>
+
       <label class="control-label"> doesn't belong to .. </label><br>
-      <div class="control-group">
-        <table style="width:100%;">
+
+        <table class="table table-stripped table-bordered">
           <tr>
             <th>Circle</th>
-            <th>Action</th>
+            <th style='text-align:right;'>Action</th>
           </tr>
 
         <?php
@@ -86,23 +87,75 @@
 
             echo "<tr>";
             echo "<td>" .$circlesJoined['circleOfFriendsName'] . "</td>";
-            echo "<td> <a class='table-btn btn btn-info' href='../accessRights/disassociate.php?circleId=".$circlesJoined["circleFriendsId"]. "&email=" . $userQueryResult['email'] ."'> <i class='fa fa-pencil' aria-hidden='true'></i> Associate </a> </td>";
+            echo "<td style='text-align:right;'> <a class='table-btn btn btn-info' href='../accessRights/disassociate.php?circleId=".$circlesJoined["circleFriendsId"]. "&email=" . $userQueryResult['email'] ."'> <i class='fa fa-pencil' aria-hidden='true'></i> Associate </a> </td>";
             echo "</tr>";
 
             $count++;
           }
         ?>
         </table>
-      </div>
 
-      </div>
+      <label class="control-label"> Users that can add to collection .. </label><br>
+        <table class="table table-stripped table-bordered">
+          <tr>
+            <th>User</th>
+            <th style='text-align:right;'>Action</th>
+          </tr>
+
+        <?php
+        $accessRightsQuery = "SELECT * FROM users JOIN accessRights ON users.email = accessRights.email WHERE photoCollectionId =" .$argument1;
+          // echo $accessRightsQuery;
+          $count = 0;
+          foreach($pdo->query($accessRightsQuery) as $pplJoined){
+            $userQuery = "SELECT * FROM users where email='". $pplJoined["email"] . "'";
+
+            $y = $pdo->prepare($userQuery);
+            $y->execute();
+            $userQueryResult = $y->fetch(PDO::FETCH_ASSOC);
+
+
+            echo "<tr>";
+            echo "<td>" .$userQueryResult['firstName'] . " " . $userQueryResult['lastName'] . "</td>";
+            echo "<td style='text-align:right;' > <a class='table-btn btn btn-danger'  > <i class='fa fa-pencil' aria-hidden='true'></i> Deassociate   </a> </td>";
+            echo "</tr>";
+
+            $count++;
+          }
+        ?>
+        </table>
+
+      <label class="control-label"> Users that can add to collection .. </label><br>
+        <table class="table table-stripped table-bordered">
+          <tr>
+            <th>User</th>
+            <th style='text-align:right;'>Action</th>
+          </tr>
+
+        <?php
+        $accessRightsQuery = "SELECT * FROM USERS WHERE email NOT IN (SELECT users.email FROM users JOIN accessRights ON users.email = accessRights.email WHERE photoCollectionId =" .$argument1 . ")";
+          $count = 0;
+          foreach($pdo->query($accessRightsQuery) as $pplJoined){
+            $userQuery = "SELECT * FROM users where email='". $pplJoined["email"] . "'";
+
+            $y = $pdo->prepare($userQuery);
+            $y->execute();
+            $userQueryResult = $y->fetch(PDO::FETCH_ASSOC);
+
+
+            echo "<tr>";
+            echo "<td>" .$userQueryResult['firstName'] . " " . $userQueryResult['lastName'] . "</td>";
+            echo "<td style='text-align:right;' > <a class='table-btn btn btn-info' href='../accessRights/disassociate.php?circleId=".$circlesJoined["circleFriendsId"]. "&email=" . $userQueryResult['email'] ."'> <i class='fa fa-pencil' aria-hidden='true'></i> Associate </a> </td>";
+            echo "</tr>";
+
+            $count++;
+          }
+        ?>
+        </table>
 
 
 
-      <button style="margin-top:10px;" class="btn btn-success" type="submit">Update Access Rights</button>
-    </form>
-      </div>
-    </div>
+
+
     </div>
 
 <?php Database::disconnect(); ?>

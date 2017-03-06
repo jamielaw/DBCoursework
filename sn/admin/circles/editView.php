@@ -33,6 +33,12 @@
               <input type="text" name="circleOfFriendsName" style="width: 30vw;"value="<?php echo $row['circleOfFriendsName'];?>"> <br>
             </div>
           </div>
+          <div class="control-group">
+            <label class="control-label">Access Rights:</label>
+            <div class="controls">
+              <input type="text" name="circleOfFriendsName" style="width: 30vw;"value="<?php echo $row['circleOfFriendsName'];?>"> <br>
+            </div>
+          </div>
         </div>
         <div class="">
           <label class="control-label">Members of this circle:</label>

@@ -1,0 +1,43 @@
+<?php
+  $title = "Bookface Social Network";
+  $description = "A far superior social network";
+  include("../../inc/header.php");
+?>
+
+<body>
+  <?php
+    include ('../../inc/nav-trn.php');
+    $pdo = Database::connect();
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    $argument1 = htmlspecialchars($_GET['commentId']);
+    $sql = "SELECT * FROM comments WHERE commentId=" . $argument1;
+
+    $q= $pdo->prepare($sql);
+    $q->execute();
+    $row = $q->fetch(PDO::FETCH_ASSOC);
+  ?>
+
+  <div class="container">
+    <div class="span10 offset1">
+      <div class="row">
+        <font size="5">Update Comment</font>
+      </div>
+
+      <form class="form-horizontal" method="POST" action="edit.php">
+        <input type="hidden" name="argument1" value="<?php echo $argument1;?>">
+        <div class="control-group">
+          <label class="control-label">Text</label>
+          <div class="controls">
+            <textarea style="width:100%;" name="commentText" ><?php echo $row['commentText'];?> </textarea><br>
+          </div>
+        </div>
+        <button type="submit">Update!</button>
+      </form>
+    </div>
+    </div>
+
+<?php Database::disconnect(); ?>
+
+
+</body>

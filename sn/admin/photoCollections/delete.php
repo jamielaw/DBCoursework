@@ -14,11 +14,13 @@
 
   // sql to delete a record
   $pdo = Database::connect();
+
   $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
   $foreignKey = $_GET['pcId'];
 
-  $pcData = "SELECT * FROM photos WHERE photoCollectionId=$foreignKey";
 
+
+  $pcData = "SELECT * FROM photos WHERE photoCollectionId=$foreignKey";
   foreach($pdo->query($pcData) as $row){
 
     $comments = "DELETE FROM comments WHERE photoId=".  $row['photoId'];
@@ -29,6 +31,11 @@
     $pdo->exec($annotations);
     $pdo->exec($sql);
   }
+
+  $deleteAccessRights = "DELETE  FROM accessRights WHERE photoCollectionId=". $foreignKey;
+  // echo $deleteAccessRights;
+  $pdo->exec($deleteAccessRights);
+
 
 
   $sql = "DELETE FROM photoCollection WHERE photoCollectionId=".   $_GET['pcId'];

@@ -222,6 +222,41 @@
             }
 
             echo "</table>";
+
+            $commentsInfo = "SELECT * FROM comments";
+            echo "<h2> Comments </h2>";
+            echo "<table class='table table-stripped table-bordered'>
+               <tr>
+                <th> Photo </th>
+                <th> Commenter </th>
+                <th> Comment </th>
+                <th> Action </th> ";
+
+            foreach ($pdo->query($commentsInfo) as $row)  {
+
+                    $photoQuery = "SELECT * FROM photos where photoId=". $row["photoId"];
+
+                    $q = $pdo->prepare($photoQuery);
+                    $q->execute();
+                    $photoResult = $q->fetch(PDO::FETCH_ASSOC);
+
+                    //$user = "SELECT * IN useres where emailId='". $row["email"] . "'";
+
+                    $userQuery = "SELECT * FROM users where email='". $row["email"] . "'";
+
+                    $y = $pdo->prepare($userQuery);
+                    $y->execute();
+                    $userQueryResult = $y->fetch(PDO::FETCH_ASSOC);
+
+                    echo "<tr>";
+                    echo "<td> <img style='height:100px;width=100px;' src='" . $photoResult["imageReference"] . "'</td>";
+                    echo "<td>" . $userQueryResult["firstName"] . " " . $userQueryResult["lastName"]  . "</td><td> "  . $row['commentText'] . "</td>";
+                    echo "<td> <a class='table-btn btn btn-success' href='comments/editView.php?commentId=".$row["commentId"]."'><i class='fa fa-pencil' aria-hidden='true'></i> Edit </a><br>";
+                    echo "<a class='table-btn btn btn-danger' href='comments/delete.php?commentId=".$row["commentId"]."'> <i class='fa fa-trash' aria-hidden='true'></i> Delete </td> </a>";
+                    echo "</tr>";
+            }
+
+            echo "</table>";
         ?>
       </div>
       <div id="messages" class="tab-pane fade">

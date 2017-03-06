@@ -6,11 +6,24 @@
   $description = "A far superior social network";
   include("../inc/header.php");
 
+  function redirect($url) {
+    ob_start();
+    header('Location: '.$url);
+    ob_end_flush();
+    die();
+  }
 ?>
 <body>
   <!--  Navigation-->
   <?php include '../inc/nav-trn.php'; ?>
+
   <div class="container">
+    <?php
+      if(!$isAdmin){
+        echo "<h1> Only admins can see this page </h1>";
+        redirect("../../sn/profile/readprofile.php?email=$loggedInUser");
+      }
+    ?>
     <ul class="nav nav-tabs">
       <li class="active"><a data-toggle="tab" href="#users">Users</a></li>
       <li><a data-toggle="tab" href="#friendships">Friendships</a></li>

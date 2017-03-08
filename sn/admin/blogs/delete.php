@@ -11,6 +11,9 @@
   }
 
   // Get PK of Table
+  $deleteAccessRights = "DELETE  FROM privac WHERE photoCollectionId=". $foreignKey;
+  // echo $deleteAccessRights;
+  $pdo->exec($deleteAccessRights);
 
   // sql to delete a record
   $sql = "DELETE FROM blogs WHERE blogId=".   $_GET['blogId'];

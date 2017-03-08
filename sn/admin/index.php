@@ -65,7 +65,7 @@
       <div id="friendships" class="tab-pane fade">
         <?php
 
-            $blogsInfo = "SELECT * FROM friendships";
+            $friendsInfo = "SELECT * FROM friendships";
             echo "<h2> Friendships </h2>";
             echo "<table class='table table-stripped table-bordered'>
                <tr>
@@ -74,17 +74,22 @@
                 <th> Status </th>
                 <th> Action </th> ";
 
-            foreach ($pdo->query($blogsInfo) as $row)  {
+            foreach ($pdo->query($friendsInfo) as $row)  {
 
-                    $userQuery = "SELECT * FROM users where email='". $row["email"] . "'";
+                    $userToQuery = "SELECT * FROM users where email='". $row["emailTo"] . "'";
 
-                    $y = $pdo->prepare($userQuery);
+                    $y = $pdo->prepare($userToQuery);
                     $y->execute();
-                    $userQueryResult = $y->fetch(PDO::FETCH_ASSOC);
+                    $userToQueryResult = $y->fetch(PDO::FETCH_ASSOC);
+
+                    $userFromQuery = "SELECT * FROM users where email='". $row["emailFrom"] . "'";
+                    $y = $pdo->prepare($userFromQuery);
+                    $y->execute();
+                    $userFromQueryResult = $y->fetch(PDO::FETCH_ASSOC);
 
                     echo "<tr>";
-                    echo "<td>" . $row['emailFrom'] . "</td>";
-                    echo "<td>" . $row['emailTo'] . "</td>";
+                    echo "<td>" . $userFromQueryResult['firstName'] . " " . $userFromQueryResult['lastName'] . "</td>";
+                    echo "<td>" . $userToQueryResult['firstName'] . " " . $userToQueryResult['lastName']  . "</td>";
                     echo "<td>" . $row['status'] .  "</td>";
                     echo "<td>";
                     if($row['status'] == "denied"){
@@ -107,14 +112,14 @@
         echo "<h2> Circles </h2>";
         echo "<table class='table table-stripped table-bordered'>
            <tr>
-            <th> Name </th>
+            <th> <b> Name </b> </th>
             <th> Members </th>
             <th> Action </th> </tr>";
 
         foreach ($pdo->query($circlesQuery) as $row)  {
 
                 echo "<tr>";
-                echo "<td>" . $row['circleOfFriendsName'] .  "</td>";
+                echo "<td> <b> " . $row['circleOfFriendsName'] .  "</b></td>";
 
                 // start loop to find members
 
@@ -282,7 +287,9 @@
             <th> To </th>
             <th> Message </th>
 
-            <th> Action </th>";
+            <th> Action </th>
+            </tr>";
+
 
         $messagesQuery = "SELECT * FROM messages";
         foreach ($pdo->query($messagesQuery) as $row)  {
@@ -301,8 +308,8 @@
 
 
                 echo "<tr>";
-                echo "<td><a href='/sn/profile/readprofile.php?email=". $userFromQueryResult['email'] . "'>" .$userFromQueryResult['firstName'] . "  " . $userFromQueryResult['lastName'] . "</a></td><br>";
-                echo "<td><a href='/sn/profile/readprofile.php?email=". $userToQueryResult['email'] . "'>" . $userToQueryResult['firstName'] . "  " .$userToQueryResult['lastName'] . "</a></td><br>";
+                echo "<td><a href='/sn/profile/readprofile.php?email=". $userFromQueryResult['email'] . "'>" .$userFromQueryResult['firstName'] . "  " . $userFromQueryResult['lastName'] . "</a></td>";
+                echo "<td><a href='/sn/profile/readprofile.php?email=". $userToQueryResult['email'] . "'>" . $userToQueryResult['firstName'] . "  " .$userToQueryResult['lastName'] . "</a></td>";
 
                 echo "<td>" . $row['messageText'] .  "</td>";
                 echo "<td> ";

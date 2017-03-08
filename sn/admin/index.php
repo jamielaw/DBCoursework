@@ -287,7 +287,9 @@
             <th> To </th>
             <th> Message </th>
 
-            <th> Action </th>";
+            <th> Action </th>
+            </tr>";
+
 
         $messagesQuery = "SELECT * FROM messages";
         foreach ($pdo->query($messagesQuery) as $row)  {
@@ -306,8 +308,8 @@
 
 
                 echo "<tr>";
-                echo "<td><a href='/sn/profile/readprofile.php?email=". $userFromQueryResult['email'] . "'>" .$userFromQueryResult['firstName'] . "  " . $userFromQueryResult['lastName'] . "</a></td><br>";
-                echo "<td><a href='/sn/profile/readprofile.php?email=". $userToQueryResult['email'] . "'>" . $userToQueryResult['firstName'] . "  " .$userToQueryResult['lastName'] . "</a></td><br>";
+                echo "<td><a href='/sn/profile/readprofile.php?email=". $userFromQueryResult['email'] . "'>" .$userFromQueryResult['firstName'] . "  " . $userFromQueryResult['lastName'] . "</a></td>";
+                echo "<td><a href='/sn/profile/readprofile.php?email=". $userToQueryResult['email'] . "'>" . $userToQueryResult['firstName'] . "  " .$userToQueryResult['lastName'] . "</a></td>";
 
                 echo "<td>" . $row['messageText'] .  "</td>";
                 echo "<td> ";

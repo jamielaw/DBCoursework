@@ -107,14 +107,14 @@
         echo "<h2> Circles </h2>";
         echo "<table class='table table-stripped table-bordered'>
            <tr>
-            <th> Name </th>
+            <th> <b> Name </b> </th>
             <th> Members </th>
             <th> Action </th> </tr>";
 
         foreach ($pdo->query($circlesQuery) as $row)  {
 
                 echo "<tr>";
-                echo "<td>" . $row['circleOfFriendsName'] .  "</td>";
+                echo "<td> <b> " . $row['circleOfFriendsName'] .  "</b></td>";
 
                 // start loop to find members
 

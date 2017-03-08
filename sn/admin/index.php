@@ -65,7 +65,7 @@
       <div id="friendships" class="tab-pane fade">
         <?php
 
-            $blogsInfo = "SELECT * FROM friendships";
+            $friendsInfo = "SELECT * FROM friendships";
             echo "<h2> Friendships </h2>";
             echo "<table class='table table-stripped table-bordered'>
                <tr>
@@ -74,17 +74,22 @@
                 <th> Status </th>
                 <th> Action </th> ";
 
-            foreach ($pdo->query($blogsInfo) as $row)  {
+            foreach ($pdo->query($friendsInfo) as $row)  {
 
-                    $userQuery = "SELECT * FROM users where email='". $row["email"] . "'";
+                    $userToQuery = "SELECT * FROM users where email='". $row["emailTo"] . "'";
 
-                    $y = $pdo->prepare($userQuery);
+                    $y = $pdo->prepare($userToQuery);
                     $y->execute();
-                    $userQueryResult = $y->fetch(PDO::FETCH_ASSOC);
+                    $userToQueryResult = $y->fetch(PDO::FETCH_ASSOC);
+
+                    $userFromQuery = "SELECT * FROM users where email='". $row["emailFrom"] . "'";
+                    $y = $pdo->prepare($userFromQuery);
+                    $y->execute();
+                    $userFromQueryResult = $y->fetch(PDO::FETCH_ASSOC);
 
                     echo "<tr>";
-                    echo "<td>" . $row['emailFrom'] . "</td>";
-                    echo "<td>" . $row['emailTo'] . "</td>";
+                    echo "<td>" . $userFromQueryResult['firstName'] . " " . $userFromQueryResult['lastName'] . "</td>";
+                    echo "<td>" . $userToQueryResult['firstName'] . " " . $userToQueryResult['lastName']  . "</td>";
                     echo "<td>" . $row['status'] .  "</td>";
                     echo "<td>";
                     if($row['status'] == "denied"){

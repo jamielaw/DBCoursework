@@ -79,7 +79,7 @@
                     echo "</li>";
 
                 //Check for new friend requests!
-                  $friendRequestCount = "SELECT COUNT( * )FROM users JOIN friendships ON users.email = friendships.emailFrom OR users.email=friendships.emailTo WHERE (friendships.emailTo='$loggedInUser' OR friendships.emailFrom='$loggedInUser' ) AND users.email!= '$loggedInUser' AND status='pending';";
+                  $friendRequestCount = "SELECT COUNT( * )FROM users JOIN friendships ON users.email = friendships.emailFrom OR users.email=friendships.emailTo WHERE (friendships.emailTo='$loggedInUser') AND users.email!= '$loggedInUser' AND status='pending';";
                   //echo $friendRequestCount;
                   $q = $pdo->prepare($friendRequestCount);
                   $q->execute();

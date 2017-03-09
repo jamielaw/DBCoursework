@@ -113,7 +113,7 @@
       </li>
       <?php
       $pdo = Database::connect();
-      $sql = "SELECT DISTINCT email, firstName, lastName, profileImage FROM users JOIN friendships ON users.email = friendships.emailFrom OR users.email=friendships.emailTo WHERE (friendships.emailTo= '$loggedInUser' OR friendships.emailFrom = '$loggedInUser') AND users.email!= '$loggedInUser'  AND status='pending';";
+      $sql = "SELECT DISTINCT email, firstName, lastName, profileImage FROM users JOIN friendships ON users.email = friendships.emailFrom OR users.email=friendships.emailTo WHERE (friendships.emailTo= '$loggedInUser') AND users.email!= '$loggedInUser'  AND status='pending';";
       $q = $pdo->prepare($sql);
       $q->execute();
       //echo $sql;

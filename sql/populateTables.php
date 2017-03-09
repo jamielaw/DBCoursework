@@ -31,7 +31,7 @@ $insertFriendshipTable = "INSERT INTO MyDB.friendships (emailFrom,emailTo,status
 (\"charles@ucl.ac.uk\",\"larry@ucl.ac.uk\",\"accepted\"),
 (\"charles@ucl.ac.uk\",\"ken@ucl.ac.uk\",\"accepted\"),
 (\"charles@ucl.ac.uk\",\"ada@ucl.ac.uk\",\"accepted\"),
-(\"charles@ucl.ac.uk\",\"alan@ucl.ac.uk\",\"pending\"),
+(\"alan@ucl.ac.uk\",\"charles@ucl.ac.uk\",\"pending\"),
 (\"charles@ucl.ac.uk\",\"john@ucl.ac.uk\",\"denied\"),
 (\"vicky@ucl.ac.uk\",\"charles@ucl.ac.uk\",\"accepted\"),
 (\"grace@ucl.ac.uk\",\"ada@ucl.ac.uk\",\"accepted\"),
@@ -155,6 +155,8 @@ $insertPrivacyTitles = "INSERT INTO MyDB.privacyTitles (privacyTitleId,privacySe
 
 $insertPrivacySettings = "INSERT INTO MyDB.privacySettings (privacyTitleId, email, privacyType) VALUES
 (1, \"charles@ucl.ac.uk\", \"Anyone\"),
+(1, \"vicky@ucl.ac.uk\", \"Anyone\"),
+(1, \"grace@ucl.ac.uk\", \"Anyone\"),
 (2, \"charles@ucl.ac.uk\", \"Anyone\"),
 (3, \"charles@ucl.ac.uk\", \"Anyone\"),
 (4, \"charles@ucl.ac.uk\", \"Anyone\"),

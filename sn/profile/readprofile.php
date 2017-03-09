@@ -147,12 +147,17 @@
 
 
                             <div class="space space-4"></div>
-                            <?php //check friend request privacy of user!
-                                if($email!=$loggedInUser){ //only show add as friend or send message button if the profile that is being viewed is not the currently logged in user
+                            <?php //check if friends with profile, if not then friend request privacy of user!
+                                if(checkUserIsFriend($loggedInUser,$email)['value']>0){
+                                    echo '<a href="#" class="btn btn-sm btn-block btn-danger">
+                                                <i class="ace-icon fa fa-minus-circle bigger-120"></i>
+                                                <span class="bigger-110" >Unfriend</span>
+                                            </a>';
+                                }
+                                elseif($email!=$loggedInUser){ //only show add as friend or send message button if the profile that is being viewed is not the currently logged in user
                                     
-                                    //TODO: check if user is already a friend, if so, change the button to show unfriend option? otherwise execute below code
 
-                                    $getFriendshipPrivacy = "SELECT privacyType FROM MyDB.privacySettings WHERE(email='".$email."' AND privacyTitleId IN (SELECT privacyTitleId FROM privacyTitles WHERE privacySettingsDescription='Who can send me friend requests?'))";
+                                    $getFriendshipPrivacy = "SELECT privacyType FROM MyDB.privacySettings WHERE(email='".$email."' AND privacyTitleId IN (SELECT privacyTitleId FROM MyDB.privacyTitles WHERE privacySettingsDescription='Who can send me friend requests?'))";
                                     $pdo = Database::connect();
                                     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                                     $stmt = $pdo->prepare($getFriendshipPrivacy); 
@@ -160,10 +165,9 @@
                                     $row = $stmt->fetch();
                                     $privacy = $row['privacyType'];
                                     if ($privacy=='Anyone'){
-                                        echo '<a href="#" class="btn btn-sm btn-block btn-success">
-                                            <i class="ace-icon fa fa-plus-circle bigger-120"></i>
-                                            <span class="bigger-110" >Add as a friend</span>
-                                        </a>';
+                                            echo '<form class = "" action="createFriendRequest.php?email=' .$email . '" method="post" enctype="multipart/form-data">
+                                            <input class= "btn btn-sm btn-block btn-success" type="submit" value="Add as a friend" name="submit"></input>
+                                            </a></form>';
                                     }elseif($privacy=='Friends of friends'){
                                         //*******BEGIN LOTS OF QUERYING CODE TO FIND FRIENDS OF FRIENDS*******
                                         //firstly, we get the friends of the logged-in user and prepare it for use in the main sql search query
@@ -200,10 +204,9 @@
                                         //*******END LOTS OF QUERYING CODE TO FIND FRIENDS OF     FRIENDS*******                                        
 
                                         if($sharedMutualFriends){
-                                            echo '<a href="#" class="btn btn-sm btn-block btn-success">
-                                                <i class="ace-icon fa fa-plus-circle bigger-120"></i>
-                                                <span class="bigger-110" >Add as a friend</span>
-                                            </a>';
+                                            echo '<form class = "" action="createFriendRequest.php?email=' .$email . '" method="post" enctype="multipart/form-data">
+                                            <input class= "btn btn-sm btn-block btn-success" type="submit" value="Add as a friend" name="submit"></input>
+                                            </a></form>';
                                         }else{
                                             echo '<a href="#" class="btn btn-sm btn-block btn-success disabled">
                                                 <i class="ace-icon fa fa-plus-circle bigger-120"></i>

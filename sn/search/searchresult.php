@@ -58,8 +58,7 @@
             $countQuery = "SELECT COUNT(email) FROM MyDB.users WHERE ((firstName LIKE '" . $name .  "%' OR lastName LIKE '" . $name ."%' OR concat_ws(' ', firstName, lastName) LIKE '" . $name . "%') 
             AND 
             (
-              email IN (SELECT emailTo FROM MyDB.friendships WHERE (emailFrom='" . $loggedInUser . "' AND status='accepted')) 
-              OR email IN (SELECT emailFrom FROM MyDB.friendships WHERE ( emailTo='". $loggedInUser . "' AND status='accepted')) 
+              email IN " . $friendStr . "
               OR email IN (SELECT emailTo FROM MyDB.friendships WHERE (emailFrom IN " .$friendStr . " AND status='accepted')) 
               OR email IN (SELECT emailFrom FROM MyDB.friendships WHERE(emailTo IN " . $friendStr . " AND status='accepted'))
             )
@@ -79,8 +78,7 @@
             ((firstName LIKE '" . $name .  "%' OR lastName LIKE '" . $name ."%' OR concat_ws(' ', firstName, lastName) LIKE '" . $name . "%') 
             AND 
             (
-              email IN (SELECT emailTo FROM MyDB.friendships WHERE (emailFrom='" . $loggedInUser . "' AND status='accepted')) 
-              OR email IN (SELECT emailFrom FROM MyDB.friendships WHERE ( emailTo='". $loggedInUser . "' AND status='accepted')) 
+              email IN " .$friendStr . " 
               OR email IN (SELECT emailTo FROM MyDB.friendships WHERE (emailFrom IN " .$friendStr . " AND status='accepted')) 
               OR email IN (SELECT emailFrom FROM MyDB.friendships WHERE(emailTo IN " . $friendStr . " AND status='accepted'))
             )

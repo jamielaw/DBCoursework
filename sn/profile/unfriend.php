@@ -15,11 +15,8 @@
   $pdo = Database::connect();
   $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-  $friendshipRequest = "INSERT INTO
-  `friendships` ( `emailFrom`, `emailTo`, `status`)
-  VALUES  ('$emailFrom', '$emailTo', 'pending');";
-
-  $pdo->exec($friendshipRequest);
+  $unfriendRequest = "UPDATE MyDB.friendships SET status='denied' WHERE((emailTo='" . $loggedInUser. "' AND emailFrom='" . $emailTo ."') OR (emailFrom='".$loggedInUser . "' AND emailTo='" . $emailTo."'));";
+  $pdo->exec($unfriendRequest);
 
   // Need to handle error catching etc
   Database::disconnect();

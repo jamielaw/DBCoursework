@@ -149,17 +149,32 @@
                             <div class="space space-4"></div>
                             <?php //check if friends with profile, if not then friend request privacy of user!
                                 if(checkUserIsFriend($loggedInUser,$email)['value']>0){
-                                    echo '<a href="#" class="btn btn-sm btn-block btn-danger">
-                                                <i class="ace-icon fa fa-minus-circle bigger-120"></i>
-                                                <span class="bigger-110" >Unfriend</span>
-                                            </a>';
+                                    echo '<form class="" action="unfriend.php?email='.$email.'" method="post" enctype="multipart/form-data">
+                                                <input class= "btn btn-sm btn-block btn-danger" type="submit" value="Unfriend" name="submit"></input>
+                                            </form>';
                                 }
                                 elseif($email!=$loggedInUser){ //only show add as friend or send message button if the profile that is being viewed is not the currently logged in user
-                                    
-
-                                    $getFriendshipPrivacy = "SELECT privacyType FROM MyDB.privacySettings WHERE(email='".$email."' AND privacyTitleId IN (SELECT privacyTitleId FROM MyDB.privacyTitles WHERE privacySettingsDescription='Who can send me friend requests?'))";
+                                    //firstly check to see if there is a pending request
                                     $pdo = Database::connect();
                                     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                                    $getPendingFriendship = "SELECT COUNT(emailTo) FROM MyDB.friendships WHERE(emailTo='" . $email . "' AND emailFrom='".$loggedInUser. "' AND status='pending')";
+                                    $getPendingFriendship2 = "SELECT COUNT(emailTo) FROM MyDB.friendships WHERE(emailFrom='" . $email . "' AND emailTo='".$loggedInUser. "' AND status='pending')";
+                                    $stmt2 = $pdo->prepare($getPendingFriendship); //for if the logged in user has sent a request to this person
+                                    $stmt2->execute();
+                                    $count=$stmt2->fetch();
+                                    $stmt3 = $pdo->prepare($getPendingFriendship2); //for if the logged in user has received a request from this person
+                                    $stmt3->execute();
+                                    $count2=$stmt3->fetch();
+                                    if($count['COUNT(emailTo)']>0){ //logged in user has already sent a friend request to this user
+                                        echo '<form class = "" action="createFriendRequest.php?email=' .$email . '" method="post" enctype="multipart/form-data">
+                                            <input class= "btn btn-sm btn-block btn-success disabled" type="submit" value="Already sent a friend request" name="submit"></input>
+                                            </a></form>';
+                                    } elseif($count2['COUNT(emailTo)']>0){
+                                        echo '<form class = "" action="handleFriendRequest.php?email=' .$email . '&action=accepted" method="post" enctype="multipart/form-data">
+                                            <input class= "btn btn-sm btn-block btn-success" type="submit" value="Accept friend request" name="submit"></input>
+                                            </a></form>';
+                                    } else{
+                                    $getFriendshipPrivacy = "SELECT privacyType FROM MyDB.privacySettings WHERE(email='".$email."' AND privacyTitleId IN (SELECT privacyTitleId FROM MyDB.privacyTitles WHERE privacySettingsDescription='Who can send me friend requests?'))";
                                     $stmt = $pdo->prepare($getFriendshipPrivacy); 
                                     $stmt->execute(); 
                                     $row = $stmt->fetch();
@@ -218,9 +233,8 @@
                                             <i class="ace-icon fa fa-plus-circle bigger-120"></i>
                                             <span class="bigger-110" >Can\'t add this person as a friend</span>
                                         </a>';
-                                    }
-
-                               
+                                    }    
+                                    }             
                                     echo '<a href="messages.php" class="btn btn-sm btn-block btn-primary">
                                         <i class="ace-icon fa fa-envelope-o bigger-110"></i>
                                         <span class="bigger-110">Send a message</span>

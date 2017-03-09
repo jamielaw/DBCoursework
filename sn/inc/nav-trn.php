@@ -46,7 +46,6 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand">BookFace</a>
     </div>
           <?php
           session_start();
@@ -60,6 +59,7 @@
           }
           $isLoggedIn=1;
           if($isLoggedIn){ //if user is logged in, display relevant navbar
+                    echo "<a class=\"navbar-brand\" href=\"\sn\profile\">BookFace</a>";
                     echo "<div class=\"collapse navbar-collapse\">
                     <ul class=\"nav navbar-nav\">
                     <li class=\"dropdown\">
@@ -118,6 +118,7 @@
                 </div>";
         }
         else{
+          echo "<a class=\"navbar-brand\">BookFace</a>";
           echo "<div class=\"collapse navbar-collapse\">
                     <ul class=\"nav navbar-nav\">
                     <li><a href=\"/loginTest/login.php\">Log In</a></li>

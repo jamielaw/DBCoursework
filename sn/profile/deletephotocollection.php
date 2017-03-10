@@ -12,6 +12,15 @@
 
         $pdo = Database::connect();
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        $sql = "DELETE FROM comments WHERE photoId IN (SELECT photoId FROM photos WHERE photoCollectionId = ?)";
+        $q = $pdo->prepare($sql);
+        $q->execute(array($photoCollectionId));
+
+        $sql = "DELETE FROM annotations WHERE photoId IN (SELECT photoId FROM photos WHERE photoCollectionId = ?)";
+        $q = $pdo->prepare($sql);
+        $q->execute(array($photoCollectionId));
+
         $sql = "DELETE FROM photos WHERE photoCollectionId = ?";
         $q = $pdo->prepare($sql);
         $q->execute(array($photoCollectionId));

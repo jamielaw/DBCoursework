@@ -1,7 +1,13 @@
 <?php
+session_start();
 require 'database.php';
 
-$loggedInUser='charles@ucl.ac.uk';
+if (isset($_SESSION['email'])) {
+  $loggedInUser= $_SESSION['email'];
+} else {
+  echo "You are not logged in";
+}
+//$loggedInUser='charles@ucl.ac.uk';
 
 //Getting user data
 $pdo = Database::connect();
@@ -15,5 +21,5 @@ $firstName = $data['firstName'];
 $lastName = $data['lastName'];
 $photo = $data['profileImage'];
 
-Database::disconnect(); // remember to disconnect otherwise this causes bugs 
+Database::disconnect(); // remember to disconnect otherwise this causes bugs
 ?>

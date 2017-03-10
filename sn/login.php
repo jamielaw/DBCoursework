@@ -11,16 +11,12 @@
   $q->execute(array($email, $user_password));
   $loginAttemptResult = $q->fetch();
 
-  if( $email == $loginAttemptResult["email"] && $user_password == $loginAttemptResult["user_password"]) {
-    // foreach($loginAttemptResult as $result) {
-    //   echo $result, '<br>';
-    // }
-    //echo "Username & Password is correct!";
+  // user password_verfiy on the returned user_password from DB against the enterered $user_password
+  if( $email == $loginAttemptResult["email"] && password_verify($user_password, $loginAttemptResult["user_password"])) {
     $_SESSION['loggedInUserEmail'] = $email;
     redirect("profile/index.php");
   } else {
-
-    //echo "Your username or password is incorrect!";
+    echo "Your username or password is incorrect!";
   }
 
   // if (!$row = mysqli_fetch_assoc($result)) {

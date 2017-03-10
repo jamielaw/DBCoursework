@@ -28,7 +28,7 @@ session_start();
           </form>";
           echo "
           <!--  SIGNUP -->
-          <form action='signup.php' method='post'>
+          <form action='signup2.php' method='post'>
             <br>
             <input type='text' name='first' placeholder='first'/>
             <br>
@@ -38,7 +38,7 @@ session_start();
             <br>
             <input type='password' name='pwd' placeholder='password'/>
             <br>
-            <button type='submit'>SIGN UP</button>
+            <button type='submit' name='sign-up-submit' value='Sign Up' >SIGN UP</button>
           </form>
           ";
         }

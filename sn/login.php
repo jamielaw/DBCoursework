@@ -40,6 +40,7 @@
 
   } else {
     // echo "Your username incorrect!";
+    redirect("..");
   }
 
   // if (!$row = mysqli_fetch_assoc($result)) {

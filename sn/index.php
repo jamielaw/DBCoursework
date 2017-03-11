@@ -28,7 +28,7 @@ session_start();
           </form>";
           echo "
           <!--  SIGNUP -->
-          <form action='signup2.php' method='post'>
+          <form action='signup.php' method='post'>
             <br>
             <input type='text' name='first' placeholder='first'/>
             <br>

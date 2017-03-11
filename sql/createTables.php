@@ -18,7 +18,7 @@ $createRolesTable = "CREATE TABLE IF NOT EXISTS MyDB.roles(
 $createUsersTable = "CREATE TABLE IF NOT EXISTS MyDB.users(
   email VARCHAR(50) NOT NULL,
   roleID INT NOT NULL,
-  user_password VARCHAR(20),
+  user_password VARCHAR(1000),
   firstName VARCHAR(15),
   lastName VARCHAR(15),
   profileImage VARCHAR(255),

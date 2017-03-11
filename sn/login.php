@@ -4,6 +4,8 @@
   $email = $_POST['email'];
   $user_password = $_POST['pwd'];
 
+  echo $user_password;
+
   $pdo = Database::connect();
   $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
   $sql = "SELECT * FROM MyDB.users WHERE email=?";
@@ -11,11 +13,14 @@
   $q->execute(array($email));
   $loginAttemptResult = $q->fetch();
 
+  echo $loginAttemptResult["user_password"];
+
   // Surely this
-  echo password_hash($user_password, PASSWORD_DEFAULT);
+  echo "<br>";
+  password_verify($user_password, PASSWORD_DEFAULT);
   echo '<br/>';
   // and this should match?
-  echo $loginAttemptResult["user_password"];
+
   echo '<br/>';
 
   // Anyway let's check to see if they do...

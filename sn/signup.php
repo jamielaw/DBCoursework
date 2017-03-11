@@ -5,8 +5,8 @@
   $email = $_POST['email'];
   $user_password = $_POST["pwd"];
 
+  echo $email;
   //pls add this xx, as well as profile image? either that or create a placeholder image and refer to that
-  echo "here";
   $pdo = Database::connect();
   $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
@@ -16,21 +16,18 @@
   $q = $pdo->prepare($sql);
 
   $q->execute(array($email, 2, $encrypted_password, $firstName, $lastName, "/images/profile/default-profile.png" ));
-  // $defaultPrivacyFriends = "INSERT INTO MyDB.privacySettings (email, privacySettingsTitle, privacySettingsDescription) VALUES (\"".$email."\", \"Who can send me friend requests?\", \"Anyone\")";
-  // $q = $pdo->prepare($sql);
-  // $q->execute();
-  //
-  // $defaultPrivacyFriends = "INSERT INTO MyDB.privacySettings (email, privacySettingsTitle, privacySettingsDescription) VALUES (\"".$email."\", \"Who can send me friend requests?\", \"Anyone\")";
-  // $q = $pdo->prepare($sql);
-  // $q->execute();
-  // $defaultPrivacyFriends = "INSERT INTO MyDB.privacySettings (email, privacySettingsTitle, privacySettingsDescription) VALUES (\"".$email."\", \"Who can send me friend requests?\", \"Anyone\")";
-  // $q = $pdo->prepare($sql);
-  // $q->execute();
-  //
-  // $defaultPrivacyFriends = "INSERT INTO MyDB.privacySettings (email, privacySettingsTitle, privacySettingsDescription) VALUES (\"".$email."\", \"Who can send me friend requests?\", \"Anyone\")";
-  // $q = $pdo->prepare($sql);
-  //   $q->execute();
 
+  $sql1 = "INSERT INTO MyDB.privacySettings (privacyTitleId, email, privacyType)
+  VALUES
+  (1, '$email', \"Friends of friends\"),
+  (2, '$email', \"Friends of friends\"),
+  (3, '$email', \"Friends of friends\"),
+  (4, '$email', \"Friends of friends\"),
+  (5, '$email', \"Friends of friends\");";
+
+
+  $q = $pdo->prepare($sql1);
+  $q->execute();
 
   Database::disconnect();
   echo $email . " user has been created! You can now login.";

@@ -13,7 +13,7 @@
   $encrypted_password = password_hash($user_password, PASSWORD_DEFAULT);
   $sql = "INSERT INTO MyDB.users (email, roleID, user_password, firstName, lastName, profileImage) VALUES (?, ?, ?, ?, ?, ? )";
   $q = $pdo->prepare($sql);
-  $q->execute(array($email, 2, $encrypted_password, $firstName, $lastName, "/images/profile/ada@ucl.ac.uk.jpg" ));
+  $q->execute(array($email, 2, $encrypted_password, $firstName, $lastName, "/images/profile/default-profile.png" ));
   Database::disconnect();
   echo $email . " user has been created! You can now login.";
   //is this sql statement above correct? shouldn't it be MyDB.users. the formatting is also incorrect, it should follow the format

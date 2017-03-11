@@ -16,7 +16,7 @@ session_start();
                   <button type='submit'>LOG OUT</button>
                 </form>
                 ";
-          $_SESSION['loggedInUserEmail'];
+          echo $_SESSION['loggedInUserEmail'];
         } else {
           echo "You are not logged in, log in or sign up";
           echo "<form class='' action='login.php' method='post'>

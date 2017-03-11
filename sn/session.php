@@ -2,8 +2,8 @@
 session_start();
 require 'database.php';
 
-if (isset($_SESSION['email'])) {
-  $loggedInUser= $_SESSION['email'];
+if (isset($_SESSION['loggedInUserEmail'])) {
+  $loggedInUser= $_SESSION['loggedInUserEmail'];
 } else {
   echo "You are not logged in";
 }

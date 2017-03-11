@@ -4,12 +4,12 @@
 
   // Given "string", returns "'string'" - useful for SQL queries
   function wrapArgument($arg){
+    $arg = htmlspecialchars($arg);
     return "'" . $arg . "'";
   }
   // Removes spaces
   function removeSpaces($arg){
-
-    return str_replace(' ', '', htmlspecialchars($arg));
+    return str_replace(' ', '', $arg);
   }
   // All functions should be moved to utils.php at some point
   function redirect($url) {
@@ -19,27 +19,25 @@
     die();
   }
 
-
   $pdo = Database::connect();
   $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
+  $sql = "UPDATE blogs SET "
+  . "blogTitle=" . wrapArgument($_POST['blogTitle']) .  ","
+  . "blogDescription=" . wrapArgument($_POST['blogDescription'])
+  . " WHERE blogId=" . htmlspecialchars($_POST['argument1']);
 
-  $sql = "UPDATE MyDB.users SET
-  email=" . removeSpaces(wrapArgument($_POST['email'])) .  ","
-  . "firstName=" . removeSpaces(wrapArgument($_POST['firstName'])) .  ","
-  . "lastName=" . removeSpaces(wrapArgument($_POST['lastName'])) .  ","
-  . "profileImage =" . removeSpaces(wrapArgument($_POST['profileImage'])) .  ","
-  . "profileDescription =" . wrapArgument($_POST['profileDescription'])
-  . " WHERE email='" . removeSpaces($_POST['argument1']) . "'";
-
-
+  #echo $sql;
   $pdo->exec($sql);
 
   // Need to handle error catching etc
-
   Database::disconnect();
 
   // Direct back to sn/admin
-  redirect('../../admin/');
+  redirect('../../admin');
+
+
+
+
 
 ?>

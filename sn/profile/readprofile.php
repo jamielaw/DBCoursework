@@ -44,6 +44,53 @@
         return $description;
     }
 
+    function checkUserIsFriendOfFriend($loggedInUser,$email)
+    {
+        $pdo = Database::connect();
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $sql = 'SELECT IF 
+        ((SELECT COUNT(*) as total FROM users JOIN friendships ON users.email = friendships.emailFrom OR users.email=friendships.emailTo WHERE 
+        users.email = ? AND 
+        (friendships.emailFrom IN
+            (SELECT DISTINCT email FROM users JOIN friendships ON users.email = friendships.emailFrom OR users.email=friendships.emailTo WHERE (friendships.emailFrom= ? OR friendships.emailTo= ?) AND users.email!=? AND status=\'accepted\') 
+        OR friendships.emailTo IN
+            (SELECT DISTINCT email FROM users JOIN friendships ON users.email = friendships.emailFrom OR users.email=friendships.emailTo WHERE (friendships.emailFrom= ? OR friendships.emailTo= ?) AND users.email!=? AND status=\'accepted\')) 
+        AND users.email NOT IN 
+            (SELECT DISTINCT email FROM users JOIN friendships ON users.email = friendships.emailFrom OR users.email=friendships.emailTo WHERE (friendships.emailFrom= ? OR friendships.emailTo= ?) AND users.email!=? AND status=\'accepted\')
+        AND users.email!=?),true,false) AS value';        
+        $q = $pdo->prepare($sql);
+        $q->execute(array($loggedInUser,$email,$email,$email,$email,$email,$email,$email,$email,$email,$email));        
+        $data = $q->fetch(PDO::FETCH_ASSOC);
+        return $data;
+    }
+
+    function checkUserIsFriend($loggedInUser,$email)
+    {
+        $pdo = Database::connect();
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $sql = 'SELECT IF 
+            ((SELECT COUNT(*) as total FROM users 
+            JOIN friendships ON users.email = friendships.emailFrom OR users.email=friendships.emailTo 
+            WHERE (friendships.emailFrom= ? OR friendships.emailTo= ?) 
+            AND users.email!=? AND status=\'accepted\' AND users.email=?
+            )>0,true,false) AS value';
+        $q = $pdo->prepare($sql);
+        $q->execute(array($email,$email,$email,$loggedInUser));
+        $data = $q->fetch(PDO::FETCH_ASSOC);
+        return $data;
+    }
+
+    function checkCollectionPrivacySettings($email)
+    {
+        $pdo = Database::connect();
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $sql = 'SELECT * FROM privacysettings WHERE email = ? AND privacyTitleId=4;';
+        $q = $pdo->prepare($sql);
+        $q->execute(array($email));
+        $data = $q->fetch(PDO::FETCH_ASSOC);
+        return $data;
+    }
+
 
 ?>
 
@@ -58,35 +105,35 @@
 <body>
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 <div id="user-profile-2" class="user-profile">
-		<div class="tabbable">
-			<ul class="nav nav-tabs padding-18">
-				<li class="active">
-					<a data-toggle="tab" href="#home">
-						<i class="green ace-icon fa fa-user bigger-120"></i>
-						Profile
-					</a>
-				</li>
+        <div class="tabbable">
+            <ul class="nav nav-tabs padding-18">
+                <li class="active">
+                    <a data-toggle="tab" href="#home">
+                        <i class="green ace-icon fa fa-user bigger-120"></i>
+                        Profile
+                    </a>
+                </li>
 
-				<li>
-					<a data-toggle="tab" href="#friends">
-						<i class="blue ace-icon fa fa-users bigger-120"></i>
-						Friends
-					</a>
-				</li>
+                <li>
+                    <a data-toggle="tab" href="#friends">
+                        <i class="blue ace-icon fa fa-users bigger-120"></i>
+                        Friends
+                    </a>
+                </li>
 
-				<li>
-					<a data-toggle="tab" href="#pictures">
-						<i class="pink ace-icon fa fa-picture-o bigger-120"></i>
-						Pictures
-					</a>
-				</li>
-			</ul>
+                <li>
+                    <a data-toggle="tab" href="#pictures">
+                        <i class="pink ace-icon fa fa-picture-o bigger-120"></i>
+                        Pictures
+                    </a>
+                </li>
+            </ul>
 
-			<div class="tab-content no-border padding-24">
-				<div id="home" class="tab-pane in active">
-					<div class="row">
-						<div class="col-xs-12 col-sm-3 center">
-							<span class="profile-picture">
+            <div class="tab-content no-border padding-24">
+                <div id="home" class="tab-pane in active">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-3 center">
+                            <span class="profile-picture">
                             <a class="open-update_photo" width="300" data-toggle="modal" href="#update_photo" data-rel="colorbox">
                                 <img height="300" src=<?php echo $data['profileImage'];?>>
                             </a>
@@ -96,27 +143,46 @@
                                     <i class="ace-icon fa fa-pencil"></i>
                                 </a>
                             </div>
-							</span>
+                            </span>
 
 
-							<div class="space space-4"></div>
-                            <?php //check friend request privacy of user!
-                                if($email!=$loggedInUser){ //only show add as friend or send message button if the profile that is being viewed is not the currently logged in user
-                                    
-                                    //TODO: check if user is already a friend, if so, change the button to show unfriend option? otherwise execute below code
-
-                                    $getFriendshipPrivacy = "SELECT privacySettingsDescription FROM MyDB.privacySettings WHERE(email='".$email."' AND privacySettingsTitle='Who can send me friend requests?')";
+                            <div class="space space-4"></div>
+                            <?php //check if friends with profile, if not then friend request privacy of user!
+                                if(checkUserIsFriend($loggedInUser,$email)['value']>0){
+                                    echo '<form class="" action="unfriend.php?email='.$email.'" method="post" enctype="multipart/form-data">
+                                                <input class= "btn btn-sm btn-block btn-danger" type="submit" value="Unfriend" name="submit"></input>
+                                            </form>';
+                                }
+                                elseif($email!=$loggedInUser){ //only show add as friend or send message button if the profile that is being viewed is not the currently logged in user
+                                    //firstly check to see if there is a pending request
                                     $pdo = Database::connect();
                                     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                                    $getPendingFriendship = "SELECT COUNT(emailTo) FROM MyDB.friendships WHERE(emailTo='" . $email . "' AND emailFrom='".$loggedInUser. "' AND status='pending')";
+                                    $getPendingFriendship2 = "SELECT COUNT(emailTo) FROM MyDB.friendships WHERE(emailFrom='" . $email . "' AND emailTo='".$loggedInUser. "' AND status='pending')";
+                                    $stmt2 = $pdo->prepare($getPendingFriendship); //for if the logged in user has sent a request to this person
+                                    $stmt2->execute();
+                                    $count=$stmt2->fetch();
+                                    $stmt3 = $pdo->prepare($getPendingFriendship2); //for if the logged in user has received a request from this person
+                                    $stmt3->execute();
+                                    $count2=$stmt3->fetch();
+                                    if($count['COUNT(emailTo)']>0){ //logged in user has already sent a friend request to this user
+                                        echo '<form class = "" action="createFriendRequest.php?email=' .$email . '" method="post" enctype="multipart/form-data">
+                                            <input class= "btn btn-sm btn-block btn-success disabled" type="submit" value="Already sent a friend request" name="submit"></input>
+                                            </a></form>';
+                                    } elseif($count2['COUNT(emailTo)']>0){
+                                        echo '<form class = "" action="handleFriendRequest.php?email=' .$email . '&action=accepted" method="post" enctype="multipart/form-data">
+                                            <input class= "btn btn-sm btn-block btn-success" type="submit" value="Accept friend request" name="submit"></input>
+                                            </a></form>';
+                                    } else{
+                                    $getFriendshipPrivacy = "SELECT privacyType FROM MyDB.privacySettings WHERE(email='".$email."' AND privacyTitleId IN (SELECT privacyTitleId FROM MyDB.privacyTitles WHERE privacySettingsDescription='Who can send me friend requests?'))";
                                     $stmt = $pdo->prepare($getFriendshipPrivacy); 
                                     $stmt->execute(); 
                                     $row = $stmt->fetch();
-                                    $privacy = $row['privacySettingsDescription'];
+                                    $privacy = $row['privacyType'];
                                     if ($privacy=='Anyone'){
-                                        echo '<a href="#" class="btn btn-sm btn-block btn-success">
-                                            <i class="ace-icon fa fa-plus-circle bigger-120"></i>
-                                            <span class="bigger-110" >Add as a friend</span>
-                                        </a>';
+                                            echo '<form class = "" action="createFriendRequest.php?email=' .$email . '" method="post" enctype="multipart/form-data">
+                                            <input class= "btn btn-sm btn-block btn-success" type="submit" value="Add as a friend" name="submit"></input>
+                                            </a></form>';
                                     }elseif($privacy=='Friends of friends'){
                                         //*******BEGIN LOTS OF QUERYING CODE TO FIND FRIENDS OF FRIENDS*******
                                         //firstly, we get the friends of the logged-in user and prepare it for use in the main sql search query
@@ -153,10 +219,9 @@
                                         //*******END LOTS OF QUERYING CODE TO FIND FRIENDS OF     FRIENDS*******                                        
 
                                         if($sharedMutualFriends){
-                                            echo '<a href="#" class="btn btn-sm btn-block btn-success">
-                                                <i class="ace-icon fa fa-plus-circle bigger-120"></i>
-                                                <span class="bigger-110" >Add as a friend</span>
-                                            </a>';
+                                            echo '<form class = "" action="createFriendRequest.php?email=' .$email . '" method="post" enctype="multipart/form-data">
+                                            <input class= "btn btn-sm btn-block btn-success" type="submit" value="Add as a friend" name="submit"></input>
+                                            </a></form>';
                                         }else{
                                             echo '<a href="#" class="btn btn-sm btn-block btn-success disabled">
                                                 <i class="ace-icon fa fa-plus-circle bigger-120"></i>
@@ -168,9 +233,8 @@
                                             <i class="ace-icon fa fa-plus-circle bigger-120"></i>
                                             <span class="bigger-110" >Can\'t add this person as a friend</span>
                                         </a>';
-                                    }
-
-                               
+                                    }    
+                                    }             
                                     echo '<a href="messages.php" class="btn btn-sm btn-block btn-primary">
                                         <i class="ace-icon fa fa-envelope-o bigger-110"></i>
                                         <span class="bigger-110">Send a message</span>
@@ -188,94 +252,110 @@
                                 <span class="bigger-110">Import Profile</span>
                             </a>
 
-						</div><!-- /.col -->
+                        </div><!-- /.col -->
 
-						<div class="col-xs-12 col-sm-9">
-							<h4 class="blue">
-								<span class="middle"> <?php echo $data['firstName'];?> <?php echo $data['lastName'];?> </span>
+                        <div class="col-xs-12 col-sm-9">
+                            <h4 class="blue">
+                                <span class="middle"> <?php echo $data['firstName'];?> <?php echo $data['lastName'];?> </span>
 
-								<span class="label label-purple arrowed-in-right">
-									<i class="ace-icon fa fa-circle smaller-80 align-middle"></i>
-									online
-								</span>
-							</h4>
+                                <span class="label label-purple arrowed-in-right">
+                                    <i class="ace-icon fa fa-circle smaller-80 align-middle"></i>
+                                    online
+                                </span>
+                            </h4>
 
-							<div class="profile-user-info">
-								<div class="profile-info-row">
-									<div style="visibility: <?php echo $showEmail ?>" class="profile-info-name"> Email </div>
+                            <div class="profile-user-info">
+                                <div class="profile-info-row">
+                                    <div style="visibility: <?php echo $showEmail ?>" class="profile-info-name"> Email </div>
 
-									<div style="visibility: <?php echo $showEmail ?>" class="profile-info-value">
-										<span> <?php echo $data['email'];?> </span>
-									</div>
-								</div>
+                                    <div style="visibility: <?php echo $showEmail ?>" class="profile-info-value">
+                                        <span> <?php echo $data['email'];?> </span>
+                                    </div>
+                                </div>
 
-							</div>
-						</div><!-- /.col -->
+                            </div>
+                        </div><!-- /.col -->
 
-						<div class="row">
-						<div class="col-xs-12 col-sm-6">
-							<div class="widget-box transparent">
-								<div class="widget-header widget-header-small">
-									<h4 class="widget-title smaller">
-										<i class="ace-icon fa fa-check-square-o bigger-110"></i>
-										Little About Me
-									</h4>
-								</div>
-								<div class="widget-body">
-									<div class="widget-main">
-										<p> <?php echo checkDescription($data['profileDescription']);?> 
+                        <div class="row">
+                        <div class="col-xs-12 col-sm-6">
+                            <div class="widget-box transparent">
+                                <div class="widget-header widget-header-small">
+                                    <h4 class="widget-title smaller">
+                                        <i class="ace-icon fa fa-check-square-o bigger-110"></i>
+                                        Little About Me
+                                    </h4>
+                                </div>
+                                <div class="widget-body">
+                                    <div class="widget-main">
+                                        <p> <?php echo checkDescription($data['profileDescription']);?> 
                                         </p>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					</div><!-- /.row -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div><!-- /.row -->
 
-					<div class="space-20"></div>
+                    <div class="space-20"></div>
 
 
-				</div><!-- /#home -->
+                </div><!-- /#home -->
 
-				<div id="friends" class="tab-pane">
-					<div class="profile-users clearfix">
+                <div id="friends" class="tab-pane">
+                    <div class="profile-users clearfix">
 
-						<?php
+                        <?php
                             $pdo = Database::connect();
                             $sql = 'SELECT DISTINCT email, firstName, lastName, profileImage FROM users JOIN friendships ON users.email = friendships.emailFrom OR users.email=friendships.emailTo WHERE (friendships.emailFrom= ? OR friendships.emailTo= ?) AND users.email!= ? AND status=\'accepted\';';
                             $q1 = $pdo->prepare($sql);
                             $q1->execute(array($email,$email,$email));
                             foreach ($q1->fetchAll() as $row) {
                                 echo '<div class="itemdiv memberdiv">
-										<div class="inline pos-rel">
-											<div class="user">
-												<a href="readprofile.php?email='.$row['email'].'">
-													<img href="readprofile.php?email='.$row['email'].'" height="65" src=" ' . $row['profileImage'] . ' " alt="Bob Does avatar">
-												</a>
-											</div>
+                                        <div class="inline pos-rel">
+                                            <div class="user">
+                                                <a href="readprofile.php?email='.$row['email'].'">
+                                                    <img href="readprofile.php?email='.$row['email'].'" height="65" src=" ' . $row['profileImage'] . ' " alt="Bob Does avatar">
+                                                </a>
+                                            </div>
 
-											<div class="body">
-												<div class="name">
-													<a href="readprofile.php?email='.$row['email'].'">
-														<span class="user-status status-online"></span>
-															' . $row['firstName']. ' ' . $row['lastName']. '
-													</a>
-												</div>
-											</div>
-										</div>
-									</div>';
+                                            <div class="body">
+                                                <div class="name">
+                                                    <a href="readprofile.php?email='.$row['email'].'">
+                                                        <span class="user-status status-online"></span>
+                                                            ' . $row['firstName']. ' ' . $row['lastName']. '
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>';
                             }
                         ?>
 
-					</div>
-				</div><!-- /#friends -->
+                    </div>
+                </div><!-- /#friends -->
 
 
-				<div id="pictures" class="tab-pane">
+                <div id="pictures" class="tab-pane">
 
                     <button style="visibility: <?php echo $adminAccess ?>" type="button" class="btn btn-info" data-toggle="modal" data-target="#collection_dialog">Create Collection</button>
 
-					<?php
+                    <?php
+                        // Check the user's privacy settings for photo collections
+                        $value=checkCollectionPrivacySettings($email)['privacyType'];
+                        checkUserIsFriendOfFriend($loggedInUser,$email)['value'];
+
+                        $allowAccess=0; //default to allow access
+                        if($value=='Friends of friends' && checkUserIsFriendOfFriend($loggedInUser,$email)['value'])
+                           $allowAccess=1;
+                        if($value=='Anyone')
+                            $allowAccess=1;
+                        if(checkUserIsFriend($loggedInUser,$email)['value'] && $value!='None')
+                            $allowAccess=1;
+                        if($loggedInUser==$email)
+                            $allowAccess=1;
+                        
+                        if($allowAccess)
+                        {
                             //$pdo = Database::connect();
                             $sql = 'SELECT photoCollectionId, dateCreated, title, description FROM photocollection WHERE createdBy = ?;';
                             $q1 = $pdo->prepare($sql);
@@ -287,34 +367,38 @@
                                 if($imageReference==null)
                                     $imageReference="http://www.plantauthority.gov.in/images/pg1.png";
                                 echo '
- 								<ul class="ace-thumbnails">
-									<li>
-		 								<a href="readphotocollection.php?createdBy='.$email.'&photoCollectionId='.$row['photoCollectionId'].'" data-rel="colorbox">
-											<img height="300" src=" ' . $imageReference . ' ">
-											<div class="text">
-												<div class="inner"> ' . $row['title'] . ' </div>
-											</div>
-										</a>
+                                <ul class="ace-thumbnails">
+                                    <li>
+                                        <a href="readphotocollection.php?createdBy='.$email.'&photoCollectionId='.$row['photoCollectionId'].'" data-rel="colorbox">
+                                            <img height="300" src=" ' . $imageReference . ' ">
+                                            <div class="text">
+                                                <div class="inner"> ' . $row['title'] . ' </div>
+                                            </div>
+                                        </a>
 
-										<div style="visibility: '.$adminAccess.'" class="tools tools-bottom">
-											<a data-title="'.$row['title'].'" data-description="'.$row['description'].'" data-id="'.$row['photoCollectionId'].'" class="open-update_dialog" data-toggle="modal" href="#update_dialog">
-												<i class="ace-icon fa fa-pencil"></i>
-											</a>
+                                        <div style="visibility: '.$adminAccess.'" class="tools tools-bottom">
+                                            <a data-title="'.$row['title'].'" data-description="'.$row['description'].'" data-id="'.$row['photoCollectionId'].'" class="open-update_dialog" data-toggle="modal" href="#update_dialog">
+                                                <i class="ace-icon fa fa-pencil"></i>
+                                            </a>
 
-											<a data-title="'.$row['title'].'" data-id="'.$row['photoCollectionId'].'" class="open-delete_dialog" data-toggle="modal" href="#delete_dialog">
-												<i class="ace-icon fa fa-times red"></i>
-											</a>
-										</div>
-									</li>
-								</ul>';
+                                            <a data-title="'.$row['title'].'" data-id="'.$row['photoCollectionId'].'" class="open-delete_dialog" data-toggle="modal" href="#delete_dialog">
+                                                <i class="ace-icon fa fa-times red"></i>
+                                            </a>
+                                        </div>
+                                    </li>
+                                </ul>';
                             }
                             if($numberofresults==0){
                                 echo '<ul class="ace-thumbnails">No photos found</ul>';
                             }
+                        } else
+                        {
+                            echo '<p> You don\'t have access to see the user\'s photo collections. </p>';
+                        }
                         ?>
-				</div><!-- /#pictures -->
-			</div>
-		</div>
+                </div><!-- /#pictures -->
+            </div>
+        </div>
 
         <!-- modal to edit profile picture -->
         <div class="modal fade" id="update_photo" role="dialog">
@@ -457,7 +541,7 @@
                 </div>
             </div>
         </div>
-	</div>
+    </div>
 
 <script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 <script type="text/javascript">

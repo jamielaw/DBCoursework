@@ -20,6 +20,8 @@ $data = $q->fetch(PDO::FETCH_ASSOC);
 $firstName = $data['firstName'];
 $lastName = $data['lastName'];
 $photo = $data['profileImage'];
+$isAdmin = false;
+if($data['roleID'] == 1 ) $isAdmin = true;
 
 Database::disconnect(); // remember to disconnect otherwise this causes bugs
 ?>

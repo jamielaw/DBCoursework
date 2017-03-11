@@ -1,6 +1,6 @@
 <?php
 	//update settings here on settings.php submit
-  	require("../session.php");
+  	require("../../session.php");
 
 	//function to redirect - to be moved into a utils.php file later?
 	function redirect($url) {
@@ -12,7 +12,7 @@
 
 	$pdo = Database::connect();
 	$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
- 
+
 	$friendsettingtype = $_GET['setting1'];
 	$searchsettingtype = $_GET['setting2'];
 	$blogsettingtype = $_GET['setting3'];
@@ -35,5 +35,5 @@
 	$pdo->exec($sql5);
 
 	Database::disconnect();
-	redirect('/sn/profile/settings.php');
+	redirect('../../admin');
 ?>

@@ -4,253 +4,254 @@
     $description = "A far superior social network";
     include("../inc/header.php");
     include("../inc/nav-trn.php");
-?>
 
+    // Fetches the latest comments and annotations of the user's friends
+    function getLatestNews($loggedInUser)
+    {
+        $pdo = Database::connect();
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $sql = 'SELECT \'annotated\' as activity, email, photoId as id, dateCreated FROM annotations WHERE photoId IN 
+        (SELECT photoId FROM photos WHERE photoCollectionId IN (SELECT photoCollectionId FROM photoCollection WHERE createdBy=?) 
+        	AND email!=?) 
+		UNION SELECT \'commented\' as activity, email, photoId as id, dateCreated FROM comments WHERE photoId IN 
+		(SELECT photoId FROM photos WHERE photoCollectionId IN (SELECT photoCollectionId FROM photoCollection WHERE createdBy=?) 
+			AND email!=?)
+		ORDER BY dateCreated DESC;';
+        $q = $pdo->prepare($sql);
+        $q->execute(array($loggedInUser,$loggedInUser,$loggedInUser,$loggedInUser));
+        return $q;
+    }   
+
+    function getUserInfo($email)
+    {
+    	$pdo = Database::connect();
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $sql = 'SELECT * FROM users WHERE email=?';
+        $q = $pdo->prepare($sql);
+        $q->execute(array($email));
+        $value = $q->fetch(PDO::FETCH_ASSOC);
+        return $value;
+    }
+
+    // Fetches the latest posted photos of the user's friends
+    function getPhotos($loggedInUser)
+    {
+        $pdo = Database::connect();
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $sql = 'SELECT * FROM photos WHERE photoId IN 
+				(SELECT photoId FROM photos WHERE photoCollectionId IN 
+					(SELECT photoCollectionId FROM photoCollection WHERE createdBy IN 
+                         (SELECT emailFrom as email FROM friendships WHERE emailTo= ? AND status=\'accepted\' 
+                         	UNION 
+                         SELECT emailTo as email FROM friendships WHERE emailFrom= ? AND status=\'accepted\' )))
+                ORDER BY dateAdded DESC LIMIT 5';
+        $q = $pdo->prepare($sql);
+        $q->execute(array($loggedInUser,$loggedInUser,));
+        return $q;
+    }  
+
+    // Fetches the latest posted blogs of the user's friends
+    function getBlogs($loggedInUser)
+    {
+    	$pdo = Database::connect();
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $sql = 'SELECT * FROM blogs WHERE email IN (SELECT emailFrom as email FROM friendships WHERE emailTo= ? AND status=\'accepted\' 
+        	UNION 
+        	SELECT emailTo as email FROM friendships WHERE emailFrom= ? AND status=\'accepted\')
+			ORDER BY dateCreated DESC LIMIT 5;';
+        $q = $pdo->prepare($sql);
+        $q->execute(array($loggedInUser,$loggedInUser));
+        return $q;
+    }
+
+    function getCollectionOwner($photoCollectionId)
+    {
+    	$pdo = Database::connect();
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $sql = 'SELECT * FROM users WHERE email IN 
+			(SELECT createdBy FROM photocollection WHERE photoCollectionId = ?)';
+        $q = $pdo->prepare($sql);
+        $q->execute(array($photoCollectionId));
+        $value = $q->fetch(PDO::FETCH_ASSOC);
+        return $value;
+    }
+
+    function getCollectionName($id)
+    {
+    	$pdo = Database::connect();
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $sql = 'SELECT * FROM photoCollection WHERE photoCollectionId = ?';
+        $q = $pdo->prepare($sql);
+        $q->execute(array($id));
+        $value = $q->fetch(PDO::FETCH_ASSOC);
+        return $value;
+    }
+
+    function getPhotoInfo($id)
+    {
+    	$pdo = Database::connect();
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $sql = 'SELECT * FROM photos WHERE photoId = ?';
+        $q = $pdo->prepare($sql);
+        $q->execute(array($id));
+        $value = $q->fetch(PDO::FETCH_ASSOC);
+        return $value;
+    }
+?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
-
-<style type="text/css">
-	.padding {
-		padding-left: 50px;
-		padding-right: 50px;
-	}
-</style>
-
 <body>
-    <div class="container-fullwidth padding">
-    		<div class="row" id="friends">
-    			<p><img src="<?php echo $photo ?>" class="rounded float-left" height="200">
-    			<font size="5"> <?php echo $firstName.' '.$lastName ?> </font> </p>
-    		</div>
-
-    		<br><br>
-    		<ul class="nav nav-tabs">
-    			<li class="active">
-		        	<a  href="#1" data-toggle="tab">Profile</a>
-				</li>
-				<li>
-				<li>
-					<a href="#4" data-toggle="tab">Photo Collections</a>
-				</li>
-		  	</ul>
-
-			<div class="tab-content ">
-				<div class="tab-pane active" id="1">
-		          <h3>Standard tab panel created on bootstrap using nav-tabs</h3>
-				</div>
-				<div class="tab-pane" id="4">
-		          <table class="table table-striped table-bordered">
-		         	<thead>
-		            	<tr>
-		                	<th>Album</th>
-		                  	<th>Action</th>
-		                </tr>
-		            </thead>
-			        <tbody>
-			          	<?php
-			          		// !!! HARDCODED STUFF - TO BE CHANGED AFTER LOGIN IS IMPLEMENTED
-						   	$sql = 'SELECT * FROM photocollection WHERE createdBy = ? ORDER BY dateCreated';
-						   	$q = $pdo->prepare($sql);
-							$q->execute(array($loggedInUser));
-		 				   	foreach ($q as $row) {
-								echo '<td>'. $row['title'] . '</td>';
-								echo '<td width=350>';
-								echo '<a class="btn btn-info" href="readphotocollection.php?createdBy='.$row['createdBy'].'&photoCollectionId='.$row['photoCollectionId'].'">Read</a>';
-								echo '&nbsp;';
-								echo '<a data-title="'.$row['title'].'" data-description="'.$row['description'].'" data-id="'.$row['photoCollectionId'].'" class="open-update_dialog btn btn-success" data-toggle="modal" href="#update_dialog">Update</a>';
-								echo '&nbsp;';
-								echo '<a data-title="'.$row['title'].'" data-id="'.$row['photoCollectionId'].'" class="open-delete_dialog btn btn-danger" data-toggle="modal" href="#delete_dialog">Delete</a>';
-								echo '</td>';
-								echo '</tr>';
-						  	}
-						  	//Database::disconnect();
-						?>
-					</tbody>
-				   </table>
-
-				    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#collection_dialog">Create Collection</button>
-
-
-					<!-- modal to create new collection -->
-					<!-- the div that represents the modal dialog -->
-					<div class="modal fade" id="collection_dialog" role="dialog">
-					    <div class="modal-dialog">
-					        <div class="modal-content">
-					            <div class="modal-header">
-					                <button type="button" class="close" data-dismiss="modal">&times;</button>
-					                <h4 class="modal-title">Create New Collection</h4>
-					            </div>
-					                <div class="modal-body">
-					                    <form data-title=<?php echo $loggedInUser ?> id="collection_form" action="createcollection.php" method="POST">
-					                        <input type="text" name="albumName" placeholder="Enter Album Name"><br/><br/>
-					                        <input type="text" name="descriptionName" placeholder="Enter Album Description"><br/>
-					                    </form>
-					                </div>
-					                <div class="modal-footer">
-					                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-					                    <button type="button" id="submitForm" class="btn btn-success">Create</button>
-					                </div>
-					            </div>
-					        </div>
-					    </div>
-
-					<!-- modal to update collection -->
-					<!-- the div that represents the modal dialog -->
-					<div class="modal fade" id="update_dialog" role="dialog">
-					    <div class="modal-dialog">
-					        <div class="modal-content">
-					            <div class="modal-header">
-					                <button type="button" class="close" data-dismiss="modal">&times;</button>
-					                <h4 class="modal-title">Update Collection</h4>
-					            </div>
-					                <div class="modal-body">
-					                    <form id="update_form" action="updatephotocollection.php" method="POST">
-					                        Collection Title: <input type="text" name="albumName" id="albumName" placeholder="Edit Album Name"><br/><br/>
-					                        Collection Description: <input type="text" name="albumDescription" id="albumDescription" placeholder="Edit Album Description"><br/>
-					                    </form>
-					                </div>
-					                <div class="modal-footer">
-					                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-					                    <button type="button" id="submitForm2" class="btn btn-success">Update</button>
-					                </div>
-					            </div>
-					        </div>
-					    </div>
-
-					<!-- modal to delete collection -->
-					<!-- the div that represents the modal dialog -->
-					<div class="modal fade" id="delete_dialog" role="dialog">
-					    <div class="modal-dialog">
-					        <div class="modal-content">
-					            <div class="modal-header">
-					                <button type="button" class="close" data-dismiss="modal">&times;</button>
-					                <h4 class="modal-title">Delete Collection</h4>
-					            </div>
-					                <div class="modal-body">
-					                    <form id="delete_form" action="deletephotocollection.php" method="POST">
-					                        Are you sure you want to delete the collection  <input type="text" name="deletealbumName" id="deletealbumName"> ?
-					                    </form>
-					                </div>
-					                <div class="modal-footer">
-					                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-					                    <button type="button" id="submitForm3" class="btn btn-danger">Delete</button>
-					                </div>
-					            </div>
-					        </div>
-					    </div>
-				</div>
-		  	</div>
-    </div> <!-- /container -->
-  </body>
-    <?php include '../inc/footer.php'; ?>
+<div class="container">
+   <div id="blog" class="row"> 
+   <div class="col-sm-2 paddingTop20">
+        <nav class="nav-sidebar">
+            <ul class="nav">
+                <li class="active"><a href="javascript:;"><span class="glyphicon glyphicon-star"></span> Your Latest News </a></li>
+					<div class="activity-feed">
+					<?php
+						foreach (getLatestNews($loggedInUser) as $row) {
+							$newdate = date( 'F j, Y, g:i a', strtotime($row['dateCreated']));
+							echo '
+							<div class="feed-item">
+							    <div class="date">'.$newdate.'</div>
+							    <div class="text"><a href="/sn/profile/readprofile.php?email='.$row['email'].'">'.getUserInfo($row['email'])['firstName'].' '.getUserInfo($row['email'])['lastName'].'</a> '. $row['activity'].'<a href="/sn/profile/readphoto.php?photoId='.$row['id'].'&imageReference='.getPhotoInfo($row['id'])['imageReference'].'&photoCollectionId='.getPhotoInfo($row['id'])['photoCollectionId'].'"> your photo.</a></div>
+							</div>';
+					    }
+					?>
+					</div>
+                <li class="nav-divider"></li>
+            </ul>
+        </nav>
+            <div><h2 class="add">Place for your add!</h2></div>
+    </div>
+    <div class="col-md-10 blogShort">
+    	<?php
+	    	foreach (getPhotos($loggedInUser) as $row) {
+				$newdate = date( 'F j, Y, g:i a', strtotime($row['dateAdded']));
+				echo '
+				<h3>'.$newdate.'</h3>
+                
+                <article><p>
+            		Your friend, <a href="/sn/profile/readprofile.php?email='.getCollectionOwner($row['photoCollectionId'])['email'].'"> '.getCollectionOwner($row['photoCollectionId'])['firstName'].' </a>, has added a new photo to the collection  <a href="/sn/profile/readphotocollection.php?createdBy='.getCollectionOwner($row['photoCollectionId'])['email'].'&photoCollectionId='.$row['photoCollectionId'].'">'.getCollectionName($row['photoCollectionId'])['title'].'</a>.
+            	</p></article>
+            	<img src='.$row['imageReference'].' alt="post img" class="img-thumbnail"  style="max-height:500px" >
+            	<hr>
+				';
+			}
+			foreach (getBlogs($loggedInUser) as $row) {
+				$newdate = date( 'F j, Y, g:i a', strtotime($row['dateCreated']));
+				echo '
+				<h3>'.$newdate.'</h3>
+                
+                <article><p>
+                	<img src='.getUserInfo($row['email'])['profileImage'].' alt="post img" class="pull-left img-responsive img-rounded"  style="max-height:50px" >
+            		Your friend, <a href="/sn/profile/readprofile.php?email='.$row['email'].'">'.getUserInfo($row['email'])['firstName'].'</a>, has written a new blog post called <a href="/sn/blog/viewPost.php?blogId='.$row['blogId'].'">'.$row['blogTitle'].'</a>.
+            		<br><br>
+            	</p></article>
+            	<hr>
+				';
+			}
+		?>
+    </div>  
+</div>
+</body>
 </html>
 
+<style>
 
-<script>
-/* must apply only after HTML has loaded */
-$(document).ready(function () {
-
-	// Create Collection Button
-    $("#collection_form").on("submit", function(e) {
-        var postData = $(this).serializeArray();
-        var email = $(this).data('title');
-        postData.push({name: "email", value: email});
-        var formURL = $(this).attr("action");
-        $.ajax({
-            url: formURL,
-            type: "POST",
-            data: postData,
-            success: function(data, textStatus, jqXHR) {
-                $('#collection_dialog .modal-header .modal-title').html("Result");
-                $('#collection_dialog .modal-body').html(data);
-                $("#submitForm").remove();
-            },
-            error: function(jqXHR, status, error) {
-                console.log(status + ": " + error);
-            }
-        });
-        e.preventDefault();
-    });
-
-    $("#submitForm").on('click', function() {
-        $("#collection_form").submit();
-    });
-});
+@import url(http://fonts.googleapis.com/css?family=Open+Sans);
+/* apply a natural box layout model to all elements, but allowing components to change */
 
 
-// Update Collection
-var albumName = null;
-var albumDescription = null;
-var albumId = null;
+.activity-feed {
+  padding: 15px;
+  max-height: 350px;
+  overflow-y:scroll; 
+}
+.activity-feed .feed-item {
+  position: relative;
+  padding-bottom: 20px;
+  padding-left: 30px;
+  border-left: 2px solid #e4e8eb;
+}
+.activity-feed .feed-item:last-child {
+  border-color: transparent;
+}
+.activity-feed .feed-item:after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: -6px;
+  width: 10px;
+  height: 10px;
+  border-radius: 6px;
+  background: #fff;
+  border: 1px solid #f37167;
+}
+.activity-feed .feed-item .date {
+  position: relative;
+  top: -5px;
+  color: #8c96a3;
+  text-transform: uppercase;
+  font-size: 13px;
+}
+.activity-feed .feed-item .text {
+  position: relative;
+  top: -3px;
+}
+  .blogShort{ border-bottom:1px solid #ddd;}
+.add{background: #333; padding: 10%; height: 300px;}
 
-$(document).on("click", ".open-update_dialog", function () {
-     albumName = $(this).data('title');
-     $(".modal-body #albumName").val(albumName);
-     albumDescription = $(this).data('description');
-     $(".modal-body #albumDescription").val(albumDescription);
-     albumId = $(this).data('id');
+.nav-sidebar { 
+    width: 100%;
+    padding: 8px 0; 
+    border-right: 1px solid #ddd;
+}
+.nav-sidebar a {
+    color: #333;
+    -webkit-transition: all 0.08s linear;
+    -moz-transition: all 0.08s linear;
+    -o-transition: all 0.08s linear;
+    transition: all 0.08s linear;
+}
+.nav-sidebar .active a { 
+    cursor: default;
+    background-color: #34ca78; 
+    color: #fff; 
+}
+.nav-sidebar .active a:hover {
+    background-color: #37D980;   
+}
+.nav-sidebar .text-overflow a,
+.nav-sidebar .text-overflow .media-body {
+    white-space: nowrap;
+    overflow: hidden;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis; 
+}
 
-    // Update Collection Button
-    $("#update_form").on("submit", function(e) {
-        var postData2 =  $(this).serializeArray();
-        postData2.push({name: "photoCollectionId", value: albumId});
-        var formURL = $(this).attr("action");
-        $.ajax({
-            url: formURL,
-            type: "POST",
-            data: postData2,
-            success: function(data, textStatus, jqXHR) {
-                $('#update_dialog .modal-header .modal-title').html("Result");
-                $('#update_dialog .modal-body').html(data);
-                $("#submitForm2").remove();
-            },
-            error: function(jqXHR, status, error) {
-                console.log(status + ": " + error);
-            }
-        });
-        e.preventDefault();
-    });
-
-    $("#submitForm2").on('click', function() {
-        $("#update_form").submit();
-    });
-});
-
-// Delete Collection
-var deletealbumName = null;
-
-$(document).on("click", ".open-delete_dialog", function () {
-     deletealbumName = $(this).data('title');
-     $(".modal-body #deletealbumName").val(deletealbumName);
-     albumId = $(this).data('id');
-
-    // Delete Collection Button
-    $("#delete_form").on("submit", function(e) {
-        var postData3 =  $(this).serializeArray();
-        postData3.push({name: "photoCollectionId", value: albumId});
-        var formURL = $(this).attr("action");
-        $.ajax({
-            url: formURL,
-            type: "POST",
-            data: postData3,
-            success: function(data, textStatus, jqXHR) {
-                $('#delete_dialog .modal-header .modal-title').html("Result");
-                $('#delete_dialog .modal-body').html(data);
-                $("#submitForm3").remove();
-            },
-            error: function(jqXHR, status, error) {
-                console.log(status + ": " + error);
-            }
-        });
-        e.preventDefault();
-    });
-
-    $("#submitForm3").on('click', function() {
-        $("#delete_form").submit();
-    });
-});
-
-</script>
+.btn-blog {
+    color: #ffffff;
+    background-color: #37d980;
+    border-color: #37d980;
+    border-radius:0;
+    margin-bottom:10px
+}
+.btn-blog:hover,
+.btn-blog:focus,
+.btn-blog:active,
+.btn-blog.active,
+.open .dropdown-toggle.btn-blog {
+    color: white;
+    background-color:#34ca78;
+    border-color: #34ca78;
+}
+ h2{color:#34ca78;}
+ .margin10{margin-bottom:10px; margin-right:10px;}
+</style>

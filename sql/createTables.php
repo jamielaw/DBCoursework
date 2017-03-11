@@ -71,6 +71,7 @@ $createAnnotationsTable = "CREATE TABLE IF NOT EXISTS MyDB.annotations(
   coordinateX INT,
   coordinateY INT,
   annotationText VARCHAR(255) ,
+  dateCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY(annotationsId),
   FOREIGN KEY(photoId) REFERENCES MyDB.photos(photoId),
   FOREIGN KEY(email) REFERENCES MyDB.users(email)
@@ -138,14 +139,21 @@ $createMessagesTable = "CREATE TABLE IF NOT EXISTS MyDB.messages(
   dateCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY(messageId)
 )";
+// Create table for privacy titles
+$createPrivacyTitles = "CREATE TABLE IF NOT EXISTS MyDB.privacyTitles(
+  privacyTitleId INT NOT NULL AUTO_INCREMENT,
+  privacySettingsDescription VARCHAR(200) NOT NULL,
+  PRIMARY KEY(privacyTitleId)
+)";
 // Create table for privacy settings
 $createPrivacySettingsTable = "CREATE TABLE IF NOT EXISTS MyDB.privacySettings(
   privacySettingsId INT NOT NULL AUTO_INCREMENT,
+  privacyTitleId INT NOT NULL,
   email VARCHAR(50) NOT NULL,
-  privacySettingsTitle VARCHAR(255) ,
-  privacySettingsDescription VARCHAR(255) ,
-  PRIMARY KEY(privacySettingsId),
-  FOREIGN KEY(email) REFERENCES MyDB.users(email)
+  privacyType VARCHAR(100) DEFAULT 'anyone',
+  PRIMARY KEY(privacySettingsId, privacyTitleId),
+  FOREIGN KEY(email) REFERENCES MyDB.users(email),
+  FOREIGN KEY(privacyTitleId) REFERENCES MyDB.privacyTitles(privacyTitleId)
 )";
 $creatingTables = [ //make sure you create in the right order! foreign keys must refer to a primary key in an existing table
     //$dropDatabase, //uncomment this if there is a wrong format in any table
@@ -157,6 +165,7 @@ $creatingTables = [ //make sure you create in the right order! foreign keys must
     $createFriendshipsTable,
     $createBlogsTable,
     $createPostsTable,
+    $createPrivacyTitles,
     $createPrivacySettingsTable,
     $createCircleOfFriendsTable,
     $createMessagesTable,

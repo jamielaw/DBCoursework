@@ -4,12 +4,12 @@
 
   // Given "string", returns "'string'" - useful for SQL queries
   function wrapArgument($arg){
+
     return "'" . $arg . "'";
   }
   // Removes spaces
   function removeSpaces($arg){
-
-    return str_replace(' ', '', htmlspecialchars($arg));
+    return str_replace(' ', '', $arg);
   }
   // All functions should be moved to utils.php at some point
   function redirect($url) {
@@ -24,16 +24,24 @@
   $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 
-  $sql = "UPDATE MyDB.users SET
-  email=" . removeSpaces(wrapArgument($_POST['email'])) .  ","
-  . "firstName=" . removeSpaces(wrapArgument($_POST['firstName'])) .  ","
-  . "lastName=" . removeSpaces(wrapArgument($_POST['lastName'])) .  ","
-  . "profileImage =" . removeSpaces(wrapArgument($_POST['profileImage'])) .  ","
-  . "profileDescription =" . wrapArgument($_POST['profileDescription'])
-  . " WHERE email='" . removeSpaces($_POST['argument1']) . "'";
+  $sql = "UPDATE MyDB.circleOfFriends SET "
+  . "circleOfFriendsName=" . wrapArgument( htmlspecialchars($_POST['circleOfFriendsName']))
+  . " WHERE circleFriendsId=" . htmlspecialchars($_POST['circleFriendsId']);
 
 
-  $pdo->exec($sql);
+    $q = $pdo->prepare($sql);
+    $q->execute();
+
+
+  //   echo $q->rowCount() . " records UPDATED successfully";
+  // }
+  // catch(PDOException $e)
+  // {
+  //   echo $sql . "<br>" . $e->getMessage();
+  // }
+
+
+
 
   // Need to handle error catching etc
 
@@ -41,5 +49,10 @@
 
   // Direct back to sn/admin
   redirect('../../admin/');
+
+
+
+
+
 
 ?>

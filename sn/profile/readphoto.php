@@ -4,7 +4,6 @@
     $description = "A far superior social network";
     include("../inc/header.php");
     include("../inc/nav-trn.php");
-      //require '../database.php';
 
     $email=$loggedInUser;
     $photoId = null;
@@ -12,6 +11,9 @@
     $imageReference = null;
     $comment = null;
     $ok=1;
+
+    if(strcmp($loggedInUser, $email)==0) {$userAccess='hidden'; $adminAccess='true';}else{$userAccess='true'; $adminAccess='hidden';}
+
     if (!empty($_GET['photoId'])) {
         $photoId = $_REQUEST['photoId'];
     }
@@ -156,8 +158,7 @@
 
     <div class="col-sm-9">
       <br>
-      <button class="btn btn-info">Access Rights</button>
-      <button data-title = <?php echo $photoId?> class="open-delete_dialog btn btn-danger" data-toggle="modal" href="#delete_dialog">Delete Photo</button>
+      <button style="visibility: <?php echo $userAccess ?>" data-title = <?php echo $photoId?> class="open-delete_dialog btn btn-danger" data-toggle="modal" href="#delete_dialog">Delete Photo</button>
       <h4>Leave a Comment:</h4>
       <form action="readphoto.php">
         <div class="form-group">
@@ -185,7 +186,7 @@
 					 </div>
 					 <div class="modal-footer">
 					    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-					    <button type="button" id="submitForm3" class="btn btn-danger">Delete</button>
+					    <button style="visibility: <?php echo $userAccess ?>" type="button" id="submitForm3" class="btn btn-danger">Delete</button>
 					 </div>
 				 </div>
 			 </div>

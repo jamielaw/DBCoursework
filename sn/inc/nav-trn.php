@@ -74,7 +74,7 @@
                   <ul class=\"dropdown-menu\">
                     <li><a href=\"/sn/profile/readprofile.php?email=" . $loggedInUser . "\"><i class=\"fa fa-user\"></i> My Profile</a></li>
                     <li><a href=\"/sn/profile/settings.php\"><i class=\"fa fa-cog\"></i> Settings</a></li>
-                    <li><a href=\"/loginTest/logout.php\"><i class=\"fa fa-sign-out\"></i> Logout</a></li>
+                    <li><a href=\"/sn/logout.php\"><i class=\"fa fa-sign-out\"></i> Logout</a></li>
                   </ul>";
                     echo "</li>";
 
@@ -94,7 +94,7 @@
                   }
 
                   echo "<li><a href=\"/sn/profile/messages.php\"><i class=\"fa fa-comments\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Your messages\"></i></a></li>
-                  
+
                   <li><a href=\"/sn/circles/index.php\">Circles</a></li>
                   <li><a href=\"/sn/blog/index.php\">Blog</a></li>
                   <li><a href=\"/sn/explore/index.php\">Explore</a></li>"; //<li><a href=\"/sn/profile/readprofile.php?email=".$loggedInUser."#pictures\"><i class=\"fa fa-picture-o\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Your photos\"></i></a></li>

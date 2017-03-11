@@ -1,7 +1,13 @@
 <?php
+session_start();
 require 'database.php';
 
-$loggedInUser='charles@ucl.ac.uk';
+if (isset($_SESSION['loggedInUserEmail'])) {
+  $loggedInUser= $_SESSION['loggedInUserEmail'];
+} else {
+  echo "You are not logged in";
+}
+//$loggedInUser='charles@ucl.ac.uk';
 
 //Getting user data
 $pdo = Database::connect();

@@ -12,7 +12,7 @@
         <div class="row">
           <h3>Social Media System</h3>
         </div>
-        <form action="signup.php" method="POST">
+        <form action="signup2.php" method="POST">
           <input type="text" name="first" placeholder="First Name">
           <br>
           <input type="text" name="last" placeholder="Last Name">

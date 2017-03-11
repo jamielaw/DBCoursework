@@ -4,7 +4,6 @@
   $email = $_POST['email'];
   $user_password = $_POST['pwd'];
 
-  echo $user_password;
 
   $pdo = Database::connect();
   $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -13,34 +12,34 @@
   $q->execute(array($email));
   $loginAttemptResult = $q->fetch();
 
-  echo $loginAttemptResult["user_password"];
+  // echo $loginAttemptResult["user_password"];
 
   // Surely this
-  echo "<br>";
-  password_verify($user_password, PASSWORD_DEFAULT);
-  echo '<br/>';
+  // echo "<br>";
+  // password_verify($user_password, PASSWORD_DEFAULT);
+  // echo '<br/>';
   // and this should match?
 
-  echo '<br/>';
+  // echo '<br/>';
 
   // Anyway let's check to see if they do...
   $answer = password_verify($user_password, $loginAttemptResult["user_password"]);
-  echo $answer == TRUE ? 'TRUE' : 'FALSE'; // we want TRUE, atm not getting it I think....
-  echo '<br/>';
+  // echo $answer == TRUE ? 'TRUE' : 'FALSE'; // we want TRUE, atm not getting it I think....
+  // echo '<br/>';
   // user password_verfiy on the returned user_password from DB against the enterered $user_password
   if( $email == $loginAttemptResult["email"]) {
-    echo "Success on email";
-    echo '<br/>';
+    // echo "Success on email";
+    // echo '<br/>';
      if ( password_verify($user_password, $loginAttemptResult["user_password"])) {
-       echo "Your password is correct";
+      //  echo "Your password is correct";
        $_SESSION['loggedInUserEmail'] = $email;
        redirect("profile/index.php");
      } else {
-       echo "Your password is incorrect, or something is wrong.";
+      //  echo "Your password is incorrect, or something is wrong.";
      }
 
   } else {
-    echo "Your username incorrect!";
+    // echo "Your username incorrect!";
   }
 
   // if (!$row = mysqli_fetch_assoc($result)) {

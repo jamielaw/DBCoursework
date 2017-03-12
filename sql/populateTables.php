@@ -1,4 +1,6 @@
 <?php
+
+$password = password_hash("pass", PASSWORD_DEFAULT);
 //require '../sn/database.php'; //uncomment this if you need to call this individual script
 $pdo = Database::connect();
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -17,16 +19,16 @@ $insertRightsTable = "INSERT INTO MyDB.rights (roleID,rightTitle,rightDescriptio
 (1, \"Edit User's Blog Posts\", \"The user has the right to edit other user's blog posts\"),
 (1, \"Edit User's Blog\", \"The user has the right to edit other user's blog\")";
 $insertUsersTable = "INSERT INTO MyDB.users (email,roleID,user_password,firstName,lastName,profileImage) VALUES
-(\"alan@ucl.ac.uk\",2,\"test\",\"Alan\",\"Turing\",\"/images/profile/alan@ucl.ac.uk.jpg\"),
-(\"ada@ucl.ac.uk\",2,\"test\",\"Ada\",\"Lovelace\",\"/images/profile/ada@ucl.ac.uk.jpg\"),
-(\"grace@ucl.ac.uk\",2,\"test\",\"Grace\",\"Hopper\",\"/images/profile/grace@ucl.ac.uk.jpg\"),
-(\"john@ucl.ac.uk\",2,\"test\",\"John\",\"von Neumann\",\"/images/profile/john@ucl.ac.uk.jpg\"),
-(\"tim@ucl.ac.uk\",2,\"test\",\"Tim\",\"Berners-Lee\",\"/images/profile/tim@ucl.ac.uk.jpg\"),
-(\"dennis@ucl.ac.uk\",2,\"test\",\"Dennis\",\"Ritchie\",\"/images/profile/dennis@ucl.ac.uk.jpg\"),
-(\"ken@ucl.ac.uk\",2,\"test\",\"Ken\",\"Thompson\",\"/images/profile/ken@ucl.ac.uk.jpg\"),
-(\"larry@ucl.ac.uk\",2,\"test\",\"Larry\",\"Page\",\"/images/profile/larry@ucl.ac.uk.jpg\"),
-(\"charles@ucl.ac.uk\",1,\"test\",\"Charles\",\"Babbage\",\"/images/profile/charles@ucl.ac.uk.jpg\"),
-(\"vicky@ucl.ac.uk\",1,\"test\",\"Vicky\",\"LovesPHP\",\"/images/profile/vicky@ucl.ac.uk.jpg\")";
+(\"alan@ucl.ac.uk\",2,  \"$password\" ,\"Alan\",\"Turing\",\"/images/profile/alan@ucl.ac.uk.jpg\"),
+(\"ada@ucl.ac.uk\",2,\"$password\",\"Ada\",\"Lovelace\",\"/images/profile/ada@ucl.ac.uk.jpg\"),
+(\"grace@ucl.ac.uk\",2,\"$password\",\"Grace\",\"Hopper\",\"/images/profile/grace@ucl.ac.uk.jpg\"),
+(\"john@ucl.ac.uk\",2,\"$password\",\"John\",\"von Neumann\",\"/images/profile/john@ucl.ac.uk.jpg\"),
+(\"tim@ucl.ac.uk\",2,\"$password\",\"Tim\",\"Berners-Lee\",\"/images/profile/tim@ucl.ac.uk.jpg\"),
+(\"dennis@ucl.ac.uk\",2,\"$password\",\"Dennis\",\"Ritchie\",\"/images/profile/dennis@ucl.ac.uk.jpg\"),
+(\"ken@ucl.ac.uk\",2,\"$password\",\"Ken\",\"Thompson\",\"/images/profile/ken@ucl.ac.uk.jpg\"),
+(\"larry@ucl.ac.uk\",2,\"$password\",\"Larry\",\"Page\",\"/images/profile/larry@ucl.ac.uk.jpg\"),
+(\"charles@ucl.ac.uk\",1,\"$password\",\"Charles\",\"Babbage\",\"/images/profile/charles@ucl.ac.uk.jpg\"),
+(\"vicky@ucl.ac.uk\",1,\"$password\",\"Vicky\",\"LovesPHP\",\"/images/profile/vicky@ucl.ac.uk.jpg\")";
 $insertFriendshipTable = "INSERT INTO MyDB.friendships (emailFrom,emailTo,status) VALUES
 (\"charles@ucl.ac.uk\",\"larry@ucl.ac.uk\",\"accepted\"),
 (\"charles@ucl.ac.uk\",\"ken@ucl.ac.uk\",\"accepted\"),

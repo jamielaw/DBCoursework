@@ -5,7 +5,7 @@ require 'database.php';
 if (isset($_SESSION['loggedInUserEmail'])) {
   $loggedInUser= $_SESSION['loggedInUserEmail'];
 } else {
-  echo "You are not logged in";
+  //echo "You are not logged in";
 }
 //$loggedInUser='charles@ucl.ac.uk';
 

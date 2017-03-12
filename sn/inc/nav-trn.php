@@ -52,12 +52,6 @@
           require("$root/sn/session.php");
           $pdo = Database::connect();
           $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-          if (isset($_SESSION['id'])) {
-            $isLoggedIn=1;
-          }else{
-            $isLoggedIn=0;
-          }
-          $isLoggedIn=1;
           if($_SESSION['loggedInUserEmail']){ //if user is logged in, display relevant navbar
                     echo "<a class=\"navbar-brand\" href=\"\sn\profile\">BookFace</a>";
                     echo "<div class=\"collapse navbar-collapse\">

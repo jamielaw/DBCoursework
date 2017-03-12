@@ -58,7 +58,7 @@
             $isLoggedIn=0;
           }
           $isLoggedIn=1;
-          if($isLoggedIn){ //if user is logged in, display relevant navbar
+          if($_SESSION['loggedInUserEmail']){ //if user is logged in, display relevant navbar
                     echo "<a class=\"navbar-brand\" href=\"\sn\profile\">BookFace</a>";
                     echo "<div class=\"collapse navbar-collapse\">
                     <ul class=\"nav navbar-nav\">
@@ -121,8 +121,8 @@
           echo "<a class=\"navbar-brand\">BookFace</a>";
           echo "<div class=\"collapse navbar-collapse\">
                     <ul class=\"nav navbar-nav\">
-                    <li><a href=\"/loginTest/login.php\">Log In</a></li>
-                    <li><a href=\"/loginTest/signup.php\">Sign Up</a></li>
+                    <li><a href=\"/sn/index.php\">Log In</a></li>
+                    <li><a href=\"/sn/index.php\">Sign Up</a></li>
                 </div>";
         }
         Database::disconnect();

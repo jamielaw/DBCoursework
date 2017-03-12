@@ -8,6 +8,16 @@ session_start();
   <body>
     <!--  No Navigation because this is a page for those who aren't authenticated -->
       <!--  LOGIN -->
+      <?php
+      $status = $_GET['status'];
+      if($status == 1){
+      ?>
+        <div class="error-msg">
+          You entered the wrong username or password
+        </div>
+      <?php
+      }
+      ?>
       <div class="container">
         <h1 style="text-align:center;"> BookFace </h1>
         <div class="row">

@@ -35,12 +35,13 @@
        $_SESSION['loggedInUserEmail'] = $email;
        redirect("profile/index.php");
      } else {
-      echo "Your password is incorrect, or something is wrong.";
+      //echo "Your password is incorrect, or something is wrong.";
+      redirect("../sn/index.php?status=1");
      }
 
   } else {
     // echo "Your username incorrect!";
-    redirect("..");
+    redirect("../sn/index.php?status=2");
   }
 
   // if (!$row = mysqli_fetch_assoc($result)) {

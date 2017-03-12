@@ -13,6 +13,26 @@ session_start();
       if($status == 1){
       ?>
         <div class="error-msg">
+          You entered the wrong password
+        </div>
+      <?php
+      }
+      ?>
+      <?php
+      $status = $_GET['status'];
+      if($status == 2){
+      ?>
+        <div class="error-msg">
+          This email does not exist.
+        </div>
+      <?php
+      }
+      ?>
+      <?php
+      $status = $_GET['status'];
+      if($status == 3){
+      ?>
+        <div class="error-msg">
           You entered the wrong username or password
         </div>
       <?php

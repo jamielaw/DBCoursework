@@ -38,6 +38,16 @@ session_start();
       <?php
       }
       ?>
+      <?php
+      $status = $_GET['status'];
+      if($status == 4){
+      ?>
+        <div class="error-msg" style="border-color:green; color:green;">
+          User created! Please log in.
+        </div>
+      <?php
+      }
+      ?>
       <div class="container">
         <h1 style="text-align:center;"> BookFace </h1>
         <div class="row">

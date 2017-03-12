@@ -75,18 +75,20 @@ session_start();
 									</div>
 								</form>
 								<form id="register-form" action="signup.php" method="post" role="form" style="display: none;">
-                  <div class="register-msg">
-
-                  </div>
+                  <div id="register-msg"></div>
                   <div class="form-group">
 										<input type="email" name="email" id="signup-email" tabindex="1" class="form-control" placeholder="Email Address*" value="">
 									</div>
+                  <div id="register-msg-first"></div>
 									<div class="form-group">
 										<input type="text" name="first" id="signup-first" tabindex="1" class="form-control" placeholder="First name*" value="">
 									</div>
+                  <div id="register-msg-last"></div>
+
                   <div class="form-group">
 										<input type="text" name="last" id="signup-last" tabindex="1" class="form-control" placeholder="Last name*" value="">
 									</div>
+                  <div id="register-msg-pwd"></div>
 									<div class="form-group">
 										<input type="password" name="pwd" id="signup-password" tabindex="2" class="form-control" placeholder="Password">
 									</div>
@@ -190,17 +192,17 @@ session_start();
               data = JSON.parse(data);
               console.log(data);
               if(data['free'] == true){
-                $(".register-msg").html("A valid email");
+                $("#register-msg").html("A valid email");
                 fieldSuccess('signup-email');
               }else{
-                $(".register-msg").html("This email already exists");
+                $("#register-msg").html("This email already exists");
                 fieldError('signup-email');
 
               }
           });
         }else{
           // invalid email
-          $(".register-msg").html("Please enter a valid email address");
+          $("#register-msg").html("Please enter a valid email address");
           fieldError('signup-email');
 
         }
@@ -221,8 +223,36 @@ session_start();
 
     }
 
-    $("#signup-confirm-pwd").keyup(function(){
-      if($(this.val() != $('#signup=pwd')))
+    $("#signup-confirm-password").keyup(function(){
+      // console.log("here");
+
+      if( $("#signup-confirm-password").val() == $('#signup-password').val() ){
+        fieldSuccess("signup-confirm-password");
+        fieldSuccess("signup-password");
+
+        $("#register-msg-pwd").html("Passwords okay!");
+      }else{
+        $("#register-msg-pwd").html("Passwords don't match!");
+        fieldError("signup-password");
+        fieldError("signup-confirm-password");
+
+      }
+    })
+
+    $("#signup-password").keyup(function(){
+      // console.log("here");
+
+      if( $("#signup-confirm-password").val() == $('#signup-password').val() ){
+        fieldSuccess("signup-confirm-password");
+        fieldSuccess("signup-password");
+
+        $("#register-msg-pwd").html("Passwords okay!");
+      }else{
+        $("#register-msg-pwd").html("Passwords don't match!");
+        fieldError("signup-password");
+        fieldError("signup-confirm-password");
+
+      }
     })
 
 

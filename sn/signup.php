@@ -5,7 +5,6 @@
   $email = $_POST['email'];
   $user_password = $_POST["pwd"];
 
-  echo $email;
   //pls add this xx, as well as profile image? either that or create a placeholder image and refer to that
   $pdo = Database::connect();
   $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -30,7 +29,7 @@
   $q->execute();
 
   Database::disconnect();
-  echo $email . " user has been created! You can now login.";
+  // echo $email . " user has been created! You can now login.";
   //is this sql statement above correct? shouldn't it be MyDB.users. the formatting is also incorrect, it should follow the format
   //(email,roleID,user_password,firstName,lastName,profileImage) - Jamie
 
@@ -42,4 +41,13 @@
   //$result = mysqli_query($conn, $sql);
 
   //header("Location: index.php");
+  redirect('/sn/index.php?status=4');
+
+
+  function redirect($url) {
+    ob_start();
+    header('Location: '.$url);
+    ob_end_flush();
+    die();
+  }
  ?>

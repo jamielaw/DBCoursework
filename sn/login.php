@@ -35,7 +35,7 @@
        $_SESSION['loggedInUserEmail'] = $email;
        redirect("profile/index.php");
      } else {
-      //  echo "Your password is incorrect, or something is wrong.";
+      echo "Your password is incorrect, or something is wrong.";
      }
 
   } else {

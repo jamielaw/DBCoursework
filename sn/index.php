@@ -171,7 +171,7 @@ session_start();
 
 
     var typingTimer;                //timer identifier
-    var doneTypingInterval = 2000;  //time in ms (5 seconds)
+    var doneTypingInterval = 1000;  //time in ms (5 seconds)
 
     //on keyup, start the countdown
     $('#signup-email').keyup(function(){
@@ -208,7 +208,21 @@ session_start();
         }
     }
 
+    $('#signup-email').keyup(function(){
+      var testEmail = $('#signup-email').val();
+      testEmail = testEmail.replace(/\s/g, "");
+      if(testEmail.length == 0){
+        $("#register-msg").html("Please enter a valid email address");
+        fieldError('signup-email');
+
+      }
+    })
+
+
     function validateEmail(email) {
+      console.log("ere" + email);
+      if(email.length == 0) return false;
+
       var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       //console.log(email);
       return re.test(email);
@@ -254,6 +268,62 @@ session_start();
 
       }
     })
+
+
+  $("#signup-first").keyup(function(){
+
+
+    var val = $("#signup-first").val();
+
+    var matches = val.match(/\d+/g);
+
+    if(matches != null ){
+      fieldError("signup-first");
+      $("#register-msg-first").html("Numbers not allowed!");
+
+    }else{
+      val = val.toString().replace(/\s/g, "");
+
+      console.log(val);
+      if( val.length > 0){
+        fieldSuccess("signup-first");
+        $("#register-msg-first").html("");
+
+      }else{
+        fieldError("signup-first");
+        $("#register-msg-first").html("First name is a required field");
+
+      }
+    }
+
+
+  });
+
+  $("#signup-last").keyup(function(){
+    var val = $("#signup-last").val();
+
+    var matches = val.match(/\d+/g);
+
+    if(matches != null ){
+      fieldError("signup-last");
+      $("#register-msg-last").html("Numbers not allowed!");
+
+    }else{
+      val = val.toString().replace(/\s/g, "");
+
+      console.log(val);
+      if( val.length > 0){
+        fieldSuccess("signup-last");
+        $("#register-msg-last").html("");
+
+      }else{
+        fieldError("signup-last");
+        $("#register-msg-last").html("Last name is a required field");
+
+      }
+    }
+  });
+
 
 
 

@@ -75,20 +75,23 @@ session_start();
 									</div>
 								</form>
 								<form id="register-form" action="signup.php" method="post" role="form" style="display: none;">
+                  <div class="register-msg">
+
+                  </div>
+                  <div class="form-group">
+										<input type="email" name="email" id="signup-email" tabindex="1" class="form-control" placeholder="Email Address*" value="">
+									</div>
 									<div class="form-group">
-										<input type="text" name="first" id="first" tabindex="1" class="form-control" placeholder="First name" value="">
+										<input type="text" name="first" id="signup-first" tabindex="1" class="form-control" placeholder="First name*" value="">
 									</div>
                   <div class="form-group">
-										<input type="text" name="last" id="last" tabindex="1" class="form-control" placeholder="Last name" value="">
+										<input type="text" name="last" id="signup-last" tabindex="1" class="form-control" placeholder="Last name*" value="">
 									</div>
 									<div class="form-group">
-										<input type="email" name="email" id="email" tabindex="1" class="form-control" placeholder="Email Address" value="">
+										<input type="password" name="pwd" id="signup-password" tabindex="2" class="form-control" placeholder="Password">
 									</div>
 									<div class="form-group">
-										<input type="password" name="pwd" id="password" tabindex="2" class="form-control" placeholder="Password">
-									</div>
-									<div class="form-group">
-										<input type="password" name="confirm-pwd" id="confirm-password" tabindex="2" class="form-control" placeholder="Confirm Password">
+										<input type="password" name="confirm-pwd" id="signup-confirm-password" tabindex="2" class="form-control" placeholder="Confirm Password">
 									</div>
 									<div class="form-group">
 										<div class="row">
@@ -161,7 +164,70 @@ session_start();
     		e.preventDefault();
     	});
 
+
     });
+
+
+    var typingTimer;                //timer identifier
+    var doneTypingInterval = 2000;  //time in ms (5 seconds)
+
+    //on keyup, start the countdown
+    $('#signup-email').keyup(function(){
+        clearTimeout(typingTimer);
+        if ($('#signup-email').val()) {
+            typingTimer = setTimeout(doneTyping, doneTypingInterval);
+        }
+    });
+
+    //user is "finished typing," do something
+    function doneTyping () {
+        //check if its an email
+        console.log("here");
+        var testEmail = $('#signup-email').val();
+        if(validateEmail(testEmail)){
+          // valid email
+          $.get("checkEmail.php?email="+testEmail, function(data){
+              data = JSON.parse(data);
+              console.log(data);
+              if(data['free'] == true){
+                $(".register-msg").html("A valid email");
+                fieldSuccess('signup-email');
+              }else{
+                $(".register-msg").html("This email already exists");
+                fieldError('signup-email');
+
+              }
+          });
+        }else{
+          // invalid email
+          $(".register-msg").html("Please enter a valid email address");
+          fieldError('signup-email');
+
+        }
+    }
+
+    function validateEmail(email) {
+      var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      //console.log(email);
+      return re.test(email);
+    }
+
+    function fieldError(ref){
+      $("#"+ref).css("border-color","red");
+    }
+
+    function fieldSuccess(ref){
+      $("#"+ref).css("border-color","green");
+
+    }
+
+    $("#signup-confirm-pwd").keyup(function(){
+      if($(this.val() != $('#signup=pwd')))
+    })
+
+
+
+
 
     </script>
 

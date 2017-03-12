@@ -169,6 +169,14 @@ session_start();
 
     });
 
+    var fieldCheck = {
+      'email':false,
+      'firstName': false,
+      'secondName': false,
+      'pass1': false,
+      'pass2': false
+    }
+
 
     var typingTimer;                //timer identifier
     var doneTypingInterval = 1000;  //time in ms (5 seconds)
@@ -194,18 +202,24 @@ session_start();
               if(data['free'] == true){
                 $("#register-msg").html("A valid email");
                 fieldSuccess('signup-email');
+                fieldCheck['email'] = true;
+                activeLink();
               }else{
                 $("#register-msg").html("This email already exists");
                 fieldError('signup-email');
-
+                fieldCheck['email'] = false;
+                activeLink();
               }
           });
         }else{
           // invalid email
           $("#register-msg").html("Please enter a valid email address");
           fieldError('signup-email');
-
+          fieldCheck['email'] = false;
+          activeLink();
         }
+
+        activeLink();
     }
 
     $('#signup-email').keyup(function(){
@@ -214,8 +228,11 @@ session_start();
       if(testEmail.length == 0){
         $("#register-msg").html("Please enter a valid email address");
         fieldError('signup-email');
+        fieldCheck['email'] = false;
 
       }
+
+      activeLink();
     })
 
 
@@ -243,14 +260,20 @@ session_start();
       if( $("#signup-confirm-password").val() == $('#signup-password').val() ){
         fieldSuccess("signup-confirm-password");
         fieldSuccess("signup-password");
-
         $("#register-msg-pwd").html("Passwords okay!");
+        fieldCheck['pass1'] = true;
+        fieldCheck['pass2'] = true;
+
       }else{
         $("#register-msg-pwd").html("Passwords don't match!");
         fieldError("signup-password");
         fieldError("signup-confirm-password");
+        fieldCheck['pass1'] = false;
+        fieldCheck['pass2'] = false;
 
       }
+
+      activeLink();
     })
 
     $("#signup-password").keyup(function(){
@@ -259,14 +282,19 @@ session_start();
       if( $("#signup-confirm-password").val() == $('#signup-password').val() ){
         fieldSuccess("signup-confirm-password");
         fieldSuccess("signup-password");
+        fieldCheck['pass1'] = true;
+        fieldCheck['pass2'] = true;
 
         $("#register-msg-pwd").html("Passwords okay!");
       }else{
         $("#register-msg-pwd").html("Passwords don't match!");
         fieldError("signup-password");
         fieldError("signup-confirm-password");
-
+        fieldCheck['pass1'] = false;
+        fieldCheck['pass2'] = false;
       }
+
+      activeLink();
     })
 
 
@@ -288,15 +316,17 @@ session_start();
       if( val.length > 0){
         fieldSuccess("signup-first");
         $("#register-msg-first").html("");
+        fieldCheck['firstName'] = true;
 
       }else{
         fieldError("signup-first");
         $("#register-msg-first").html("First name is a required field");
+        fieldCheck['firstName'] = false;
 
       }
     }
 
-
+    activeLink();
   });
 
   $("#signup-last").keyup(function(){
@@ -315,14 +345,50 @@ session_start();
       if( val.length > 0){
         fieldSuccess("signup-last");
         $("#register-msg-last").html("");
+        fieldCheck['secondName'] = true;
 
       }else{
         fieldError("signup-last");
         $("#register-msg-last").html("Last name is a required field");
+        fieldCheck['secondName'] = false;
 
       }
     }
+
+    activeLink();
   });
+
+  $("#register-submit").click(function(e){
+    if( fieldCheck['email'] && fieldCheck['firstName']
+        && fieldCheck['secondName'] && fieldCheck['pass1']
+        && fieldCheck['pass2'] ){
+        $("#register-submit").css('background-color','green');
+        }else{
+          $("#register-submit").css('background-color','grey');
+
+      e.preventDefault();
+    }
+  })
+
+  function activeLink(){
+    if( fieldCheck['email'] && fieldCheck['firstName']
+        && fieldCheck['secondName'] && fieldCheck['pass1']
+        && fieldCheck['pass2'] ){
+        $("#register-submit").css('background-color','green');
+        }else{
+          $("#register-submit").css('background-color','grey');
+
+    }
+  }
+
+
+    if( fieldCheck['email'] && fieldCheck['firstName']
+        && fieldCheck['secondName'] && fieldCheck['pass1']
+        && fieldCheck['pass2'] ){
+        $("#register-submit").css('background-color','green');
+        }else{
+          $("#register-submit").css('background-color','grey');
+    }
 
 
 

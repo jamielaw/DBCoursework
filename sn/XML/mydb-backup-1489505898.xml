@@ -1,0 +1,677 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database name="mydb">
+<user name="ada@ucl.ac.uk">
+	<table name="accessRights">
+		<columns>
+			<column name="accessRightsId" orgname="accessRightsId" max_length="2" length="11" charsetnr="63" flags="49667" type="3" decimals="0" is_nullable="NO" column_type="int(11)" column_key="PRI" extra="auto_increment" />
+			<column name="photoCollectionId" orgname="photoCollectionId" max_length="1" length="11" charsetnr="63" flags="53257" type="3" decimals="0" is_nullable="NO" column_type="int(11)" column_key="MUL" referenced_table_name="photoCollection" referenced_column_name="photoCollectionId" />
+			<column name="email" orgname="email" max_length="15" length="150" charsetnr="33" flags="0" type="253" decimals="0" is_nullable="YES" column_type="varchar(50)" />
+			<column name="circleFriendsId" orgname="circleFriendsId" max_length="1" length="11" charsetnr="63" flags="32768" type="3" decimals="0" is_nullable="YES" column_type="int(11)" />
+		</columns>
+		<records>
+			<record>
+				<accessRightsId>1</accessRightsId>
+				<photoCollectionId>1</photoCollectionId>
+				<email>ken@ucl.ac.uk</email>
+				<circleFriendsId></circleFriendsId>
+			</record>
+			<record>
+				<accessRightsId>2</accessRightsId>
+				<photoCollectionId>1</photoCollectionId>
+				<email>vicky@ucl.ac.uk</email>
+				<circleFriendsId></circleFriendsId>
+			</record>
+			<record>
+				<accessRightsId>4</accessRightsId>
+				<photoCollectionId>1</photoCollectionId>
+				<email></email>
+				<circleFriendsId>4</circleFriendsId>
+			</record>
+			<record>
+				<accessRightsId>5</accessRightsId>
+				<photoCollectionId>1</photoCollectionId>
+				<email>grace@ucl.ac.uk</email>
+				<circleFriendsId></circleFriendsId>
+			</record>
+			<record>
+				<accessRightsId>6</accessRightsId>
+				<photoCollectionId>2</photoCollectionId>
+				<email>ken@ucl.ac.uk</email>
+				<circleFriendsId></circleFriendsId>
+			</record>
+			<record>
+				<accessRightsId>7</accessRightsId>
+				<photoCollectionId>2</photoCollectionId>
+				<email>vicky@ucl.ac.uk</email>
+				<circleFriendsId></circleFriendsId>
+			</record>
+			<record>
+				<accessRightsId>9</accessRightsId>
+				<photoCollectionId>2</photoCollectionId>
+				<email></email>
+				<circleFriendsId>4</circleFriendsId>
+			</record>
+			<record>
+				<accessRightsId>10</accessRightsId>
+				<photoCollectionId>2</photoCollectionId>
+				<email>grace@ucl.ac.uk</email>
+				<circleFriendsId></circleFriendsId>
+			</record>
+		</records>
+	</table>
+	<table name="annotations">
+		<columns>
+			<column name="annotationsId" orgname="annotationsId" max_length="1" length="11" charsetnr="63" flags="49667" type="3" decimals="0" is_nullable="NO" column_type="int(11)" column_key="PRI" extra="auto_increment" />
+			<column name="photoId" orgname="photoId" max_length="1" length="11" charsetnr="63" flags="49160" type="3" decimals="0" is_nullable="YES" column_type="int(11)" column_key="MUL" referenced_table_name="photos" referenced_column_name="photoId" />
+			<column name="email" orgname="email" max_length="17" length="150" charsetnr="33" flags="20489" type="253" decimals="0" is_nullable="NO" column_type="varchar(50)" column_key="MUL" referenced_table_name="users" referenced_column_name="email" />
+			<column name="coordinateX" orgname="coordinateX" max_length="2" length="11" charsetnr="63" flags="32768" type="3" decimals="0" is_nullable="YES" column_type="int(11)" />
+			<column name="coordinateY" orgname="coordinateY" max_length="2" length="11" charsetnr="63" flags="32768" type="3" decimals="0" is_nullable="YES" column_type="int(11)" />
+			<column name="annotationText" orgname="annotationText" max_length="12" length="765" charsetnr="33" flags="0" type="253" decimals="0" is_nullable="YES" column_type="varchar(255)" />
+			<column name="dateCreated" orgname="dateCreated" max_length="19" length="19" charsetnr="63" flags="1153" type="7" decimals="0" is_nullable="NO" column_type="timestamp" />
+		</columns>
+		<records>
+		</records>
+	</table>
+	<table name="blogs">
+		<columns>
+			<column name="blogId" orgname="blogId" max_length="1" length="11" charsetnr="63" flags="49667" type="3" decimals="0" is_nullable="NO" column_type="int(11)" column_key="PRI" extra="auto_increment" />
+			<column name="email" orgname="email" max_length="17" length="150" charsetnr="33" flags="20489" type="253" decimals="0" is_nullable="NO" column_type="varchar(50)" column_key="MUL" referenced_table_name="users" referenced_column_name="email" />
+			<column name="blogTitle" orgname="blogTitle" max_length="38" length="765" charsetnr="33" flags="0" type="253" decimals="0" is_nullable="YES" column_type="varchar(255)" />
+			<column name="blogDescription" orgname="blogDescription" max_length="76" length="765" charsetnr="33" flags="0" type="253" decimals="0" is_nullable="YES" column_type="varchar(255)" />
+			<column name="dateCreated" orgname="dateCreated" max_length="19" length="19" charsetnr="63" flags="1153" type="7" decimals="0" is_nullable="NO" column_type="timestamp" />
+		</columns>
+		<records>
+		</records>
+	</table>
+	<table name="circleOfFriends">
+		<columns>
+			<column name="circleFriendsId" orgname="circleFriendsId" max_length="1" length="11" charsetnr="63" flags="49667" type="3" decimals="0" is_nullable="NO" column_type="int(11)" column_key="PRI" extra="auto_increment" />
+			<column name="circleOfFriendsName" orgname="circleOfFriendsName" max_length="16" length="150" charsetnr="33" flags="0" type="253" decimals="0" is_nullable="YES" column_type="varchar(50)" />
+			<column name="dateCreated" orgname="dateCreated" max_length="19" length="19" charsetnr="63" flags="1153" type="7" decimals="0" is_nullable="NO" column_type="timestamp" />
+		</columns>
+		<records>
+			<record>
+				<circleFriendsId>1</circleFriendsId>
+				<circleOfFriendsName>lmao</circleOfFriendsName>
+				<dateCreated>2017-03-14 15:25:29</dateCreated>
+			</record>
+			<record>
+				<circleFriendsId>2</circleFriendsId>
+				<circleOfFriendsName>lol</circleOfFriendsName>
+				<dateCreated>2017-03-14 15:25:29</dateCreated>
+			</record>
+			<record>
+				<circleFriendsId>3</circleFriendsId>
+				<circleOfFriendsName>The CS Friends</circleOfFriendsName>
+				<dateCreated>2017-03-14 15:25:29</dateCreated>
+			</record>
+			<record>
+				<circleFriendsId>4</circleFriendsId>
+				<circleOfFriendsName>The Science Club</circleOfFriendsName>
+				<dateCreated>2017-03-14 15:25:29</dateCreated>
+			</record>
+		</records>
+	</table>
+	<table name="comments">
+		<columns>
+			<column name="commentId" orgname="commentId" max_length="1" length="11" charsetnr="63" flags="49667" type="3" decimals="0" is_nullable="NO" column_type="int(11)" column_key="PRI" extra="auto_increment" />
+			<column name="photoId" orgname="photoId" max_length="1" length="11" charsetnr="63" flags="53257" type="3" decimals="0" is_nullable="NO" column_type="int(11)" column_key="MUL" referenced_table_name="photos" referenced_column_name="photoId" />
+			<column name="email" orgname="email" max_length="17" length="150" charsetnr="33" flags="16392" type="253" decimals="0" is_nullable="YES" column_type="varchar(50)" column_key="MUL" referenced_table_name="users" referenced_column_name="email" />
+			<column name="commentText" orgname="commentText" max_length="123" length="765" charsetnr="33" flags="0" type="253" decimals="0" is_nullable="YES" column_type="varchar(255)" />
+			<column name="dateCreated" orgname="dateCreated" max_length="19" length="19" charsetnr="63" flags="1153" type="7" decimals="0" is_nullable="NO" column_type="timestamp" />
+		</columns>
+		<records>
+		</records>
+	</table>
+	<table name="friendships">
+		<columns>
+			<column name="friendshipID" orgname="friendshipID" max_length="2" length="11" charsetnr="63" flags="49667" type="3" decimals="0" is_nullable="NO" column_type="int(11)" column_key="PRI" extra="auto_increment" />
+			<column name="emailFrom" orgname="emailFrom" max_length="17" length="150" charsetnr="33" flags="4097" type="253" decimals="0" is_nullable="NO" column_type="varchar(50)" />
+			<column name="emailTo" orgname="emailTo" max_length="17" length="150" charsetnr="33" flags="4097" type="253" decimals="0" is_nullable="NO" column_type="varchar(50)" />
+			<column name="status" orgname="status" max_length="8" length="60" charsetnr="33" flags="0" type="253" decimals="0" is_nullable="YES" column_type="varchar(20)" />
+		</columns>
+		<records>
+			<record>
+				<friendshipID>3</friendshipID>
+				<emailFrom>charles@ucl.ac.uk</emailFrom>
+				<emailTo>ada@ucl.ac.uk</emailTo>
+				<status>accepted</status>
+			</record>
+			<record>
+				<friendshipID>7</friendshipID>
+				<emailFrom>grace@ucl.ac.uk</emailFrom>
+				<emailTo>ada@ucl.ac.uk</emailTo>
+				<status>accepted</status>
+			</record>
+		</records>
+	</table>
+	<table name="messages">
+		<columns>
+			<column name="messageId" orgname="messageId" max_length="1" length="11" charsetnr="63" flags="49667" type="3" decimals="0" is_nullable="NO" column_type="int(11)" column_key="PRI" extra="auto_increment" />
+			<column name="emailTo" orgname="emailTo" max_length="1" length="150" charsetnr="33" flags="4097" type="253" decimals="0" is_nullable="NO" column_type="varchar(50)" />
+			<column name="emailFrom" orgname="emailFrom" max_length="17" length="150" charsetnr="33" flags="4097" type="253" decimals="0" is_nullable="NO" column_type="varchar(50)" />
+			<column name="messageText" orgname="messageText" max_length="11" length="765" charsetnr="33" flags="0" type="253" decimals="0" is_nullable="YES" column_type="varchar(255)" />
+			<column name="dateCreated" orgname="dateCreated" max_length="19" length="19" charsetnr="63" flags="1153" type="7" decimals="0" is_nullable="NO" column_type="timestamp" />
+		</columns>
+		<records>
+		</records>
+	</table>
+	<table name="photoCollection">
+		<columns>
+			<column name="photoCollectionId" orgname="photoCollectionId" max_length="1" length="11" charsetnr="63" flags="49667" type="3" decimals="0" is_nullable="NO" column_type="int(11)" column_key="PRI" extra="auto_increment" />
+			<column name="dateCreated" orgname="dateCreated" max_length="19" length="19" charsetnr="63" flags="1153" type="7" decimals="0" is_nullable="NO" column_type="timestamp" />
+			<column name="title" orgname="title" max_length="17" length="300" charsetnr="33" flags="0" type="253" decimals="0" is_nullable="YES" column_type="varchar(100)" />
+			<column name="description" orgname="description" max_length="0" length="765" charsetnr="33" flags="0" type="253" decimals="0" is_nullable="YES" column_type="varchar(255)" />
+			<column name="createdBy" orgname="createdBy" max_length="17" length="765" charsetnr="33" flags="20489" type="253" decimals="0" is_nullable="NO" column_type="varchar(255)" column_key="MUL" referenced_table_name="users" referenced_column_name="email" />
+		</columns>
+		<records>
+			<record>
+				<photoCollectionId>1</photoCollectionId>
+				<dateCreated>2017-03-14 15:25:29</dateCreated>
+				<title>Conferences</title>
+				<description></description>
+				<createdBy>charles@ucl.ac.uk</createdBy>
+			</record>
+			<record>
+				<photoCollectionId>2</photoCollectionId>
+				<dateCreated>2017-03-14 15:25:29</dateCreated>
+				<title>Difference Engine</title>
+				<description></description>
+				<createdBy>charles@ucl.ac.uk</createdBy>
+			</record>
+		</records>
+	</table>
+	<table name="photos">
+		<columns>
+			<column name="photoId" orgname="photoId" max_length="2" length="11" charsetnr="63" flags="49667" type="3" decimals="0" is_nullable="NO" column_type="int(11)" column_key="PRI" extra="auto_increment" />
+			<column name="photoCollectionId" orgname="photoCollectionId" max_length="1" length="11" charsetnr="63" flags="53257" type="3" decimals="0" is_nullable="NO" column_type="int(11)" column_key="MUL" referenced_table_name="photoCollection" referenced_column_name="photoCollectionId" />
+			<column name="dateAdded" orgname="dateAdded" max_length="19" length="19" charsetnr="63" flags="1153" type="7" decimals="0" is_nullable="NO" column_type="timestamp" />
+			<column name="imageReference" orgname="imageReference" max_length="30" length="765" charsetnr="33" flags="0" type="253" decimals="0" is_nullable="YES" column_type="varchar(255)" />
+		</columns>
+		<records>
+		</records>
+	</table>
+	<table name="posts">
+		<columns>
+			<column name="postId" orgname="postId" max_length="0" length="11" charsetnr="63" flags="49667" type="3" decimals="0" is_nullable="NO" column_type="int(11)" column_key="PRI" extra="auto_increment" />
+			<column name="blogId" orgname="blogId" max_length="0" length="11" charsetnr="63" flags="53257" type="3" decimals="0" is_nullable="NO" column_type="int(11)" column_key="MUL" referenced_table_name="blogs" referenced_column_name="blogId" />
+			<column name="postTitle" orgname="postTitle" max_length="0" length="765" charsetnr="33" flags="0" type="253" decimals="0" is_nullable="YES" column_type="varchar(255)" />
+			<column name="postText" orgname="postText" max_length="0" length="4294967295" charsetnr="33" flags="16" type="252" decimals="0" is_nullable="YES" column_type="longtext" />
+			<column name="dateCreated" orgname="dateCreated" max_length="0" length="19" charsetnr="63" flags="1153" type="7" decimals="0" is_nullable="NO" column_type="timestamp" />
+		</columns>
+		<records>
+		</records>
+	</table>
+	<table name="privacySettings">
+		<columns>
+			<column name="privacySettingsId" orgname="privacySettingsId" max_length="2" length="11" charsetnr="63" flags="49667" type="3" decimals="0" is_nullable="NO" column_type="int(11)" column_key="PRI" extra="auto_increment" />
+			<column name="privacyTitleId" orgname="privacyTitleId" max_length="1" length="11" charsetnr="63" flags="53259" type="3" decimals="0" is_nullable="NO" column_type="int(11)" column_key="PRI" referenced_table_name="privacyTitles" referenced_column_name="privacyTitleId" />
+			<column name="email" orgname="email" max_length="17" length="150" charsetnr="33" flags="20489" type="253" decimals="0" is_nullable="NO" column_type="varchar(50)" column_key="MUL" referenced_table_name="users" referenced_column_name="email" />
+			<column name="privacyType" orgname="privacyType" max_length="6" length="300" charsetnr="33" flags="0" type="253" decimals="0" is_nullable="YES" column_type="varchar(100)" />
+		</columns>
+		<records>
+			<record>
+				<privacySettingsId>1</privacySettingsId>
+				<privacyTitleId>1</privacyTitleId>
+				<email>charles@ucl.ac.uk</email>
+				<privacyType>Anyone</privacyType>
+			</record>
+			<record>
+				<privacySettingsId>2</privacySettingsId>
+				<privacyTitleId>2</privacyTitleId>
+				<email>charles@ucl.ac.uk</email>
+				<privacyType>Anyone</privacyType>
+			</record>
+			<record>
+				<privacySettingsId>3</privacySettingsId>
+				<privacyTitleId>3</privacyTitleId>
+				<email>charles@ucl.ac.uk</email>
+				<privacyType>Anyone</privacyType>
+			</record>
+			<record>
+				<privacySettingsId>4</privacySettingsId>
+				<privacyTitleId>4</privacyTitleId>
+				<email>charles@ucl.ac.uk</email>
+				<privacyType>Anyone</privacyType>
+			</record>
+			<record>
+				<privacySettingsId>5</privacySettingsId>
+				<privacyTitleId>5</privacyTitleId>
+				<email>charles@ucl.ac.uk</email>
+				<privacyType>Anyone</privacyType>
+			</record>
+			<record>
+				<privacySettingsId>6</privacySettingsId>
+				<privacyTitleId>1</privacyTitleId>
+				<email>vicky@ucl.ac.uk</email>
+				<privacyType>Anyone</privacyType>
+			</record>
+			<record>
+				<privacySettingsId>7</privacySettingsId>
+				<privacyTitleId>2</privacyTitleId>
+				<email>vicky@ucl.ac.uk</email>
+				<privacyType>Anyone</privacyType>
+			</record>
+			<record>
+				<privacySettingsId>8</privacySettingsId>
+				<privacyTitleId>3</privacyTitleId>
+				<email>vicky@ucl.ac.uk</email>
+				<privacyType>Anyone</privacyType>
+			</record>
+			<record>
+				<privacySettingsId>9</privacySettingsId>
+				<privacyTitleId>4</privacyTitleId>
+				<email>vicky@ucl.ac.uk</email>
+				<privacyType>Anyone</privacyType>
+			</record>
+			<record>
+				<privacySettingsId>10</privacySettingsId>
+				<privacyTitleId>5</privacyTitleId>
+				<email>vicky@ucl.ac.uk</email>
+				<privacyType>Anyone</privacyType>
+			</record>
+			<record>
+				<privacySettingsId>11</privacySettingsId>
+				<privacyTitleId>1</privacyTitleId>
+				<email>grace@ucl.ac.uk</email>
+				<privacyType>Anyone</privacyType>
+			</record>
+			<record>
+				<privacySettingsId>12</privacySettingsId>
+				<privacyTitleId>2</privacyTitleId>
+				<email>grace@ucl.ac.uk</email>
+				<privacyType>Anyone</privacyType>
+			</record>
+			<record>
+				<privacySettingsId>13</privacySettingsId>
+				<privacyTitleId>3</privacyTitleId>
+				<email>grace@ucl.ac.uk</email>
+				<privacyType>Anyone</privacyType>
+			</record>
+			<record>
+				<privacySettingsId>14</privacySettingsId>
+				<privacyTitleId>4</privacyTitleId>
+				<email>grace@ucl.ac.uk</email>
+				<privacyType>Anyone</privacyType>
+			</record>
+			<record>
+				<privacySettingsId>15</privacySettingsId>
+				<privacyTitleId>5</privacyTitleId>
+				<email>grace@ucl.ac.uk</email>
+				<privacyType>Anyone</privacyType>
+			</record>
+			<record>
+				<privacySettingsId>16</privacySettingsId>
+				<privacyTitleId>1</privacyTitleId>
+				<email>alan@ucl.ac.uk</email>
+				<privacyType>Anyone</privacyType>
+			</record>
+			<record>
+				<privacySettingsId>17</privacySettingsId>
+				<privacyTitleId>2</privacyTitleId>
+				<email>alan@ucl.ac.uk</email>
+				<privacyType>Anyone</privacyType>
+			</record>
+			<record>
+				<privacySettingsId>18</privacySettingsId>
+				<privacyTitleId>3</privacyTitleId>
+				<email>alan@ucl.ac.uk</email>
+				<privacyType>Anyone</privacyType>
+			</record>
+			<record>
+				<privacySettingsId>19</privacySettingsId>
+				<privacyTitleId>4</privacyTitleId>
+				<email>alan@ucl.ac.uk</email>
+				<privacyType>Anyone</privacyType>
+			</record>
+			<record>
+				<privacySettingsId>20</privacySettingsId>
+				<privacyTitleId>5</privacyTitleId>
+				<email>alan@ucl.ac.uk</email>
+				<privacyType>Anyone</privacyType>
+			</record>
+			<record>
+				<privacySettingsId>26</privacySettingsId>
+				<privacyTitleId>1</privacyTitleId>
+				<email>john@ucl.ac.uk</email>
+				<privacyType>Anyone</privacyType>
+			</record>
+			<record>
+				<privacySettingsId>27</privacySettingsId>
+				<privacyTitleId>2</privacyTitleId>
+				<email>john@ucl.ac.uk</email>
+				<privacyType>Anyone</privacyType>
+			</record>
+			<record>
+				<privacySettingsId>28</privacySettingsId>
+				<privacyTitleId>3</privacyTitleId>
+				<email>john@ucl.ac.uk</email>
+				<privacyType>Anyone</privacyType>
+			</record>
+			<record>
+				<privacySettingsId>29</privacySettingsId>
+				<privacyTitleId>4</privacyTitleId>
+				<email>john@ucl.ac.uk</email>
+				<privacyType>Anyone</privacyType>
+			</record>
+			<record>
+				<privacySettingsId>30</privacySettingsId>
+				<privacyTitleId>5</privacyTitleId>
+				<email>john@ucl.ac.uk</email>
+				<privacyType>Anyone</privacyType>
+			</record>
+			<record>
+				<privacySettingsId>31</privacySettingsId>
+				<privacyTitleId>1</privacyTitleId>
+				<email>tim@ucl.ac.uk</email>
+				<privacyType>Anyone</privacyType>
+			</record>
+			<record>
+				<privacySettingsId>32</privacySettingsId>
+				<privacyTitleId>2</privacyTitleId>
+				<email>tim@ucl.ac.uk</email>
+				<privacyType>Anyone</privacyType>
+			</record>
+			<record>
+				<privacySettingsId>33</privacySettingsId>
+				<privacyTitleId>3</privacyTitleId>
+				<email>tim@ucl.ac.uk</email>
+				<privacyType>Anyone</privacyType>
+			</record>
+			<record>
+				<privacySettingsId>34</privacySettingsId>
+				<privacyTitleId>4</privacyTitleId>
+				<email>tim@ucl.ac.uk</email>
+				<privacyType>Anyone</privacyType>
+			</record>
+			<record>
+				<privacySettingsId>35</privacySettingsId>
+				<privacyTitleId>5</privacyTitleId>
+				<email>tim@ucl.ac.uk</email>
+				<privacyType>Anyone</privacyType>
+			</record>
+			<record>
+				<privacySettingsId>36</privacySettingsId>
+				<privacyTitleId>1</privacyTitleId>
+				<email>dennis@ucl.ac.uk</email>
+				<privacyType>Anyone</privacyType>
+			</record>
+			<record>
+				<privacySettingsId>37</privacySettingsId>
+				<privacyTitleId>2</privacyTitleId>
+				<email>dennis@ucl.ac.uk</email>
+				<privacyType>Anyone</privacyType>
+			</record>
+			<record>
+				<privacySettingsId>38</privacySettingsId>
+				<privacyTitleId>3</privacyTitleId>
+				<email>dennis@ucl.ac.uk</email>
+				<privacyType>Anyone</privacyType>
+			</record>
+			<record>
+				<privacySettingsId>39</privacySettingsId>
+				<privacyTitleId>4</privacyTitleId>
+				<email>dennis@ucl.ac.uk</email>
+				<privacyType>Anyone</privacyType>
+			</record>
+			<record>
+				<privacySettingsId>40</privacySettingsId>
+				<privacyTitleId>5</privacyTitleId>
+				<email>dennis@ucl.ac.uk</email>
+				<privacyType>Anyone</privacyType>
+			</record>
+			<record>
+				<privacySettingsId>41</privacySettingsId>
+				<privacyTitleId>1</privacyTitleId>
+				<email>ken@ucl.ac.uk</email>
+				<privacyType>Noone</privacyType>
+			</record>
+			<record>
+				<privacySettingsId>42</privacySettingsId>
+				<privacyTitleId>2</privacyTitleId>
+				<email>ken@ucl.ac.uk</email>
+				<privacyType>Anyone</privacyType>
+			</record>
+			<record>
+				<privacySettingsId>43</privacySettingsId>
+				<privacyTitleId>3</privacyTitleId>
+				<email>ken@ucl.ac.uk</email>
+				<privacyType>Anyone</privacyType>
+			</record>
+			<record>
+				<privacySettingsId>44</privacySettingsId>
+				<privacyTitleId>4</privacyTitleId>
+				<email>ken@ucl.ac.uk</email>
+				<privacyType>Anyone</privacyType>
+			</record>
+			<record>
+				<privacySettingsId>45</privacySettingsId>
+				<privacyTitleId>5</privacyTitleId>
+				<email>ken@ucl.ac.uk</email>
+				<privacyType>Anyone</privacyType>
+			</record>
+			<record>
+				<privacySettingsId>46</privacySettingsId>
+				<privacyTitleId>1</privacyTitleId>
+				<email>larry@ucl.ac.uk</email>
+				<privacyType>Anyone</privacyType>
+			</record>
+			<record>
+				<privacySettingsId>47</privacySettingsId>
+				<privacyTitleId>2</privacyTitleId>
+				<email>larry@ucl.ac.uk</email>
+				<privacyType>Anyone</privacyType>
+			</record>
+			<record>
+				<privacySettingsId>48</privacySettingsId>
+				<privacyTitleId>3</privacyTitleId>
+				<email>larry@ucl.ac.uk</email>
+				<privacyType>Anyone</privacyType>
+			</record>
+			<record>
+				<privacySettingsId>49</privacySettingsId>
+				<privacyTitleId>4</privacyTitleId>
+				<email>larry@ucl.ac.uk</email>
+				<privacyType>Anyone</privacyType>
+			</record>
+			<record>
+				<privacySettingsId>50</privacySettingsId>
+				<privacyTitleId>5</privacyTitleId>
+				<email>larry@ucl.ac.uk</email>
+				<privacyType>Anyone</privacyType>
+			</record>
+		</records>
+	</table>
+	<table name="privacyTitles">
+		<columns>
+			<column name="privacyTitleId" orgname="privacyTitleId" max_length="1" length="11" charsetnr="63" flags="49667" type="3" decimals="0" is_nullable="NO" column_type="int(11)" column_key="PRI" extra="auto_increment" />
+			<column name="privacySettingsDescription" orgname="privacySettingsDescription" max_length="33" length="600" charsetnr="33" flags="4097" type="253" decimals="0" is_nullable="NO" column_type="varchar(200)" />
+		</columns>
+		<records>
+			<record>
+				<privacyTitleId>1</privacyTitleId>
+				<privacySettingsDescription>Who can send me friend requests?</privacySettingsDescription>
+			</record>
+			<record>
+				<privacyTitleId>2</privacyTitleId>
+				<privacySettingsDescription>Who can search me?</privacySettingsDescription>
+			</record>
+			<record>
+				<privacyTitleId>3</privacyTitleId>
+				<privacySettingsDescription>Who can view my blogs?</privacySettingsDescription>
+			</record>
+			<record>
+				<privacyTitleId>4</privacyTitleId>
+				<privacySettingsDescription>Who can see my photo collections?</privacySettingsDescription>
+			</record>
+			<record>
+				<privacyTitleId>5</privacyTitleId>
+				<privacySettingsDescription>Who can send me messages?</privacySettingsDescription>
+			</record>
+		</records>
+	</table>
+	<table name="rights">
+		<columns>
+			<column name="rightID" orgname="rightID" max_length="2" length="11" charsetnr="63" flags="49667" type="3" decimals="0" is_nullable="NO" column_type="int(11)" column_key="PRI" extra="auto_increment" />
+			<column name="roleID" orgname="roleID" max_length="1" length="11" charsetnr="63" flags="53257" type="3" decimals="0" is_nullable="NO" column_type="int(11)" column_key="MUL" referenced_table_name="roles" referenced_column_name="roleID" />
+			<column name="rightTitle" orgname="rightTitle" max_length="30" length="300" charsetnr="33" flags="0" type="253" decimals="0" is_nullable="YES" column_type="varchar(100)" />
+			<column name="rightDescription" orgname="rightDescription" max_length="63" length="765" charsetnr="33" flags="0" type="253" decimals="0" is_nullable="YES" column_type="varchar(255)" />
+		</columns>
+		<records>
+			<record>
+				<rightID>1</rightID>
+				<roleID>1</roleID>
+				<rightTitle>Delete User</rightTitle>
+				<rightDescription>The user has the right to delete other user</rightDescription>
+			</record>
+			<record>
+				<rightID>2</rightID>
+				<roleID>1</roleID>
+				<rightTitle>Delete User's Photos</rightTitle>
+				<rightDescription>The user has the right to delete other user's photos</rightDescription>
+			</record>
+			<record>
+				<rightID>3</rightID>
+				<roleID>1</roleID>
+				<rightTitle>Delete User's Photo Collection</rightTitle>
+				<rightDescription>The user has the right to delete other user's photo collections</rightDescription>
+			</record>
+			<record>
+				<rightID>4</rightID>
+				<roleID>1</roleID>
+				<rightTitle>Delete User's Annotations</rightTitle>
+				<rightDescription>The user has the right to delete other user's annotations</rightDescription>
+			</record>
+			<record>
+				<rightID>5</rightID>
+				<roleID>1</roleID>
+				<rightTitle>Delete User's Blog Posts</rightTitle>
+				<rightDescription>The user has the right to delete other user's blog posts</rightDescription>
+			</record>
+			<record>
+				<rightID>6</rightID>
+				<roleID>1</roleID>
+				<rightTitle>Delete User's Blog</rightTitle>
+				<rightDescription>The user has the right to delete other user's blog</rightDescription>
+			</record>
+			<record>
+				<rightID>7</rightID>
+				<roleID>1</roleID>
+				<rightTitle>Edit User's Profile Details</rightTitle>
+				<rightDescription>The user has the right to edit other user's profile details</rightDescription>
+			</record>
+			<record>
+				<rightID>8</rightID>
+				<roleID>1</roleID>
+				<rightTitle>Edit User's Photo</rightTitle>
+				<rightDescription>The user has the right to edit other user's photo</rightDescription>
+			</record>
+			<record>
+				<rightID>9</rightID>
+				<roleID>1</roleID>
+				<rightTitle>Edit User's Photo Collection</rightTitle>
+				<rightDescription>The user has the right to edit other user's photo collection</rightDescription>
+			</record>
+			<record>
+				<rightID>10</rightID>
+				<roleID>1</roleID>
+				<rightTitle>Edit User's Annotations</rightTitle>
+				<rightDescription>The user has the right to edit other user's annotations</rightDescription>
+			</record>
+			<record>
+				<rightID>11</rightID>
+				<roleID>1</roleID>
+				<rightTitle>Edit User's Blog Posts</rightTitle>
+				<rightDescription>The user has the right to edit other user's blog posts</rightDescription>
+			</record>
+			<record>
+				<rightID>12</rightID>
+				<roleID>1</roleID>
+				<rightTitle>Edit User's Blog</rightTitle>
+				<rightDescription>The user has the right to edit other user's blog</rightDescription>
+			</record>
+		</records>
+	</table>
+	<table name="roles">
+		<columns>
+			<column name="roleID" orgname="roleID" max_length="1" length="11" charsetnr="63" flags="49667" type="3" decimals="0" is_nullable="NO" column_type="int(11)" column_key="PRI" extra="auto_increment" />
+			<column name="roleTitle" orgname="roleTitle" max_length="13" length="150" charsetnr="33" flags="0" type="253" decimals="0" is_nullable="YES" column_type="varchar(50)" />
+		</columns>
+		<records>
+			<record>
+				<roleID>1</roleID>
+				<roleTitle>administrator</roleTitle>
+			</record>
+			<record>
+				<roleID>2</roleID>
+				<roleTitle>user</roleTitle>
+			</record>
+		</records>
+	</table>
+	<table name="userCircleRelationships">
+		<columns>
+			<column name="email" orgname="email" max_length="17" length="150" charsetnr="33" flags="20483" type="253" decimals="0" is_nullable="NO" column_type="varchar(50)" column_key="PRI" referenced_table_name="users" referenced_column_name="email" />
+			<column name="circleFriendsId" orgname="circleFriendsId" max_length="1" length="11" charsetnr="63" flags="53259" type="3" decimals="0" is_nullable="NO" column_type="int(11)" column_key="PRI" referenced_table_name="circleOfFriends" referenced_column_name="circleFriendsId" />
+		</columns>
+		<records>
+			<record>
+				<email>alan@ucl.ac.uk</email>
+				<circleFriendsId>1</circleFriendsId>
+			</record>
+			<record>
+				<email>charles@ucl.ac.uk</email>
+				<circleFriendsId>1</circleFriendsId>
+			</record>
+			<record>
+				<email>larry@ucl.ac.uk</email>
+				<circleFriendsId>1</circleFriendsId>
+			</record>
+			<record>
+				<email>tim@ucl.ac.uk</email>
+				<circleFriendsId>1</circleFriendsId>
+			</record>
+			<record>
+				<email>vicky@ucl.ac.uk</email>
+				<circleFriendsId>1</circleFriendsId>
+			</record>
+			<record>
+				<email>charles@ucl.ac.uk</email>
+				<circleFriendsId>2</circleFriendsId>
+			</record>
+			<record>
+				<email>charles@ucl.ac.uk</email>
+				<circleFriendsId>3</circleFriendsId>
+			</record>
+			<record>
+				<email>vicky@ucl.ac.uk</email>
+				<circleFriendsId>3</circleFriendsId>
+			</record>
+			<record>
+				<email>charles@ucl.ac.uk</email>
+				<circleFriendsId>4</circleFriendsId>
+			</record>
+		</records>
+	</table>
+	<table name="users">
+		<columns>
+			<column name="email" orgname="email" max_length="17" length="150" charsetnr="33" flags="20483" type="253" decimals="0" is_nullable="NO" column_type="varchar(50)" column_key="PRI" />
+			<column name="roleID" orgname="roleID" max_length="1" length="11" charsetnr="63" flags="53257" type="3" decimals="0" is_nullable="NO" column_type="int(11)" column_key="MUL" referenced_table_name="roles" referenced_column_name="roleID" />
+			<column name="user_password" orgname="user_password" max_length="60" length="3000" charsetnr="33" flags="0" type="253" decimals="0" is_nullable="YES" column_type="varchar(1000)" />
+			<column name="firstName" orgname="firstName" max_length="7" length="45" charsetnr="33" flags="0" type="253" decimals="0" is_nullable="YES" column_type="varchar(15)" />
+			<column name="lastName" orgname="lastName" max_length="11" length="45" charsetnr="33" flags="0" type="253" decimals="0" is_nullable="YES" column_type="varchar(15)" />
+			<column name="profileImage" orgname="profileImage" max_length="39" length="765" charsetnr="33" flags="0" type="253" decimals="0" is_nullable="YES" column_type="varchar(255)" />
+			<column name="profileDescription" orgname="profileDescription" max_length="4" length="765" charsetnr="33" flags="0" type="253" decimals="0" is_nullable="YES" column_type="varchar(255)" />
+		</columns>
+		<records>
+			<record>
+				<email>ada@ucl.ac.uk</email>
+				<roleID>2</roleID>
+				<user_password>$2y$10$e94eLzS1oYOsJSIF66czYehg2gUBsEae/h94QBoVW2JsNEgdj/6DS</user_password>
+				<firstName>Ada</firstName>
+				<lastName>Lovelace</lastName>
+				<profileImage>../../images/profile/ada_1489505309.jpg</profileImage>
+				<profileDescription>null</profileDescription>
+			</record>
+		</records>
+	</table>
+</user></database>

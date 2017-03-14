@@ -30,7 +30,7 @@
         <div class="control-group">
           <label class="control-label">Content:</label>
           <div class="controls">
-            <textarea style="width:100%" name="blogDescription" ><?php echo $row['blogDescription'];?></textarea> <br>
+            <textarea style="width:100%;height:300px;" name="blogDescription" ><?php echo $row['blogDescription'];?></textarea> <br>
           </div>
         </div>
 

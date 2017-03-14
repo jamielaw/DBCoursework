@@ -2,6 +2,7 @@
 session_start();
 require 'database.php';
 
+// $loggedInUser = 'ada@ucl.ac.uk';
 if (isset($_SESSION['loggedInUserEmail'])) {
   $loggedInUser= $_SESSION['loggedInUserEmail'];
 } else {

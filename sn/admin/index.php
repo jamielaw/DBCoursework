@@ -95,6 +95,10 @@
                     if($row['status'] == "denied"){
                       echo "<a class='table-btn btn btn-success' href='friendships/editFriendship.php?friendshipId=".$row["friendshipID"]."&action=accepted'><i class='fa fa-check' aria-hidden='true'></i> Accept </a><br>";
 
+                    }else if($row['status'] == "pending"){
+                      echo "<a class='table-btn btn btn-success' href='friendships/editFriendship.php?friendshipId=".$row["friendshipID"]."&action=accepted'><i class='fa fa-check' aria-hidden='true'></i> Accept </a><br>";
+                      echo " <a class='table-btn btn btn-warning' href='friendships/editFriendship.php?friendshipId=".$row["friendshipID"]."&action=denied'><i class='fa fa-times' aria-hidden='true'></i> Decline </a><br>";
+
                     }else{
                       echo " <a class='table-btn btn btn-warning' href='friendships/editFriendship.php?friendshipId=".$row["friendshipID"]."&action=denied'><i class='fa fa-times' aria-hidden='true'></i> Decline </a><br>";
 

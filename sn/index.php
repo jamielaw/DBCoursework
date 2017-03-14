@@ -6,6 +6,13 @@ include ("inc/nav-trn.php");
 session_start();
  ?>
   <body>
+    <script>
+      var status = <?php echo '"' . $_SESSION["loggedInUserEmail"] . '"'; ?>;
+      console.log(status);
+      if(status){
+        window.location.replace("/sn/profile");
+      }
+    </script>
     <!--  No Navigation because this is a page for those who aren't authenticated -->
       <!--  LOGIN -->
       <?php

@@ -136,9 +136,8 @@
             </div>
           </div>
           <label class="pull-right">
-            <a  class="btn btn-success btn-xs glyphicon glyphicon-ok" href="handleFriendRequest.php?email='.$row['email'].'&action=accepted" title="Accept"></a>
-            <a  class="btn btn-danger  btn-xs glyphicon glyphicon-remove" href="handleFriendRequest.php?email='.$row['email'].'&action=denied" title="Reject"></a>
-            <a  class="btn btn-info  btn-xs glyphicon glyphicon glyphicon-comment" href="#" title="Send message"></a>
+            <a  class="btn btn-success btn-xs glyphicon glyphicon-ok" href="handleFriendRequest.php?email='.$row['email'].'&action=accepted" data-toggle="tooltip" title="Accept"></a>
+            <a  class="btn btn-danger  btn-xs glyphicon glyphicon-remove" href="handleFriendRequest.php?email='.$row['email'].'&action=denied" data-toggle="tooltip" title="Reject"></a>
           </label>
           <div class="break"></div>
         </div>
@@ -214,8 +213,8 @@
          echo '</div>
           </div>
           <label class="pull-right">
-            <a  class="btn btn-success btn-xs glyphicon glyphicon-plus" href="createFriendRequest.php?email='.$row['email'].'" title="Add as friend"></a>
-            <a  class="btn btn-info  btn-xs glyphicon glyphicon glyphicon-comment" href="#" title="Send message"></a>
+            <a  class="btn btn-success btn-xs glyphicon glyphicon-plus" href="createFriendRequest.php?email='.$row['email'].'" data-toggle="tooltip" title="Add as friend"></a>
+            <a  class="btn btn-info  btn-xs fa fa-eye" href="readprofile.php?email='.$row['email']. '" data-toggle="tooltip" title="View profile"></a>
           </label>
           <div class="break"></div>
         </div>
@@ -265,9 +264,9 @@
             </div>
           </div>
           <label class="pull-right">
-            <a  class="btn btn-success btn-xs glyphicon glyphicon-ok" href="readprofile.php?email='.$row['email'].'" title="View"></a>
-            <a  class="btn btn-danger  btn-xs glyphicon glyphicon-trash" href="deleteprofile.php?email='.$row['email'].'" title="Delete"></a>
-            <a  class="btn btn-info  btn-xs glyphicon glyphicon glyphicon-comment" href="#" title="Send message"></a>
+            <a  class="btn btn-success btn-xs fa fa-eye" data-toggle="tooltip" title="View profile" href="readprofile.php?email='.$row['email'].'"></a>
+            <a  class="btn btn-danger btn-xs glyphicon glyphicon-remove" data-toggle="tooltip" title="Remove friend" href="unfriend.php?page=zone&email='.$row['email'].'"></a>
+            <a  class="btn btn-info  btn-xs glyphicon glyphicon glyphicon-comment" href="messages.php" data-toggle="tooltip" title="Send message"></a>
           </label>
           <div class="break"></div>
         </div>
@@ -282,6 +281,11 @@
 
 </body>
 </html>
+<script>
+$(document).ready(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
+</script>
 
 
 <style type="text/css">

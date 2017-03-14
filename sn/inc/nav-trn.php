@@ -99,7 +99,7 @@
                   $res=$pdo->query($sql);
                   $row = $res->fetch(PDO::FETCH_ASSOC);
                   if ($row["roleTitle"]=="administrator") {
-                      echo "<li><a href=\"../admin/index.php\">Admin</a></li>";
+                      echo "<li><a href=\"/sn/admin/index.php\">Admin</a></li>";
                   }
 
 

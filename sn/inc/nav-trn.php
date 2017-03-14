@@ -53,10 +53,10 @@
           $pdo = Database::connect();
           $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
           if($_SESSION['loggedInUserEmail']){ //if user is logged in, display relevant navbar
-                    echo "<a class=\"navbar-brand\" href=\"\sn\profile\">BookFace</a>";
-                    echo "<div class=\"collapse navbar-collapse\">
-                    <ul class=\"nav navbar-nav\">
-                    <li class=\"dropdown\">
+                    echo "<div class=\"collapse navbar-collapse\">";
+                    echo "<ul class=\"nav navbar-nav\">";
+                    echo "<li><a href=\"\sn\profile\" style=\"color:#DDDDDD;\">BookFace</a></li>";
+                    echo "<li class=\"dropdown\">
                     <a class=\"dropdown-toggle\" data-toggle=\"dropdown\" href=\"#\">";
                     //get user details for sprite in navbar
                     $sql="SELECT firstName, lastName, profileImage FROM MyDB.users WHERE email='" . $loggedInUser . "'";
@@ -111,9 +111,9 @@
                 </div>";
         }
         else{
-          echo "<a class=\"navbar-brand\">BookFace</a>";
           echo "<div class=\"collapse navbar-collapse\">
-                    <ul class=\"nav navbar-nav\">
+                    <ul class=\"nav navbar-nav\">";
+          echo "<li><a href=\"#\" style=\"color:#DDDDDD; :hover{color:#FFFFFF};\">BookFace</a></li>          
                     <li><a href=\"/sn/index.php\">Log In</a></li>
                     <li><a href=\"/sn/index.php\">Sign Up</a></li>
                 </div>";

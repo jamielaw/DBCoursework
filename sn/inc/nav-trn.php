@@ -55,7 +55,7 @@
           if($_SESSION['loggedInUserEmail']){ //if user is logged in, display relevant navbar
                     echo "<div class=\"collapse navbar-collapse\">";
                     echo "<ul class=\"nav navbar-nav\">";
-                    echo "<li><a href=\"\sn\profile\" style=\"color:#DDDDDD; font-size:20px;\">BookFace</a></li>";
+                    echo "<li><a href=\"\sn\profile\" style=\"color:#DDDDDD; font-size:20px;\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Click to go to news feed\">BookFace</a></li>";
                     echo "<li class=\"dropdown\">
                     <a class=\"dropdown-toggle\" data-toggle=\"dropdown\" href=\"#\">";
                     //get user details for sprite in navbar

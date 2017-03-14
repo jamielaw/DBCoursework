@@ -120,6 +120,8 @@
               $blogData =$y->fetch(PDO::FETCH_ASSOC);
               //echo $blogData['email'];
 
+              if($blogData == null) continue;
+
           ?>
           <a href="viewPost.php?blogId=<?php echo $blogData["blogId"]; ?>" class="col-md-6 col-sm-12 col-lg-3 blog-section friend-post-container">
             <div class="author-box">

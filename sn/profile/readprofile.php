@@ -166,9 +166,9 @@
                                     $stmt3->execute();
                                     $count2=$stmt3->fetch();
                                     if($count['COUNT(emailTo)']>0){ //logged in user has already sent a friend request to this user
-                                        echo '<form class = "" action="createFriendRequest.php?email=' .$email . '" method="post" enctype="multipart/form-data">
+                                        echo '
                                             <input class= "btn btn-sm btn-block btn-success disabled" type="submit" value="Already sent a friend request" name="submit"></input>
-                                            </a></form>';
+                                            ';
                                     } elseif($count2['COUNT(emailTo)']>0){
                                         echo '<form class = "" action="handleFriendRequest.php?email=' .$email . '&action=accepted" method="post" enctype="multipart/form-data">
                                             <input class= "btn btn-sm btn-block btn-success" type="submit" value="Accept friend request" name="submit"></input>

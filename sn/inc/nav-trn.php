@@ -48,7 +48,7 @@
       </button>
     </div>
           <?php
-          session_start();
+          //session_start();
           require("$root/sn/session.php");
           $pdo = Database::connect();
           $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

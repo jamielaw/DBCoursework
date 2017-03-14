@@ -48,15 +48,15 @@
       </button>
     </div>
           <?php
-          session_start();
+          //session_start();
           require("$root/sn/session.php");
           $pdo = Database::connect();
           $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
           if($_SESSION['loggedInUserEmail']){ //if user is logged in, display relevant navbar
-                    echo "<a class=\"navbar-brand\" href=\"\sn\profile\">BookFace</a>";
-                    echo "<div class=\"collapse navbar-collapse\">
-                    <ul class=\"nav navbar-nav\">
-                    <li class=\"dropdown\">
+                    echo "<div class=\"collapse navbar-collapse\">";
+                    echo "<ul class=\"nav navbar-nav\">";
+                    echo "<li><a href=\"\sn\profile\" style=\"color:#DDDDDD; font-size:20px;\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Click to go to news feed\">BookFace</a></li>";
+                    echo "<li class=\"dropdown\">
                     <a class=\"dropdown-toggle\" data-toggle=\"dropdown\" href=\"#\">";
                     //get user details for sprite in navbar
                     $sql="SELECT firstName, lastName, profileImage FROM MyDB.users WHERE email='" . $loggedInUser . "'";
@@ -90,8 +90,7 @@
                   echo "<li><a href=\"/sn/profile/messages.php\"><i class=\"fa fa-comments\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Your messages\"></i></a></li>
 
                   <li><a href=\"/sn/circles/index.php\">Circles</a></li>
-                  <li><a href=\"/sn/blog/index.php\">Blog</a></li>
-                  <li><a href=\"/sn/explore/index.php\">Explore</a></li>"; //<li><a href=\"/sn/profile/readprofile.php?email=".$loggedInUser."#pictures\"><i class=\"fa fa-picture-o\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Your photos\"></i></a></li>
+                  <li><a href=\"/sn/blog/index.php\">Blog</a></li>"; //<li><a href=\"/sn/profile/readprofile.php?email=".$loggedInUser."#pictures\"><i class=\"fa fa-picture-o\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Your photos\"></i></a></li>
 
                   //Check if logged in user is administrator
                   $sql = "SELECT roleTitle FROM MyDB.roles INNER JOIN MyDB.users ON MyDB.users.roleID=MyDB.roles.roleID WHERE(users.email='" . $loggedInUser . "')";
@@ -112,9 +111,9 @@
                 </div>";
         }
         else{
-          echo "<a class=\"navbar-brand\">BookFace</a>";
           echo "<div class=\"collapse navbar-collapse\">
-                    <ul class=\"nav navbar-nav\">
+                    <ul class=\"nav navbar-nav\">";
+          echo "<li><a href=\"#\" style=\"font-size:20px; color:#DDDDDD; :hover{color:#FFFFFF};\">BookFace</a></li>          
                     <li><a href=\"/sn/index.php\">Log In</a></li>
                     <li><a href=\"/sn/index.php\">Sign Up</a></li>
                 </div>";

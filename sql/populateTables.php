@@ -103,8 +103,8 @@ $insertPhotosTable = "INSERT INTO MyDB.photos (photoCollectionId,imageReference)
 
 
 $insertCircleOfFriendsTable = "INSERT INTO MyDB.circleOfFriends (circleFriendsId, circleOfFriendsName) VALUES
-(1,\"lmao\"),
-(2,\"lol\"),
+(1,\"UCL Freshers 2017\"),
+(2,\"PHP and Chill\"),
 (3,\"The CS Friends\"),
 (4,\"The Science Club\")";
 

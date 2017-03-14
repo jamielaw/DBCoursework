@@ -11,6 +11,7 @@
   }
 
   $emailTo = $_GET['email'];
+  $ref=$_GET['page'];
   $emailFrom = $loggedInUser;
   $pdo = Database::connect();
   $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -20,7 +21,10 @@
 
   // Need to handle error catching etc
   Database::disconnect();
-
-  redirect("readprofile.php?email=" . $emailTo);
+  if($ref=="zone"){
+    redirect("myfriends.php");
+  }else{
+    redirect("readprofile.php?email=" . $emailTo);
+  }
 
 ?>

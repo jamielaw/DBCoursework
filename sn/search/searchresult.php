@@ -55,6 +55,7 @@
             //echo $friendStr;
 
             //get number of search results, similar to search query below except we're just selecting the count. explanation of how this query works is defined below
+            if($countF>0){//check that user has at least one friend!
             $countQuery = "SELECT COUNT(email) FROM MyDB.users WHERE ((firstName LIKE '" . $name .  "%' OR lastName LIKE '" . $name ."%' OR concat_ws(' ', firstName, lastName) LIKE '" . $name . "%') 
             AND 
             (
@@ -103,6 +104,10 @@
 
               echo "</table>";
             }
+          }else{
+            echo "<h1>0 results found for first/last name matching with: <i>" . $name . "</i></h1>";
+            echo "<p>You have no friends, so this search function won't work as per the specs</p>";
+          }
           } 
           else{ 
             echo  "<p>Please enter a valid search query</p>"; //this seems to be triggered when user inputs a query like <b>test, no big deal though because a query like that is invalid as it is

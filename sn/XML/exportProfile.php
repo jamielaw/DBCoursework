@@ -5,6 +5,7 @@ $pass = 'root';
 $name = 'mydb';
 $email = null;
 
+
 require("../database.php");
 
 if ( !empty($_POST['email'])) {
@@ -50,12 +51,6 @@ function getConstraints($table, $columnName)
     $constraints = null;
     foreach ($q1->fetchAll() as $row) {
         if ($columnName==$row['INITIAL_COLUMN_NAME']) {
-            /*  echo 'TABLE_NAME: '.$row['INITIAL_TABLE_NAME'].'<br/>';
-            echo 'COLUMN_NAME: '.$row['INITIAL_COLUMN_NAME'].'<br/>';
-            echo 'TYPE: '.$row['DATA_TYPE'].'<br/>';
-            echo 'REFERENCED_TABLE_NAME: '.$row['REFERENCED_TABLE_NAME'].'<br/>';
-            echo 'REFERENCED_COLUMN_NAME: '.$row['REFERENCED_COLUMN_NAME'].'<br/>';
-            echo '<br/><br/>'; */
 
             $constraints = array(
               0 => $row['IS_NULLABLE'],
@@ -89,8 +84,6 @@ if (mysqli_num_rows($result)) {
     while ($table = mysqli_fetch_row($result)) {
         //prep table out
         $xml.= $tab.'<table name="'.$table[0].'">'.$br;
-        //echo 'TABLE NAME:'.$table[0].'<br/>';
-
 
         // getting columns
         // table attributes
@@ -107,20 +100,11 @@ if (mysqli_num_rows($result)) {
             foreach ($attributes as $attribute) {
                 if ($attribute=='name') {
                     $columnName = $meta->$attribute;
-                    //echo 'COLUMN NAME:'.$columnName.'<br/>';
                 }
                 $xml.= $attribute.'="'.$meta->$attribute.'" ';
             }
             $constraints = getConstraints($table[0], $columnName);
             if ($constraints) {
-              /*
-                echo 'IS_NULLABLE: '.$constraints[0].'<br/>';
-                echo 'COLUMN_TYPE: '.$constraints[1].'<br/>';
-                echo 'COLUMN_KEY: '.$constraints[2].'<br/>';
-                echo 'EXTRA: '.$constraints[3].'<br/>';
-                echo 'REFERENCED_TABLE_NAME: '.$constraints[4].'<br/>';
-                echo 'REFERENCED_COLUMN_NAME: '.$constraints[5].'<br/>';
-                */
                 $xml.= 'is_nullable="'.$constraints[0].'" ';
                 $xml.= 'column_type="'.$constraints[1].'" ';
                 if ($constraints[2]) {
@@ -207,8 +191,6 @@ if (mysqli_num_rows($result)) {
 
           $records = mysqli_query($link, $query) or die('cannot select from table: '.$table[0]);
 
-          //echo $query;
-
           //stick the records
           $xml.= $tab.$tab.'<records>'.$br;
           while ($record = mysqli_fetch_assoc($records)) {
@@ -225,12 +207,21 @@ if (mysqli_num_rows($result)) {
     $xml.= '</user>';
     $xml.= '</database>';
 
-    echo 'Exported Successfully! Check your XML folder.';
-
     //save file
     $fileName = $name.'-backup-'.time().'.xml';
+
+    //on server
     $handle = fopen($fileName, 'w+');
     fwrite($handle, $xml);
     fclose($handle);
+
+    header('Content-Type: application/xml');
+    header('Content-Disposition: attachment; filename="'.$fileName.'" ');
+
+    //locally
+    readfile($fileName);
+    //exit();
+    
+    //echo 'Exported Successfully! The file will be opened in a word document.';
 
 }

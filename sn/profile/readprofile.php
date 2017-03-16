@@ -242,10 +242,11 @@
                                 }
                             ?>
 
-                            <a style="visibility: <?php echo $adminAccess ?>" data-toggle="modal" data-target="#export_dialog" class="btn btn-sm btn-block btn-primary">
+                            <a onclick="showAlert()" style="visibility: <?php echo $adminAccess ?>" data-toggle="modal" href="../xml/exportProfile.php" class="btn btn-sm btn-block btn-primary">
                                 <i class="ace-icon fa fa-download bigger-110"></i>
                                 <span class="bigger-110">Export Profile</span>
                             </a>
+                            <p id='textAlert'></p>
 
                             <a style="visibility: <?php echo $adminAccess ?>" data-toggle="modal" data-target="#import_dialog" class="btn btn-sm btn-block btn-primary">
                                 <i class="ace-icon fa fa-upload bigger-110"></i>
@@ -435,6 +436,7 @@
                     <div class="modal-body">
                         <form data-title=<?php echo $loggedInUser ?> id="export_form" action="../XML/exportProfile.php" method="POST">
                             <p> Are you sure you want to export your profile? We appreciate your patience as it may take a while.</p>
+                            <p> After the export is complete, the file will be opened via a word doc.</p>
                             <div id="myProgress">
                               <div id="myBar">
                                 <div id="label">0%</div>
@@ -551,6 +553,10 @@
 </html>
 
 <script>
+function showAlert() {
+    document.getElementById("textAlert").innerHTML = "Please wait...the file is being exported and will be downloaded in your browser.";
+}
+
 /* must apply only after HTML has loaded */
 $(document).ready(function () {
 
